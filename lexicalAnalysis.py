@@ -269,6 +269,4 @@ def t_error(t):
     t.lexer.skip(1)
 
 # Construccion de los lexers
-lexerKR = lex.lex()
-lexerJM = lex.lex()
-lexerJP = lex.lex()
+lexer = lex.lex()
