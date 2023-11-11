@@ -19,6 +19,8 @@ def p_sentence_print_statement(p):
     """
     sentence : print_statement SEMICOLON
              | assignment
+             | object_expressions
+             | types_structure
     """
 
 
@@ -191,6 +193,65 @@ def p_codeblock(p):
 
 #FIN DE APORTACIÓN KEVIN ROLDAN
 
+#INICIO DE APORTACIÓN JORGE MAWYIN
+
+#ESTRUCTURAS DE DATOS
+
+def p_types_structure(p):
+    '''
+    types_structure : indexed_array
+                    | associative_array
+                    | matrix_firstform
+                    | matrix_secondform
+    '''
+#ARRAY
+def p_indexed_array(p):
+    'indexed_array : ARRAY LEFT_PAREN values RIGHT_PAREN SEMICOLON'
+
+def p_associative_array(p):
+    'associative_array : ARRAY LEFT_PAREN structure_array RIGHT_PAREN SEMICOLON'
+
+def p_structure_array(p):
+    '''
+    structure_array : key EQUALS GREATER_THAN value
+                    | key EQUALS GREATER_THAN value COMMA structure_array
+    '''
+
+def p_key(p):
+    '''
+    key : INTEGER 
+        | STRING
+    '''
+#MATRIX
+def p_matrix_firstform(p):
+    'matrix_firstform : ARRAY LEFT_PAREN structure_matrix_first RIGHT_PAREN SEMICOLON'
+
+def p_matrix_secondform(p):
+    'matrix_secondform : LEFT_BRACKET structure_matrix_second RIGHT_BRACKET SEMICOLON'
+
+def p_structure_matrix_second(p):
+    '''
+    structure_matrix_second : LEFT_BRACKET values RIGHT_BRACKET
+                            | LEFT_BRACKET values RIGHT_BRACKET COMMA structure_matrix_second
+    '''
+def p_structure_matrix_first(p):
+    '''
+    structure_matrix_first : ARRAY LEFT_PAREN values RIGHT_PAREN
+                           | ARRAY LEFT_PAREN values RIGHT_PAREN COMMA structure_matrix_first
+    '''
+#OBJECT
+def p_object_expressions(p):
+    '''
+    object_expressions : object_creation
+    '''
+
+def p_object_creation(p):
+    'object_creation : NEW class_name SEMICOLON'
+
+def p_class_name(p):
+    'class_name : IDENTIFIER'
+
+#FIN DE APORTACIÓN JORGE MAWYIN
 
 # Regla para los errores de sintáxis
 def p_error(p):
