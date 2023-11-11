@@ -73,7 +73,8 @@ reserved = {
     'var': 'VAR',
     'while': 'WHILE',
     'xor': 'XOR',
-    'yield': 'YIELD'
+    'yield': 'YIELD',
+    'define': 'DEFINE'
 }
 
     # FIN DE CONTRIBUCION KEVIN ROLDAN

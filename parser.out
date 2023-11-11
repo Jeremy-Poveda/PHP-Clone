@@ -19,7 +19,6 @@ Unused terminals:
     COLON
     COMMENT
     CONCATENATION
-    CONST
     CONTINUE
     DECLARE
     DEFAULT
@@ -113,42 +112,48 @@ Rule 7     print_statement -> ECHO printable_values
 Rule 8     print_statement -> PRINT printable_values
 Rule 9     printable_values -> values
 Rule 10    printable_values -> values COMMA printable_values
-Rule 11    values -> INTEGER
-Rule 12    values -> STRING
-Rule 13    values -> FLOAT
-Rule 14    values -> VARIABLE
-Rule 15    values -> boolean
-Rule 16    boolean -> TRUE
-Rule 17    boolean -> FALSE
-Rule 18    expression -> term
-Rule 19    expression -> term PLUS expression
-Rule 20    expression -> term MINUS expression
-Rule 21    term -> factor
-Rule 22    term -> factor MULTIPLY term
-Rule 23    term -> factor DIVIDE term
-Rule 24    term -> factor MODULE term
-Rule 25    term -> factor POW term
-Rule 26    factor -> INTEGER
-Rule 27    factor -> VARIABLE
-Rule 28    factor -> LEFT_PAREN expression RIGHT_PAREN
-Rule 29    assignment -> variable_assignment
-Rule 30    assignment -> function_assignment
-Rule 31    variable_assignment -> VARIABLE EQUALS values SEMICOLON
-Rule 32    variable_assignment -> VARIABLE EQUALS function_invocation SEMICOLON
-Rule 33    variable_assignment -> VARIABLE EQUALS expression SEMICOLON
-Rule 34    function_invocation -> IDENTIFIER LEFT_PAREN params RIGHT_PAREN SEMICOLON
-Rule 35    params -> real_params
-Rule 36    params -> empty
-Rule 37    real_params -> VARIABLE
-Rule 38    real_params -> real_params COMMA VARIABLE
-Rule 39    empty -> <empty>
-Rule 40    function_assignment -> VARIABLE EQUALS special_function SEMICOLON
-Rule 41    function_assignment -> FUNCTION IDENTIFIER LEFT_PAREN params RIGHT_PAREN codeblock
-Rule 42    special_function -> arrow_function
-Rule 43    special_function -> anonymous_functions
-Rule 44    arrow_function -> FN LEFT_PAREN params RIGHT_PAREN EQUALS GREATER_THAN codeblock
-Rule 45    anonymous_functions -> FUNCTION LEFT_PAREN params RIGHT_PAREN codeblock
-Rule 46    codeblock -> LEFT_BRACE RIGHT_BRACE
+Rule 11    printable_values -> VARIABLE
+Rule 12    printable_values -> VARIABLE COMMA printable_values
+Rule 13    values -> INTEGER
+Rule 14    values -> STRING
+Rule 15    values -> FLOAT
+Rule 16    values -> boolean
+Rule 17    boolean -> TRUE
+Rule 18    boolean -> FALSE
+Rule 19    expression -> term
+Rule 20    expression -> term PLUS expression
+Rule 21    expression -> term MINUS expression
+Rule 22    term -> factor
+Rule 23    term -> factor MULTIPLY term
+Rule 24    term -> factor DIVIDE term
+Rule 25    term -> factor MODULE term
+Rule 26    term -> factor POW term
+Rule 27    factor -> INTEGER
+Rule 28    factor -> VARIABLE
+Rule 29    factor -> LEFT_PAREN expression RIGHT_PAREN
+Rule 30    assignment -> variable_assignment
+Rule 31    assignment -> function_assignment
+Rule 32    assignment -> constant_assignment
+Rule 33    variable_assignment -> VARIABLE EQUALS values SEMICOLON
+Rule 34    variable_assignment -> VARIABLE EQUALS function_invocation SEMICOLON
+Rule 35    variable_assignment -> VARIABLE EQUALS expression SEMICOLON
+Rule 36    constant_assignment -> const_syntax
+Rule 37    constant_assignment -> define_syntax
+Rule 38    const_syntax -> CONST IDENTIFIER EQUALS values SEMICOLON
+Rule 39    define_syntax -> DEFINE LEFT_PAREN STRING COMMA values RIGHT_PAREN SEMICOLON
+Rule 40    function_invocation -> IDENTIFIER LEFT_PAREN params RIGHT_PAREN SEMICOLON
+Rule 41    params -> real_params
+Rule 42    params -> empty
+Rule 43    real_params -> VARIABLE
+Rule 44    real_params -> real_params COMMA VARIABLE
+Rule 45    empty -> <empty>
+Rule 46    function_assignment -> VARIABLE EQUALS special_function SEMICOLON
+Rule 47    function_assignment -> FUNCTION IDENTIFIER LEFT_PAREN params RIGHT_PAREN codeblock
+Rule 48    special_function -> arrow_function
+Rule 49    special_function -> anonymous_functions
+Rule 50    arrow_function -> FN LEFT_PAREN params RIGHT_PAREN EQUALS GREATER_THAN codeblock
+Rule 51    anonymous_functions -> FUNCTION LEFT_PAREN params RIGHT_PAREN codeblock
+Rule 52    codeblock -> LEFT_BRACE RIGHT_BRACE
 
 Terminals, with rules where they appear
 
@@ -167,15 +172,16 @@ CATCH                :
 CLASS                : 
 CLONE                : 
 COLON                : 
-COMMA                : 10 38
+COMMA                : 10 12 39 44
 COMMENT              : 
 CONCATENATION        : 
-CONST                : 
+CONST                : 38
 CONTINUE             : 
 DECLARE              : 
 DEFAULT              : 
+DEFINE               : 39
 DIE                  : 
-DIVIDE               : 23
+DIVIDE               : 24
 DO                   : 
 ECHO                 : 5 7
 ELSE                 : 
@@ -187,27 +193,27 @@ ENDFOREACH           :
 ENDIF                : 
 ENDSWITCH            : 
 ENDWHILE             : 
-EQUALS               : 31 32 33 40 44
+EQUALS               : 33 34 35 38 46 50
 EQUALS_EQUALS        : 
 ERROR_CONTROL        : 
 EVAL                 : 
 EXIT                 : 
 EXTENDS              : 
-FALSE                : 17
+FALSE                : 18
 FINAL                : 
 FINALLY              : 
-FLOAT                : 13
-FN                   : 44
+FLOAT                : 15
+FN                   : 50
 FOR                  : 
 FOREACH              : 
-FUNCTION             : 41 45
+FUNCTION             : 47 51
 GLOBAL               : 
 GOTO                 : 
 GREATER_EQUALS_TO    : 
-GREATER_THAN         : 44
+GREATER_THAN         : 50
 HALT_COMPILER        : 
 IDENTICAL            : 
-IDENTIFIER           : 34 41
+IDENTIFIER           : 38 40 47
 IF                   : 
 IMPLEMENTS           : 
 INCLUDE              : 
@@ -215,32 +221,32 @@ INCLUDE_ONCE         :
 INPUT                : 
 INSTANCEOF           : 
 INSTEADOF            : 
-INTEGER              : 11 26
+INTEGER              : 13 27
 INTERFACE            : 
 ISSET                : 
-LEFT_BRACE           : 46
+LEFT_BRACE           : 52
 LEFT_BRACKET         : 
-LEFT_PAREN           : 5 6 28 34 41 44 45
+LEFT_PAREN           : 5 6 29 39 40 47 50 51
 LIST                 : 
 LOGIC_AND            : 
 LOGIC_NOT            : 
 LOGIC_OR             : 
 LOGIC_XOR            : 
 MATCH                : 
-MINUS                : 20
-MODULE               : 24
-MULTIPLY             : 22
+MINUS                : 21
+MODULE               : 25
+MULTIPLY             : 23
 NAMESPACE            : 
 NEW                  : 
 NOT_EQUALS           : 
 NOT_IDENTICAL        : 
 NULL_FUSION          : 
 OR                   : 
-PLUS                 : 19
+PLUS                 : 20
 PLUS_EQUALS          : 
 POST_DECREMENT       : 
 POST_INCREASE        : 
-POW                  : 25
+POW                  : 26
 PRE_DECREMENT        : 
 PRE_INCREASE         : 
 PRINT                : 6 8
@@ -250,27 +256,27 @@ PUBLIC               :
 REQUIRE              : 
 REQUIRE_ONCE         : 
 RETURN               : 
-RIGHT_BRACE          : 46
+RIGHT_BRACE          : 52
 RIGHT_BRACKET        : 
-RIGHT_PAREN          : 5 6 28 34 41 44 45
-SEMICOLON            : 3 31 32 33 34 40
+RIGHT_PAREN          : 5 6 29 39 40 47 50 51
+SEMICOLON            : 3 33 34 35 38 39 40 46
 SHIF_LEFT            : 
 SHIF_RIGHT           : 
 SMALL_EQUALS_TO      : 
 SMALL_THAN           : 
 SPACECRAFT           : 
 STATIC               : 
-STRING               : 12
+STRING               : 14 39
 STRING_CONCATENATION : 
 SWITCH               : 
 THROW                : 
 TRAIT                : 
-TRUE                 : 16
+TRUE                 : 17
 TRY                  : 
 UNSET                : 
 USE                  : 
 VAR                  : 
-VARIABLE             : 14 27 31 32 33 37 38 40
+VARIABLE             : 11 12 28 33 34 35 43 44 46
 WHILE                : 
 XOR                  : 
 YIELD                : 
@@ -278,26 +284,29 @@ error                :
 
 Nonterminals, with rules where they appear
 
-anonymous_functions  : 43
-arrow_function       : 42
+anonymous_functions  : 49
+arrow_function       : 48
 assignment           : 4
-boolean              : 15
-codeblock            : 41 44 45
-empty                : 36
-expression           : 19 20 28 33
-factor               : 21 22 23 24 25
-function_assignment  : 30
-function_invocation  : 32
-params               : 34 41 44 45
+boolean              : 16
+codeblock            : 47 50 51
+const_syntax         : 36
+constant_assignment  : 32
+define_syntax        : 37
+empty                : 42
+expression           : 20 21 29 35
+factor               : 22 23 24 25 26
+function_assignment  : 31
+function_invocation  : 34
+params               : 40 47 50 51
 print_statement      : 3
-printable_values     : 5 6 7 8 10
+printable_values     : 5 6 7 8 10 12
 program              : 1 0
-real_params          : 35 38
+real_params          : 41 44
 sentence             : 1 2
-special_function     : 40
-term                 : 18 19 20 22 23 24 25
-values               : 9 10 31
-variable_assignment  : 29
+special_function     : 46
+term                 : 19 20 21 23 24 25 26
+values               : 9 10 33 38 39
+variable_assignment  : 30
 
 Parsing method: LALR
 
@@ -312,18 +321,25 @@ state 0
     (6) print_statement -> . PRINT LEFT_PAREN printable_values RIGHT_PAREN
     (7) print_statement -> . ECHO printable_values
     (8) print_statement -> . PRINT printable_values
-    (29) assignment -> . variable_assignment
-    (30) assignment -> . function_assignment
-    (31) variable_assignment -> . VARIABLE EQUALS values SEMICOLON
-    (32) variable_assignment -> . VARIABLE EQUALS function_invocation SEMICOLON
-    (33) variable_assignment -> . VARIABLE EQUALS expression SEMICOLON
-    (40) function_assignment -> . VARIABLE EQUALS special_function SEMICOLON
-    (41) function_assignment -> . FUNCTION IDENTIFIER LEFT_PAREN params RIGHT_PAREN codeblock
+    (30) assignment -> . variable_assignment
+    (31) assignment -> . function_assignment
+    (32) assignment -> . constant_assignment
+    (33) variable_assignment -> . VARIABLE EQUALS values SEMICOLON
+    (34) variable_assignment -> . VARIABLE EQUALS function_invocation SEMICOLON
+    (35) variable_assignment -> . VARIABLE EQUALS expression SEMICOLON
+    (46) function_assignment -> . VARIABLE EQUALS special_function SEMICOLON
+    (47) function_assignment -> . FUNCTION IDENTIFIER LEFT_PAREN params RIGHT_PAREN codeblock
+    (36) constant_assignment -> . const_syntax
+    (37) constant_assignment -> . define_syntax
+    (38) const_syntax -> . CONST IDENTIFIER EQUALS values SEMICOLON
+    (39) define_syntax -> . DEFINE LEFT_PAREN STRING COMMA values RIGHT_PAREN SEMICOLON
 
     ECHO            shift and go to state 5
     PRINT           shift and go to state 6
-    VARIABLE        shift and go to state 9
-    FUNCTION        shift and go to state 10
+    VARIABLE        shift and go to state 10
+    FUNCTION        shift and go to state 11
+    CONST           shift and go to state 14
+    DEFINE          shift and go to state 15
 
     program                        shift and go to state 1
     sentence                       shift and go to state 2
@@ -331,6 +347,9 @@ state 0
     assignment                     shift and go to state 4
     variable_assignment            shift and go to state 7
     function_assignment            shift and go to state 8
+    constant_assignment            shift and go to state 9
+    const_syntax                   shift and go to state 12
+    define_syntax                  shift and go to state 13
 
 state 1
 
@@ -350,32 +369,42 @@ state 2
     (6) print_statement -> . PRINT LEFT_PAREN printable_values RIGHT_PAREN
     (7) print_statement -> . ECHO printable_values
     (8) print_statement -> . PRINT printable_values
-    (29) assignment -> . variable_assignment
-    (30) assignment -> . function_assignment
-    (31) variable_assignment -> . VARIABLE EQUALS values SEMICOLON
-    (32) variable_assignment -> . VARIABLE EQUALS function_invocation SEMICOLON
-    (33) variable_assignment -> . VARIABLE EQUALS expression SEMICOLON
-    (40) function_assignment -> . VARIABLE EQUALS special_function SEMICOLON
-    (41) function_assignment -> . FUNCTION IDENTIFIER LEFT_PAREN params RIGHT_PAREN codeblock
+    (30) assignment -> . variable_assignment
+    (31) assignment -> . function_assignment
+    (32) assignment -> . constant_assignment
+    (33) variable_assignment -> . VARIABLE EQUALS values SEMICOLON
+    (34) variable_assignment -> . VARIABLE EQUALS function_invocation SEMICOLON
+    (35) variable_assignment -> . VARIABLE EQUALS expression SEMICOLON
+    (46) function_assignment -> . VARIABLE EQUALS special_function SEMICOLON
+    (47) function_assignment -> . FUNCTION IDENTIFIER LEFT_PAREN params RIGHT_PAREN codeblock
+    (36) constant_assignment -> . const_syntax
+    (37) constant_assignment -> . define_syntax
+    (38) const_syntax -> . CONST IDENTIFIER EQUALS values SEMICOLON
+    (39) define_syntax -> . DEFINE LEFT_PAREN STRING COMMA values RIGHT_PAREN SEMICOLON
 
     $end            reduce using rule 2 (program -> sentence .)
     ECHO            shift and go to state 5
     PRINT           shift and go to state 6
-    VARIABLE        shift and go to state 9
-    FUNCTION        shift and go to state 10
+    VARIABLE        shift and go to state 10
+    FUNCTION        shift and go to state 11
+    CONST           shift and go to state 14
+    DEFINE          shift and go to state 15
 
     sentence                       shift and go to state 2
-    program                        shift and go to state 11
+    program                        shift and go to state 16
     print_statement                shift and go to state 3
     assignment                     shift and go to state 4
     variable_assignment            shift and go to state 7
     function_assignment            shift and go to state 8
+    constant_assignment            shift and go to state 9
+    const_syntax                   shift and go to state 12
+    define_syntax                  shift and go to state 13
 
 state 3
 
     (3) sentence -> print_statement . SEMICOLON
 
-    SEMICOLON       shift and go to state 12
+    SEMICOLON       shift and go to state 17
 
 
 state 4
@@ -386,6 +415,8 @@ state 4
     PRINT           reduce using rule 4 (sentence -> assignment .)
     VARIABLE        reduce using rule 4 (sentence -> assignment .)
     FUNCTION        reduce using rule 4 (sentence -> assignment .)
+    CONST           reduce using rule 4 (sentence -> assignment .)
+    DEFINE          reduce using rule 4 (sentence -> assignment .)
     $end            reduce using rule 4 (sentence -> assignment .)
 
 
@@ -395,25 +426,26 @@ state 5
     (7) print_statement -> ECHO . printable_values
     (9) printable_values -> . values
     (10) printable_values -> . values COMMA printable_values
-    (11) values -> . INTEGER
-    (12) values -> . STRING
-    (13) values -> . FLOAT
-    (14) values -> . VARIABLE
-    (15) values -> . boolean
-    (16) boolean -> . TRUE
-    (17) boolean -> . FALSE
+    (11) printable_values -> . VARIABLE
+    (12) printable_values -> . VARIABLE COMMA printable_values
+    (13) values -> . INTEGER
+    (14) values -> . STRING
+    (15) values -> . FLOAT
+    (16) values -> . boolean
+    (17) boolean -> . TRUE
+    (18) boolean -> . FALSE
 
-    LEFT_PAREN      shift and go to state 13
-    INTEGER         shift and go to state 16
-    STRING          shift and go to state 17
-    FLOAT           shift and go to state 18
-    VARIABLE        shift and go to state 19
-    TRUE            shift and go to state 21
-    FALSE           shift and go to state 22
+    LEFT_PAREN      shift and go to state 18
+    VARIABLE        shift and go to state 21
+    INTEGER         shift and go to state 22
+    STRING          shift and go to state 23
+    FLOAT           shift and go to state 24
+    TRUE            shift and go to state 26
+    FALSE           shift and go to state 27
 
-    printable_values               shift and go to state 14
-    values                         shift and go to state 15
-    boolean                        shift and go to state 20
+    printable_values               shift and go to state 19
+    values                         shift and go to state 20
+    boolean                        shift and go to state 25
 
 state 6
 
@@ -421,73 +453,131 @@ state 6
     (8) print_statement -> PRINT . printable_values
     (9) printable_values -> . values
     (10) printable_values -> . values COMMA printable_values
-    (11) values -> . INTEGER
-    (12) values -> . STRING
-    (13) values -> . FLOAT
-    (14) values -> . VARIABLE
-    (15) values -> . boolean
-    (16) boolean -> . TRUE
-    (17) boolean -> . FALSE
+    (11) printable_values -> . VARIABLE
+    (12) printable_values -> . VARIABLE COMMA printable_values
+    (13) values -> . INTEGER
+    (14) values -> . STRING
+    (15) values -> . FLOAT
+    (16) values -> . boolean
+    (17) boolean -> . TRUE
+    (18) boolean -> . FALSE
 
-    LEFT_PAREN      shift and go to state 23
-    INTEGER         shift and go to state 16
-    STRING          shift and go to state 17
-    FLOAT           shift and go to state 18
-    VARIABLE        shift and go to state 19
-    TRUE            shift and go to state 21
-    FALSE           shift and go to state 22
+    LEFT_PAREN      shift and go to state 28
+    VARIABLE        shift and go to state 21
+    INTEGER         shift and go to state 22
+    STRING          shift and go to state 23
+    FLOAT           shift and go to state 24
+    TRUE            shift and go to state 26
+    FALSE           shift and go to state 27
 
-    printable_values               shift and go to state 24
-    values                         shift and go to state 15
-    boolean                        shift and go to state 20
+    printable_values               shift and go to state 29
+    values                         shift and go to state 20
+    boolean                        shift and go to state 25
 
 state 7
 
-    (29) assignment -> variable_assignment .
+    (30) assignment -> variable_assignment .
 
-    ECHO            reduce using rule 29 (assignment -> variable_assignment .)
-    PRINT           reduce using rule 29 (assignment -> variable_assignment .)
-    VARIABLE        reduce using rule 29 (assignment -> variable_assignment .)
-    FUNCTION        reduce using rule 29 (assignment -> variable_assignment .)
-    $end            reduce using rule 29 (assignment -> variable_assignment .)
+    ECHO            reduce using rule 30 (assignment -> variable_assignment .)
+    PRINT           reduce using rule 30 (assignment -> variable_assignment .)
+    VARIABLE        reduce using rule 30 (assignment -> variable_assignment .)
+    FUNCTION        reduce using rule 30 (assignment -> variable_assignment .)
+    CONST           reduce using rule 30 (assignment -> variable_assignment .)
+    DEFINE          reduce using rule 30 (assignment -> variable_assignment .)
+    $end            reduce using rule 30 (assignment -> variable_assignment .)
 
 
 state 8
 
-    (30) assignment -> function_assignment .
+    (31) assignment -> function_assignment .
 
-    ECHO            reduce using rule 30 (assignment -> function_assignment .)
-    PRINT           reduce using rule 30 (assignment -> function_assignment .)
-    VARIABLE        reduce using rule 30 (assignment -> function_assignment .)
-    FUNCTION        reduce using rule 30 (assignment -> function_assignment .)
-    $end            reduce using rule 30 (assignment -> function_assignment .)
+    ECHO            reduce using rule 31 (assignment -> function_assignment .)
+    PRINT           reduce using rule 31 (assignment -> function_assignment .)
+    VARIABLE        reduce using rule 31 (assignment -> function_assignment .)
+    FUNCTION        reduce using rule 31 (assignment -> function_assignment .)
+    CONST           reduce using rule 31 (assignment -> function_assignment .)
+    DEFINE          reduce using rule 31 (assignment -> function_assignment .)
+    $end            reduce using rule 31 (assignment -> function_assignment .)
 
 
 state 9
 
-    (31) variable_assignment -> VARIABLE . EQUALS values SEMICOLON
-    (32) variable_assignment -> VARIABLE . EQUALS function_invocation SEMICOLON
-    (33) variable_assignment -> VARIABLE . EQUALS expression SEMICOLON
-    (40) function_assignment -> VARIABLE . EQUALS special_function SEMICOLON
+    (32) assignment -> constant_assignment .
 
-    EQUALS          shift and go to state 25
+    ECHO            reduce using rule 32 (assignment -> constant_assignment .)
+    PRINT           reduce using rule 32 (assignment -> constant_assignment .)
+    VARIABLE        reduce using rule 32 (assignment -> constant_assignment .)
+    FUNCTION        reduce using rule 32 (assignment -> constant_assignment .)
+    CONST           reduce using rule 32 (assignment -> constant_assignment .)
+    DEFINE          reduce using rule 32 (assignment -> constant_assignment .)
+    $end            reduce using rule 32 (assignment -> constant_assignment .)
 
 
 state 10
 
-    (41) function_assignment -> FUNCTION . IDENTIFIER LEFT_PAREN params RIGHT_PAREN codeblock
+    (33) variable_assignment -> VARIABLE . EQUALS values SEMICOLON
+    (34) variable_assignment -> VARIABLE . EQUALS function_invocation SEMICOLON
+    (35) variable_assignment -> VARIABLE . EQUALS expression SEMICOLON
+    (46) function_assignment -> VARIABLE . EQUALS special_function SEMICOLON
 
-    IDENTIFIER      shift and go to state 26
+    EQUALS          shift and go to state 30
 
 
 state 11
+
+    (47) function_assignment -> FUNCTION . IDENTIFIER LEFT_PAREN params RIGHT_PAREN codeblock
+
+    IDENTIFIER      shift and go to state 31
+
+
+state 12
+
+    (36) constant_assignment -> const_syntax .
+
+    ECHO            reduce using rule 36 (constant_assignment -> const_syntax .)
+    PRINT           reduce using rule 36 (constant_assignment -> const_syntax .)
+    VARIABLE        reduce using rule 36 (constant_assignment -> const_syntax .)
+    FUNCTION        reduce using rule 36 (constant_assignment -> const_syntax .)
+    CONST           reduce using rule 36 (constant_assignment -> const_syntax .)
+    DEFINE          reduce using rule 36 (constant_assignment -> const_syntax .)
+    $end            reduce using rule 36 (constant_assignment -> const_syntax .)
+
+
+state 13
+
+    (37) constant_assignment -> define_syntax .
+
+    ECHO            reduce using rule 37 (constant_assignment -> define_syntax .)
+    PRINT           reduce using rule 37 (constant_assignment -> define_syntax .)
+    VARIABLE        reduce using rule 37 (constant_assignment -> define_syntax .)
+    FUNCTION        reduce using rule 37 (constant_assignment -> define_syntax .)
+    CONST           reduce using rule 37 (constant_assignment -> define_syntax .)
+    DEFINE          reduce using rule 37 (constant_assignment -> define_syntax .)
+    $end            reduce using rule 37 (constant_assignment -> define_syntax .)
+
+
+state 14
+
+    (38) const_syntax -> CONST . IDENTIFIER EQUALS values SEMICOLON
+
+    IDENTIFIER      shift and go to state 32
+
+
+state 15
+
+    (39) define_syntax -> DEFINE . LEFT_PAREN STRING COMMA values RIGHT_PAREN SEMICOLON
+
+    LEFT_PAREN      shift and go to state 33
+
+
+state 16
 
     (1) program -> sentence program .
 
     $end            reduce using rule 1 (program -> sentence program .)
 
 
-state 12
+state 17
 
     (3) sentence -> print_statement SEMICOLON .
 
@@ -495,414 +585,481 @@ state 12
     PRINT           reduce using rule 3 (sentence -> print_statement SEMICOLON .)
     VARIABLE        reduce using rule 3 (sentence -> print_statement SEMICOLON .)
     FUNCTION        reduce using rule 3 (sentence -> print_statement SEMICOLON .)
+    CONST           reduce using rule 3 (sentence -> print_statement SEMICOLON .)
+    DEFINE          reduce using rule 3 (sentence -> print_statement SEMICOLON .)
     $end            reduce using rule 3 (sentence -> print_statement SEMICOLON .)
 
 
-state 13
+state 18
 
     (5) print_statement -> ECHO LEFT_PAREN . printable_values RIGHT_PAREN
     (9) printable_values -> . values
     (10) printable_values -> . values COMMA printable_values
-    (11) values -> . INTEGER
-    (12) values -> . STRING
-    (13) values -> . FLOAT
-    (14) values -> . VARIABLE
-    (15) values -> . boolean
-    (16) boolean -> . TRUE
-    (17) boolean -> . FALSE
+    (11) printable_values -> . VARIABLE
+    (12) printable_values -> . VARIABLE COMMA printable_values
+    (13) values -> . INTEGER
+    (14) values -> . STRING
+    (15) values -> . FLOAT
+    (16) values -> . boolean
+    (17) boolean -> . TRUE
+    (18) boolean -> . FALSE
 
-    INTEGER         shift and go to state 16
-    STRING          shift and go to state 17
-    FLOAT           shift and go to state 18
-    VARIABLE        shift and go to state 19
-    TRUE            shift and go to state 21
-    FALSE           shift and go to state 22
+    VARIABLE        shift and go to state 21
+    INTEGER         shift and go to state 22
+    STRING          shift and go to state 23
+    FLOAT           shift and go to state 24
+    TRUE            shift and go to state 26
+    FALSE           shift and go to state 27
 
-    printable_values               shift and go to state 27
-    values                         shift and go to state 15
-    boolean                        shift and go to state 20
+    printable_values               shift and go to state 34
+    values                         shift and go to state 20
+    boolean                        shift and go to state 25
 
-state 14
+state 19
 
     (7) print_statement -> ECHO printable_values .
 
     SEMICOLON       reduce using rule 7 (print_statement -> ECHO printable_values .)
 
 
-state 15
+state 20
 
     (9) printable_values -> values .
     (10) printable_values -> values . COMMA printable_values
 
     SEMICOLON       reduce using rule 9 (printable_values -> values .)
     RIGHT_PAREN     reduce using rule 9 (printable_values -> values .)
-    COMMA           shift and go to state 28
-
-
-state 16
-
-    (11) values -> INTEGER .
-
-    COMMA           reduce using rule 11 (values -> INTEGER .)
-    SEMICOLON       reduce using rule 11 (values -> INTEGER .)
-    RIGHT_PAREN     reduce using rule 11 (values -> INTEGER .)
-
-
-state 17
-
-    (12) values -> STRING .
-
-    COMMA           reduce using rule 12 (values -> STRING .)
-    SEMICOLON       reduce using rule 12 (values -> STRING .)
-    RIGHT_PAREN     reduce using rule 12 (values -> STRING .)
-
-
-state 18
-
-    (13) values -> FLOAT .
-
-    COMMA           reduce using rule 13 (values -> FLOAT .)
-    SEMICOLON       reduce using rule 13 (values -> FLOAT .)
-    RIGHT_PAREN     reduce using rule 13 (values -> FLOAT .)
-
-
-state 19
-
-    (14) values -> VARIABLE .
-
-    COMMA           reduce using rule 14 (values -> VARIABLE .)
-    SEMICOLON       reduce using rule 14 (values -> VARIABLE .)
-    RIGHT_PAREN     reduce using rule 14 (values -> VARIABLE .)
-
-
-state 20
-
-    (15) values -> boolean .
-
-    COMMA           reduce using rule 15 (values -> boolean .)
-    SEMICOLON       reduce using rule 15 (values -> boolean .)
-    RIGHT_PAREN     reduce using rule 15 (values -> boolean .)
+    COMMA           shift and go to state 35
 
 
 state 21
 
-    (16) boolean -> TRUE .
+    (11) printable_values -> VARIABLE .
+    (12) printable_values -> VARIABLE . COMMA printable_values
 
-    COMMA           reduce using rule 16 (boolean -> TRUE .)
-    SEMICOLON       reduce using rule 16 (boolean -> TRUE .)
-    RIGHT_PAREN     reduce using rule 16 (boolean -> TRUE .)
+    SEMICOLON       reduce using rule 11 (printable_values -> VARIABLE .)
+    RIGHT_PAREN     reduce using rule 11 (printable_values -> VARIABLE .)
+    COMMA           shift and go to state 36
 
 
 state 22
 
-    (17) boolean -> FALSE .
+    (13) values -> INTEGER .
 
-    COMMA           reduce using rule 17 (boolean -> FALSE .)
-    SEMICOLON       reduce using rule 17 (boolean -> FALSE .)
-    RIGHT_PAREN     reduce using rule 17 (boolean -> FALSE .)
+    COMMA           reduce using rule 13 (values -> INTEGER .)
+    SEMICOLON       reduce using rule 13 (values -> INTEGER .)
+    RIGHT_PAREN     reduce using rule 13 (values -> INTEGER .)
 
 
 state 23
 
+    (14) values -> STRING .
+
+    COMMA           reduce using rule 14 (values -> STRING .)
+    SEMICOLON       reduce using rule 14 (values -> STRING .)
+    RIGHT_PAREN     reduce using rule 14 (values -> STRING .)
+
+
+state 24
+
+    (15) values -> FLOAT .
+
+    COMMA           reduce using rule 15 (values -> FLOAT .)
+    SEMICOLON       reduce using rule 15 (values -> FLOAT .)
+    RIGHT_PAREN     reduce using rule 15 (values -> FLOAT .)
+
+
+state 25
+
+    (16) values -> boolean .
+
+    COMMA           reduce using rule 16 (values -> boolean .)
+    SEMICOLON       reduce using rule 16 (values -> boolean .)
+    RIGHT_PAREN     reduce using rule 16 (values -> boolean .)
+
+
+state 26
+
+    (17) boolean -> TRUE .
+
+    COMMA           reduce using rule 17 (boolean -> TRUE .)
+    SEMICOLON       reduce using rule 17 (boolean -> TRUE .)
+    RIGHT_PAREN     reduce using rule 17 (boolean -> TRUE .)
+
+
+state 27
+
+    (18) boolean -> FALSE .
+
+    COMMA           reduce using rule 18 (boolean -> FALSE .)
+    SEMICOLON       reduce using rule 18 (boolean -> FALSE .)
+    RIGHT_PAREN     reduce using rule 18 (boolean -> FALSE .)
+
+
+state 28
+
     (6) print_statement -> PRINT LEFT_PAREN . printable_values RIGHT_PAREN
     (9) printable_values -> . values
     (10) printable_values -> . values COMMA printable_values
-    (11) values -> . INTEGER
-    (12) values -> . STRING
-    (13) values -> . FLOAT
-    (14) values -> . VARIABLE
-    (15) values -> . boolean
-    (16) boolean -> . TRUE
-    (17) boolean -> . FALSE
+    (11) printable_values -> . VARIABLE
+    (12) printable_values -> . VARIABLE COMMA printable_values
+    (13) values -> . INTEGER
+    (14) values -> . STRING
+    (15) values -> . FLOAT
+    (16) values -> . boolean
+    (17) boolean -> . TRUE
+    (18) boolean -> . FALSE
 
-    INTEGER         shift and go to state 16
-    STRING          shift and go to state 17
-    FLOAT           shift and go to state 18
-    VARIABLE        shift and go to state 19
-    TRUE            shift and go to state 21
-    FALSE           shift and go to state 22
+    VARIABLE        shift and go to state 21
+    INTEGER         shift and go to state 22
+    STRING          shift and go to state 23
+    FLOAT           shift and go to state 24
+    TRUE            shift and go to state 26
+    FALSE           shift and go to state 27
 
-    printable_values               shift and go to state 29
-    values                         shift and go to state 15
-    boolean                        shift and go to state 20
+    printable_values               shift and go to state 37
+    values                         shift and go to state 20
+    boolean                        shift and go to state 25
 
-state 24
+state 29
 
     (8) print_statement -> PRINT printable_values .
 
     SEMICOLON       reduce using rule 8 (print_statement -> PRINT printable_values .)
 
 
-state 25
-
-    (31) variable_assignment -> VARIABLE EQUALS . values SEMICOLON
-    (32) variable_assignment -> VARIABLE EQUALS . function_invocation SEMICOLON
-    (33) variable_assignment -> VARIABLE EQUALS . expression SEMICOLON
-    (40) function_assignment -> VARIABLE EQUALS . special_function SEMICOLON
-    (11) values -> . INTEGER
-    (12) values -> . STRING
-    (13) values -> . FLOAT
-    (14) values -> . VARIABLE
-    (15) values -> . boolean
-    (34) function_invocation -> . IDENTIFIER LEFT_PAREN params RIGHT_PAREN SEMICOLON
-    (18) expression -> . term
-    (19) expression -> . term PLUS expression
-    (20) expression -> . term MINUS expression
-    (42) special_function -> . arrow_function
-    (43) special_function -> . anonymous_functions
-    (16) boolean -> . TRUE
-    (17) boolean -> . FALSE
-    (21) term -> . factor
-    (22) term -> . factor MULTIPLY term
-    (23) term -> . factor DIVIDE term
-    (24) term -> . factor MODULE term
-    (25) term -> . factor POW term
-    (44) arrow_function -> . FN LEFT_PAREN params RIGHT_PAREN EQUALS GREATER_THAN codeblock
-    (45) anonymous_functions -> . FUNCTION LEFT_PAREN params RIGHT_PAREN codeblock
-    (26) factor -> . INTEGER
-    (27) factor -> . VARIABLE
-    (28) factor -> . LEFT_PAREN expression RIGHT_PAREN
-
-    INTEGER         shift and go to state 35
-    STRING          shift and go to state 17
-    FLOAT           shift and go to state 18
-    VARIABLE        shift and go to state 30
-    IDENTIFIER      shift and go to state 36
-    TRUE            shift and go to state 21
-    FALSE           shift and go to state 22
-    FN              shift and go to state 42
-    FUNCTION        shift and go to state 43
-    LEFT_PAREN      shift and go to state 37
-
-    values                         shift and go to state 31
-    function_invocation            shift and go to state 32
-    expression                     shift and go to state 33
-    special_function               shift and go to state 34
-    boolean                        shift and go to state 20
-    term                           shift and go to state 38
-    arrow_function                 shift and go to state 39
-    anonymous_functions            shift and go to state 40
-    factor                         shift and go to state 41
-
-state 26
-
-    (41) function_assignment -> FUNCTION IDENTIFIER . LEFT_PAREN params RIGHT_PAREN codeblock
-
-    LEFT_PAREN      shift and go to state 44
-
-
-state 27
-
-    (5) print_statement -> ECHO LEFT_PAREN printable_values . RIGHT_PAREN
-
-    RIGHT_PAREN     shift and go to state 45
-
-
-state 28
-
-    (10) printable_values -> values COMMA . printable_values
-    (9) printable_values -> . values
-    (10) printable_values -> . values COMMA printable_values
-    (11) values -> . INTEGER
-    (12) values -> . STRING
-    (13) values -> . FLOAT
-    (14) values -> . VARIABLE
-    (15) values -> . boolean
-    (16) boolean -> . TRUE
-    (17) boolean -> . FALSE
-
-    INTEGER         shift and go to state 16
-    STRING          shift and go to state 17
-    FLOAT           shift and go to state 18
-    VARIABLE        shift and go to state 19
-    TRUE            shift and go to state 21
-    FALSE           shift and go to state 22
-
-    values                         shift and go to state 15
-    printable_values               shift and go to state 46
-    boolean                        shift and go to state 20
-
-state 29
-
-    (6) print_statement -> PRINT LEFT_PAREN printable_values . RIGHT_PAREN
-
-    RIGHT_PAREN     shift and go to state 47
-
-
 state 30
 
-    (14) values -> VARIABLE .
-    (27) factor -> VARIABLE .
+    (33) variable_assignment -> VARIABLE EQUALS . values SEMICOLON
+    (34) variable_assignment -> VARIABLE EQUALS . function_invocation SEMICOLON
+    (35) variable_assignment -> VARIABLE EQUALS . expression SEMICOLON
+    (46) function_assignment -> VARIABLE EQUALS . special_function SEMICOLON
+    (13) values -> . INTEGER
+    (14) values -> . STRING
+    (15) values -> . FLOAT
+    (16) values -> . boolean
+    (40) function_invocation -> . IDENTIFIER LEFT_PAREN params RIGHT_PAREN SEMICOLON
+    (19) expression -> . term
+    (20) expression -> . term PLUS expression
+    (21) expression -> . term MINUS expression
+    (48) special_function -> . arrow_function
+    (49) special_function -> . anonymous_functions
+    (17) boolean -> . TRUE
+    (18) boolean -> . FALSE
+    (22) term -> . factor
+    (23) term -> . factor MULTIPLY term
+    (24) term -> . factor DIVIDE term
+    (25) term -> . factor MODULE term
+    (26) term -> . factor POW term
+    (50) arrow_function -> . FN LEFT_PAREN params RIGHT_PAREN EQUALS GREATER_THAN codeblock
+    (51) anonymous_functions -> . FUNCTION LEFT_PAREN params RIGHT_PAREN codeblock
+    (27) factor -> . INTEGER
+    (28) factor -> . VARIABLE
+    (29) factor -> . LEFT_PAREN expression RIGHT_PAREN
 
-  ! reduce/reduce conflict for SEMICOLON resolved using rule 14 (values -> VARIABLE .)
-    SEMICOLON       reduce using rule 14 (values -> VARIABLE .)
-    MULTIPLY        reduce using rule 27 (factor -> VARIABLE .)
-    DIVIDE          reduce using rule 27 (factor -> VARIABLE .)
-    MODULE          reduce using rule 27 (factor -> VARIABLE .)
-    POW             reduce using rule 27 (factor -> VARIABLE .)
-    PLUS            reduce using rule 27 (factor -> VARIABLE .)
-    MINUS           reduce using rule 27 (factor -> VARIABLE .)
+    INTEGER         shift and go to state 43
+    STRING          shift and go to state 23
+    FLOAT           shift and go to state 24
+    IDENTIFIER      shift and go to state 44
+    TRUE            shift and go to state 26
+    FALSE           shift and go to state 27
+    FN              shift and go to state 50
+    FUNCTION        shift and go to state 51
+    VARIABLE        shift and go to state 38
+    LEFT_PAREN      shift and go to state 45
 
-  ! SEMICOLON       [ reduce using rule 27 (factor -> VARIABLE .) ]
-
+    values                         shift and go to state 39
+    function_invocation            shift and go to state 40
+    expression                     shift and go to state 41
+    special_function               shift and go to state 42
+    boolean                        shift and go to state 25
+    term                           shift and go to state 46
+    arrow_function                 shift and go to state 47
+    anonymous_functions            shift and go to state 48
+    factor                         shift and go to state 49
 
 state 31
 
-    (31) variable_assignment -> VARIABLE EQUALS values . SEMICOLON
-
-    SEMICOLON       shift and go to state 48
-
-
-state 32
-
-    (32) variable_assignment -> VARIABLE EQUALS function_invocation . SEMICOLON
-
-    SEMICOLON       shift and go to state 49
-
-
-state 33
-
-    (33) variable_assignment -> VARIABLE EQUALS expression . SEMICOLON
-
-    SEMICOLON       shift and go to state 50
-
-
-state 34
-
-    (40) function_assignment -> VARIABLE EQUALS special_function . SEMICOLON
-
-    SEMICOLON       shift and go to state 51
-
-
-state 35
-
-    (11) values -> INTEGER .
-    (26) factor -> INTEGER .
-
-  ! reduce/reduce conflict for SEMICOLON resolved using rule 11 (values -> INTEGER .)
-    SEMICOLON       reduce using rule 11 (values -> INTEGER .)
-    MULTIPLY        reduce using rule 26 (factor -> INTEGER .)
-    DIVIDE          reduce using rule 26 (factor -> INTEGER .)
-    MODULE          reduce using rule 26 (factor -> INTEGER .)
-    POW             reduce using rule 26 (factor -> INTEGER .)
-    PLUS            reduce using rule 26 (factor -> INTEGER .)
-    MINUS           reduce using rule 26 (factor -> INTEGER .)
-
-  ! SEMICOLON       [ reduce using rule 26 (factor -> INTEGER .) ]
-
-
-state 36
-
-    (34) function_invocation -> IDENTIFIER . LEFT_PAREN params RIGHT_PAREN SEMICOLON
+    (47) function_assignment -> FUNCTION IDENTIFIER . LEFT_PAREN params RIGHT_PAREN codeblock
 
     LEFT_PAREN      shift and go to state 52
 
 
+state 32
+
+    (38) const_syntax -> CONST IDENTIFIER . EQUALS values SEMICOLON
+
+    EQUALS          shift and go to state 53
+
+
+state 33
+
+    (39) define_syntax -> DEFINE LEFT_PAREN . STRING COMMA values RIGHT_PAREN SEMICOLON
+
+    STRING          shift and go to state 54
+
+
+state 34
+
+    (5) print_statement -> ECHO LEFT_PAREN printable_values . RIGHT_PAREN
+
+    RIGHT_PAREN     shift and go to state 55
+
+
+state 35
+
+    (10) printable_values -> values COMMA . printable_values
+    (9) printable_values -> . values
+    (10) printable_values -> . values COMMA printable_values
+    (11) printable_values -> . VARIABLE
+    (12) printable_values -> . VARIABLE COMMA printable_values
+    (13) values -> . INTEGER
+    (14) values -> . STRING
+    (15) values -> . FLOAT
+    (16) values -> . boolean
+    (17) boolean -> . TRUE
+    (18) boolean -> . FALSE
+
+    VARIABLE        shift and go to state 21
+    INTEGER         shift and go to state 22
+    STRING          shift and go to state 23
+    FLOAT           shift and go to state 24
+    TRUE            shift and go to state 26
+    FALSE           shift and go to state 27
+
+    values                         shift and go to state 20
+    printable_values               shift and go to state 56
+    boolean                        shift and go to state 25
+
+state 36
+
+    (12) printable_values -> VARIABLE COMMA . printable_values
+    (9) printable_values -> . values
+    (10) printable_values -> . values COMMA printable_values
+    (11) printable_values -> . VARIABLE
+    (12) printable_values -> . VARIABLE COMMA printable_values
+    (13) values -> . INTEGER
+    (14) values -> . STRING
+    (15) values -> . FLOAT
+    (16) values -> . boolean
+    (17) boolean -> . TRUE
+    (18) boolean -> . FALSE
+
+    VARIABLE        shift and go to state 21
+    INTEGER         shift and go to state 22
+    STRING          shift and go to state 23
+    FLOAT           shift and go to state 24
+    TRUE            shift and go to state 26
+    FALSE           shift and go to state 27
+
+    printable_values               shift and go to state 57
+    values                         shift and go to state 20
+    boolean                        shift and go to state 25
+
 state 37
 
-    (28) factor -> LEFT_PAREN . expression RIGHT_PAREN
-    (18) expression -> . term
-    (19) expression -> . term PLUS expression
-    (20) expression -> . term MINUS expression
-    (21) term -> . factor
-    (22) term -> . factor MULTIPLY term
-    (23) term -> . factor DIVIDE term
-    (24) term -> . factor MODULE term
-    (25) term -> . factor POW term
-    (26) factor -> . INTEGER
-    (27) factor -> . VARIABLE
-    (28) factor -> . LEFT_PAREN expression RIGHT_PAREN
+    (6) print_statement -> PRINT LEFT_PAREN printable_values . RIGHT_PAREN
 
-    INTEGER         shift and go to state 54
-    VARIABLE        shift and go to state 55
-    LEFT_PAREN      shift and go to state 37
+    RIGHT_PAREN     shift and go to state 58
 
-    expression                     shift and go to state 53
-    term                           shift and go to state 38
-    factor                         shift and go to state 41
 
 state 38
 
-    (18) expression -> term .
-    (19) expression -> term . PLUS expression
-    (20) expression -> term . MINUS expression
+    (28) factor -> VARIABLE .
 
-    SEMICOLON       reduce using rule 18 (expression -> term .)
-    RIGHT_PAREN     reduce using rule 18 (expression -> term .)
-    PLUS            shift and go to state 56
-    MINUS           shift and go to state 57
+    MULTIPLY        reduce using rule 28 (factor -> VARIABLE .)
+    DIVIDE          reduce using rule 28 (factor -> VARIABLE .)
+    MODULE          reduce using rule 28 (factor -> VARIABLE .)
+    POW             reduce using rule 28 (factor -> VARIABLE .)
+    PLUS            reduce using rule 28 (factor -> VARIABLE .)
+    MINUS           reduce using rule 28 (factor -> VARIABLE .)
+    SEMICOLON       reduce using rule 28 (factor -> VARIABLE .)
+    RIGHT_PAREN     reduce using rule 28 (factor -> VARIABLE .)
 
 
 state 39
 
-    (42) special_function -> arrow_function .
+    (33) variable_assignment -> VARIABLE EQUALS values . SEMICOLON
 
-    SEMICOLON       reduce using rule 42 (special_function -> arrow_function .)
+    SEMICOLON       shift and go to state 59
 
 
 state 40
 
-    (43) special_function -> anonymous_functions .
+    (34) variable_assignment -> VARIABLE EQUALS function_invocation . SEMICOLON
 
-    SEMICOLON       reduce using rule 43 (special_function -> anonymous_functions .)
+    SEMICOLON       shift and go to state 60
 
 
 state 41
 
-    (21) term -> factor .
-    (22) term -> factor . MULTIPLY term
-    (23) term -> factor . DIVIDE term
-    (24) term -> factor . MODULE term
-    (25) term -> factor . POW term
+    (35) variable_assignment -> VARIABLE EQUALS expression . SEMICOLON
 
-    PLUS            reduce using rule 21 (term -> factor .)
-    MINUS           reduce using rule 21 (term -> factor .)
-    SEMICOLON       reduce using rule 21 (term -> factor .)
-    RIGHT_PAREN     reduce using rule 21 (term -> factor .)
-    MULTIPLY        shift and go to state 58
-    DIVIDE          shift and go to state 59
-    MODULE          shift and go to state 60
-    POW             shift and go to state 61
+    SEMICOLON       shift and go to state 61
 
 
 state 42
 
-    (44) arrow_function -> FN . LEFT_PAREN params RIGHT_PAREN EQUALS GREATER_THAN codeblock
+    (46) function_assignment -> VARIABLE EQUALS special_function . SEMICOLON
 
-    LEFT_PAREN      shift and go to state 62
+    SEMICOLON       shift and go to state 62
 
 
 state 43
 
-    (45) anonymous_functions -> FUNCTION . LEFT_PAREN params RIGHT_PAREN codeblock
+    (13) values -> INTEGER .
+    (27) factor -> INTEGER .
 
-    LEFT_PAREN      shift and go to state 63
+  ! reduce/reduce conflict for SEMICOLON resolved using rule 13 (values -> INTEGER .)
+    SEMICOLON       reduce using rule 13 (values -> INTEGER .)
+    MULTIPLY        reduce using rule 27 (factor -> INTEGER .)
+    DIVIDE          reduce using rule 27 (factor -> INTEGER .)
+    MODULE          reduce using rule 27 (factor -> INTEGER .)
+    POW             reduce using rule 27 (factor -> INTEGER .)
+    PLUS            reduce using rule 27 (factor -> INTEGER .)
+    MINUS           reduce using rule 27 (factor -> INTEGER .)
+
+  ! SEMICOLON       [ reduce using rule 27 (factor -> INTEGER .) ]
 
 
 state 44
 
-    (41) function_assignment -> FUNCTION IDENTIFIER LEFT_PAREN . params RIGHT_PAREN codeblock
-    (35) params -> . real_params
-    (36) params -> . empty
-    (37) real_params -> . VARIABLE
-    (38) real_params -> . real_params COMMA VARIABLE
-    (39) empty -> .
+    (40) function_invocation -> IDENTIFIER . LEFT_PAREN params RIGHT_PAREN SEMICOLON
 
-    VARIABLE        shift and go to state 67
-    RIGHT_PAREN     reduce using rule 39 (empty -> .)
+    LEFT_PAREN      shift and go to state 63
 
-    params                         shift and go to state 64
-    real_params                    shift and go to state 65
-    empty                          shift and go to state 66
 
 state 45
+
+    (29) factor -> LEFT_PAREN . expression RIGHT_PAREN
+    (19) expression -> . term
+    (20) expression -> . term PLUS expression
+    (21) expression -> . term MINUS expression
+    (22) term -> . factor
+    (23) term -> . factor MULTIPLY term
+    (24) term -> . factor DIVIDE term
+    (25) term -> . factor MODULE term
+    (26) term -> . factor POW term
+    (27) factor -> . INTEGER
+    (28) factor -> . VARIABLE
+    (29) factor -> . LEFT_PAREN expression RIGHT_PAREN
+
+    INTEGER         shift and go to state 65
+    VARIABLE        shift and go to state 38
+    LEFT_PAREN      shift and go to state 45
+
+    expression                     shift and go to state 64
+    term                           shift and go to state 46
+    factor                         shift and go to state 49
+
+state 46
+
+    (19) expression -> term .
+    (20) expression -> term . PLUS expression
+    (21) expression -> term . MINUS expression
+
+    SEMICOLON       reduce using rule 19 (expression -> term .)
+    RIGHT_PAREN     reduce using rule 19 (expression -> term .)
+    PLUS            shift and go to state 66
+    MINUS           shift and go to state 67
+
+
+state 47
+
+    (48) special_function -> arrow_function .
+
+    SEMICOLON       reduce using rule 48 (special_function -> arrow_function .)
+
+
+state 48
+
+    (49) special_function -> anonymous_functions .
+
+    SEMICOLON       reduce using rule 49 (special_function -> anonymous_functions .)
+
+
+state 49
+
+    (22) term -> factor .
+    (23) term -> factor . MULTIPLY term
+    (24) term -> factor . DIVIDE term
+    (25) term -> factor . MODULE term
+    (26) term -> factor . POW term
+
+    PLUS            reduce using rule 22 (term -> factor .)
+    MINUS           reduce using rule 22 (term -> factor .)
+    SEMICOLON       reduce using rule 22 (term -> factor .)
+    RIGHT_PAREN     reduce using rule 22 (term -> factor .)
+    MULTIPLY        shift and go to state 68
+    DIVIDE          shift and go to state 69
+    MODULE          shift and go to state 70
+    POW             shift and go to state 71
+
+
+state 50
+
+    (50) arrow_function -> FN . LEFT_PAREN params RIGHT_PAREN EQUALS GREATER_THAN codeblock
+
+    LEFT_PAREN      shift and go to state 72
+
+
+state 51
+
+    (51) anonymous_functions -> FUNCTION . LEFT_PAREN params RIGHT_PAREN codeblock
+
+    LEFT_PAREN      shift and go to state 73
+
+
+state 52
+
+    (47) function_assignment -> FUNCTION IDENTIFIER LEFT_PAREN . params RIGHT_PAREN codeblock
+    (41) params -> . real_params
+    (42) params -> . empty
+    (43) real_params -> . VARIABLE
+    (44) real_params -> . real_params COMMA VARIABLE
+    (45) empty -> .
+
+    VARIABLE        shift and go to state 77
+    RIGHT_PAREN     reduce using rule 45 (empty -> .)
+
+    params                         shift and go to state 74
+    real_params                    shift and go to state 75
+    empty                          shift and go to state 76
+
+state 53
+
+    (38) const_syntax -> CONST IDENTIFIER EQUALS . values SEMICOLON
+    (13) values -> . INTEGER
+    (14) values -> . STRING
+    (15) values -> . FLOAT
+    (16) values -> . boolean
+    (17) boolean -> . TRUE
+    (18) boolean -> . FALSE
+
+    INTEGER         shift and go to state 22
+    STRING          shift and go to state 23
+    FLOAT           shift and go to state 24
+    TRUE            shift and go to state 26
+    FALSE           shift and go to state 27
+
+    values                         shift and go to state 78
+    boolean                        shift and go to state 25
+
+state 54
+
+    (39) define_syntax -> DEFINE LEFT_PAREN STRING . COMMA values RIGHT_PAREN SEMICOLON
+
+    COMMA           shift and go to state 79
+
+
+state 55
 
     (5) print_statement -> ECHO LEFT_PAREN printable_values RIGHT_PAREN .
 
     SEMICOLON       reduce using rule 5 (print_statement -> ECHO LEFT_PAREN printable_values RIGHT_PAREN .)
 
 
-state 46
+state 56
 
     (10) printable_values -> values COMMA printable_values .
 
@@ -910,501 +1067,571 @@ state 46
     RIGHT_PAREN     reduce using rule 10 (printable_values -> values COMMA printable_values .)
 
 
-state 47
+state 57
+
+    (12) printable_values -> VARIABLE COMMA printable_values .
+
+    SEMICOLON       reduce using rule 12 (printable_values -> VARIABLE COMMA printable_values .)
+    RIGHT_PAREN     reduce using rule 12 (printable_values -> VARIABLE COMMA printable_values .)
+
+
+state 58
 
     (6) print_statement -> PRINT LEFT_PAREN printable_values RIGHT_PAREN .
 
     SEMICOLON       reduce using rule 6 (print_statement -> PRINT LEFT_PAREN printable_values RIGHT_PAREN .)
 
 
-state 48
-
-    (31) variable_assignment -> VARIABLE EQUALS values SEMICOLON .
-
-    ECHO            reduce using rule 31 (variable_assignment -> VARIABLE EQUALS values SEMICOLON .)
-    PRINT           reduce using rule 31 (variable_assignment -> VARIABLE EQUALS values SEMICOLON .)
-    VARIABLE        reduce using rule 31 (variable_assignment -> VARIABLE EQUALS values SEMICOLON .)
-    FUNCTION        reduce using rule 31 (variable_assignment -> VARIABLE EQUALS values SEMICOLON .)
-    $end            reduce using rule 31 (variable_assignment -> VARIABLE EQUALS values SEMICOLON .)
-
-
-state 49
-
-    (32) variable_assignment -> VARIABLE EQUALS function_invocation SEMICOLON .
-
-    ECHO            reduce using rule 32 (variable_assignment -> VARIABLE EQUALS function_invocation SEMICOLON .)
-    PRINT           reduce using rule 32 (variable_assignment -> VARIABLE EQUALS function_invocation SEMICOLON .)
-    VARIABLE        reduce using rule 32 (variable_assignment -> VARIABLE EQUALS function_invocation SEMICOLON .)
-    FUNCTION        reduce using rule 32 (variable_assignment -> VARIABLE EQUALS function_invocation SEMICOLON .)
-    $end            reduce using rule 32 (variable_assignment -> VARIABLE EQUALS function_invocation SEMICOLON .)
-
-
-state 50
-
-    (33) variable_assignment -> VARIABLE EQUALS expression SEMICOLON .
-
-    ECHO            reduce using rule 33 (variable_assignment -> VARIABLE EQUALS expression SEMICOLON .)
-    PRINT           reduce using rule 33 (variable_assignment -> VARIABLE EQUALS expression SEMICOLON .)
-    VARIABLE        reduce using rule 33 (variable_assignment -> VARIABLE EQUALS expression SEMICOLON .)
-    FUNCTION        reduce using rule 33 (variable_assignment -> VARIABLE EQUALS expression SEMICOLON .)
-    $end            reduce using rule 33 (variable_assignment -> VARIABLE EQUALS expression SEMICOLON .)
-
-
-state 51
-
-    (40) function_assignment -> VARIABLE EQUALS special_function SEMICOLON .
-
-    ECHO            reduce using rule 40 (function_assignment -> VARIABLE EQUALS special_function SEMICOLON .)
-    PRINT           reduce using rule 40 (function_assignment -> VARIABLE EQUALS special_function SEMICOLON .)
-    VARIABLE        reduce using rule 40 (function_assignment -> VARIABLE EQUALS special_function SEMICOLON .)
-    FUNCTION        reduce using rule 40 (function_assignment -> VARIABLE EQUALS special_function SEMICOLON .)
-    $end            reduce using rule 40 (function_assignment -> VARIABLE EQUALS special_function SEMICOLON .)
-
-
-state 52
-
-    (34) function_invocation -> IDENTIFIER LEFT_PAREN . params RIGHT_PAREN SEMICOLON
-    (35) params -> . real_params
-    (36) params -> . empty
-    (37) real_params -> . VARIABLE
-    (38) real_params -> . real_params COMMA VARIABLE
-    (39) empty -> .
-
-    VARIABLE        shift and go to state 67
-    RIGHT_PAREN     reduce using rule 39 (empty -> .)
-
-    params                         shift and go to state 68
-    real_params                    shift and go to state 65
-    empty                          shift and go to state 66
-
-state 53
-
-    (28) factor -> LEFT_PAREN expression . RIGHT_PAREN
-
-    RIGHT_PAREN     shift and go to state 69
-
-
-state 54
-
-    (26) factor -> INTEGER .
-
-    MULTIPLY        reduce using rule 26 (factor -> INTEGER .)
-    DIVIDE          reduce using rule 26 (factor -> INTEGER .)
-    MODULE          reduce using rule 26 (factor -> INTEGER .)
-    POW             reduce using rule 26 (factor -> INTEGER .)
-    PLUS            reduce using rule 26 (factor -> INTEGER .)
-    MINUS           reduce using rule 26 (factor -> INTEGER .)
-    RIGHT_PAREN     reduce using rule 26 (factor -> INTEGER .)
-    SEMICOLON       reduce using rule 26 (factor -> INTEGER .)
-
-
-state 55
-
-    (27) factor -> VARIABLE .
-
-    MULTIPLY        reduce using rule 27 (factor -> VARIABLE .)
-    DIVIDE          reduce using rule 27 (factor -> VARIABLE .)
-    MODULE          reduce using rule 27 (factor -> VARIABLE .)
-    POW             reduce using rule 27 (factor -> VARIABLE .)
-    PLUS            reduce using rule 27 (factor -> VARIABLE .)
-    MINUS           reduce using rule 27 (factor -> VARIABLE .)
-    RIGHT_PAREN     reduce using rule 27 (factor -> VARIABLE .)
-    SEMICOLON       reduce using rule 27 (factor -> VARIABLE .)
-
-
-state 56
-
-    (19) expression -> term PLUS . expression
-    (18) expression -> . term
-    (19) expression -> . term PLUS expression
-    (20) expression -> . term MINUS expression
-    (21) term -> . factor
-    (22) term -> . factor MULTIPLY term
-    (23) term -> . factor DIVIDE term
-    (24) term -> . factor MODULE term
-    (25) term -> . factor POW term
-    (26) factor -> . INTEGER
-    (27) factor -> . VARIABLE
-    (28) factor -> . LEFT_PAREN expression RIGHT_PAREN
-
-    INTEGER         shift and go to state 54
-    VARIABLE        shift and go to state 55
-    LEFT_PAREN      shift and go to state 37
-
-    term                           shift and go to state 38
-    expression                     shift and go to state 70
-    factor                         shift and go to state 41
-
-state 57
-
-    (20) expression -> term MINUS . expression
-    (18) expression -> . term
-    (19) expression -> . term PLUS expression
-    (20) expression -> . term MINUS expression
-    (21) term -> . factor
-    (22) term -> . factor MULTIPLY term
-    (23) term -> . factor DIVIDE term
-    (24) term -> . factor MODULE term
-    (25) term -> . factor POW term
-    (26) factor -> . INTEGER
-    (27) factor -> . VARIABLE
-    (28) factor -> . LEFT_PAREN expression RIGHT_PAREN
-
-    INTEGER         shift and go to state 54
-    VARIABLE        shift and go to state 55
-    LEFT_PAREN      shift and go to state 37
-
-    term                           shift and go to state 38
-    expression                     shift and go to state 71
-    factor                         shift and go to state 41
-
-state 58
-
-    (22) term -> factor MULTIPLY . term
-    (21) term -> . factor
-    (22) term -> . factor MULTIPLY term
-    (23) term -> . factor DIVIDE term
-    (24) term -> . factor MODULE term
-    (25) term -> . factor POW term
-    (26) factor -> . INTEGER
-    (27) factor -> . VARIABLE
-    (28) factor -> . LEFT_PAREN expression RIGHT_PAREN
-
-    INTEGER         shift and go to state 54
-    VARIABLE        shift and go to state 55
-    LEFT_PAREN      shift and go to state 37
-
-    factor                         shift and go to state 41
-    term                           shift and go to state 72
-
 state 59
 
-    (23) term -> factor DIVIDE . term
-    (21) term -> . factor
-    (22) term -> . factor MULTIPLY term
-    (23) term -> . factor DIVIDE term
-    (24) term -> . factor MODULE term
-    (25) term -> . factor POW term
-    (26) factor -> . INTEGER
-    (27) factor -> . VARIABLE
-    (28) factor -> . LEFT_PAREN expression RIGHT_PAREN
+    (33) variable_assignment -> VARIABLE EQUALS values SEMICOLON .
 
-    INTEGER         shift and go to state 54
-    VARIABLE        shift and go to state 55
-    LEFT_PAREN      shift and go to state 37
+    ECHO            reduce using rule 33 (variable_assignment -> VARIABLE EQUALS values SEMICOLON .)
+    PRINT           reduce using rule 33 (variable_assignment -> VARIABLE EQUALS values SEMICOLON .)
+    VARIABLE        reduce using rule 33 (variable_assignment -> VARIABLE EQUALS values SEMICOLON .)
+    FUNCTION        reduce using rule 33 (variable_assignment -> VARIABLE EQUALS values SEMICOLON .)
+    CONST           reduce using rule 33 (variable_assignment -> VARIABLE EQUALS values SEMICOLON .)
+    DEFINE          reduce using rule 33 (variable_assignment -> VARIABLE EQUALS values SEMICOLON .)
+    $end            reduce using rule 33 (variable_assignment -> VARIABLE EQUALS values SEMICOLON .)
 
-    factor                         shift and go to state 41
-    term                           shift and go to state 73
 
 state 60
 
-    (24) term -> factor MODULE . term
-    (21) term -> . factor
-    (22) term -> . factor MULTIPLY term
-    (23) term -> . factor DIVIDE term
-    (24) term -> . factor MODULE term
-    (25) term -> . factor POW term
-    (26) factor -> . INTEGER
-    (27) factor -> . VARIABLE
-    (28) factor -> . LEFT_PAREN expression RIGHT_PAREN
+    (34) variable_assignment -> VARIABLE EQUALS function_invocation SEMICOLON .
 
-    INTEGER         shift and go to state 54
-    VARIABLE        shift and go to state 55
-    LEFT_PAREN      shift and go to state 37
+    ECHO            reduce using rule 34 (variable_assignment -> VARIABLE EQUALS function_invocation SEMICOLON .)
+    PRINT           reduce using rule 34 (variable_assignment -> VARIABLE EQUALS function_invocation SEMICOLON .)
+    VARIABLE        reduce using rule 34 (variable_assignment -> VARIABLE EQUALS function_invocation SEMICOLON .)
+    FUNCTION        reduce using rule 34 (variable_assignment -> VARIABLE EQUALS function_invocation SEMICOLON .)
+    CONST           reduce using rule 34 (variable_assignment -> VARIABLE EQUALS function_invocation SEMICOLON .)
+    DEFINE          reduce using rule 34 (variable_assignment -> VARIABLE EQUALS function_invocation SEMICOLON .)
+    $end            reduce using rule 34 (variable_assignment -> VARIABLE EQUALS function_invocation SEMICOLON .)
 
-    factor                         shift and go to state 41
-    term                           shift and go to state 74
 
 state 61
 
-    (25) term -> factor POW . term
-    (21) term -> . factor
-    (22) term -> . factor MULTIPLY term
-    (23) term -> . factor DIVIDE term
-    (24) term -> . factor MODULE term
-    (25) term -> . factor POW term
-    (26) factor -> . INTEGER
-    (27) factor -> . VARIABLE
-    (28) factor -> . LEFT_PAREN expression RIGHT_PAREN
+    (35) variable_assignment -> VARIABLE EQUALS expression SEMICOLON .
 
-    INTEGER         shift and go to state 54
-    VARIABLE        shift and go to state 55
-    LEFT_PAREN      shift and go to state 37
+    ECHO            reduce using rule 35 (variable_assignment -> VARIABLE EQUALS expression SEMICOLON .)
+    PRINT           reduce using rule 35 (variable_assignment -> VARIABLE EQUALS expression SEMICOLON .)
+    VARIABLE        reduce using rule 35 (variable_assignment -> VARIABLE EQUALS expression SEMICOLON .)
+    FUNCTION        reduce using rule 35 (variable_assignment -> VARIABLE EQUALS expression SEMICOLON .)
+    CONST           reduce using rule 35 (variable_assignment -> VARIABLE EQUALS expression SEMICOLON .)
+    DEFINE          reduce using rule 35 (variable_assignment -> VARIABLE EQUALS expression SEMICOLON .)
+    $end            reduce using rule 35 (variable_assignment -> VARIABLE EQUALS expression SEMICOLON .)
 
-    factor                         shift and go to state 41
-    term                           shift and go to state 75
 
 state 62
 
-    (44) arrow_function -> FN LEFT_PAREN . params RIGHT_PAREN EQUALS GREATER_THAN codeblock
-    (35) params -> . real_params
-    (36) params -> . empty
-    (37) real_params -> . VARIABLE
-    (38) real_params -> . real_params COMMA VARIABLE
-    (39) empty -> .
+    (46) function_assignment -> VARIABLE EQUALS special_function SEMICOLON .
 
-    VARIABLE        shift and go to state 67
-    RIGHT_PAREN     reduce using rule 39 (empty -> .)
+    ECHO            reduce using rule 46 (function_assignment -> VARIABLE EQUALS special_function SEMICOLON .)
+    PRINT           reduce using rule 46 (function_assignment -> VARIABLE EQUALS special_function SEMICOLON .)
+    VARIABLE        reduce using rule 46 (function_assignment -> VARIABLE EQUALS special_function SEMICOLON .)
+    FUNCTION        reduce using rule 46 (function_assignment -> VARIABLE EQUALS special_function SEMICOLON .)
+    CONST           reduce using rule 46 (function_assignment -> VARIABLE EQUALS special_function SEMICOLON .)
+    DEFINE          reduce using rule 46 (function_assignment -> VARIABLE EQUALS special_function SEMICOLON .)
+    $end            reduce using rule 46 (function_assignment -> VARIABLE EQUALS special_function SEMICOLON .)
 
-    params                         shift and go to state 76
-    real_params                    shift and go to state 65
-    empty                          shift and go to state 66
 
 state 63
 
-    (45) anonymous_functions -> FUNCTION LEFT_PAREN . params RIGHT_PAREN codeblock
-    (35) params -> . real_params
-    (36) params -> . empty
-    (37) real_params -> . VARIABLE
-    (38) real_params -> . real_params COMMA VARIABLE
-    (39) empty -> .
+    (40) function_invocation -> IDENTIFIER LEFT_PAREN . params RIGHT_PAREN SEMICOLON
+    (41) params -> . real_params
+    (42) params -> . empty
+    (43) real_params -> . VARIABLE
+    (44) real_params -> . real_params COMMA VARIABLE
+    (45) empty -> .
 
-    VARIABLE        shift and go to state 67
-    RIGHT_PAREN     reduce using rule 39 (empty -> .)
+    VARIABLE        shift and go to state 77
+    RIGHT_PAREN     reduce using rule 45 (empty -> .)
 
-    params                         shift and go to state 77
-    real_params                    shift and go to state 65
-    empty                          shift and go to state 66
+    params                         shift and go to state 80
+    real_params                    shift and go to state 75
+    empty                          shift and go to state 76
 
 state 64
 
-    (41) function_assignment -> FUNCTION IDENTIFIER LEFT_PAREN params . RIGHT_PAREN codeblock
-
-    RIGHT_PAREN     shift and go to state 78
-
-
-state 65
-
-    (35) params -> real_params .
-    (38) real_params -> real_params . COMMA VARIABLE
-
-    RIGHT_PAREN     reduce using rule 35 (params -> real_params .)
-    COMMA           shift and go to state 79
-
-
-state 66
-
-    (36) params -> empty .
-
-    RIGHT_PAREN     reduce using rule 36 (params -> empty .)
-
-
-state 67
-
-    (37) real_params -> VARIABLE .
-
-    COMMA           reduce using rule 37 (real_params -> VARIABLE .)
-    RIGHT_PAREN     reduce using rule 37 (real_params -> VARIABLE .)
-
-
-state 68
-
-    (34) function_invocation -> IDENTIFIER LEFT_PAREN params . RIGHT_PAREN SEMICOLON
-
-    RIGHT_PAREN     shift and go to state 80
-
-
-state 69
-
-    (28) factor -> LEFT_PAREN expression RIGHT_PAREN .
-
-    MULTIPLY        reduce using rule 28 (factor -> LEFT_PAREN expression RIGHT_PAREN .)
-    DIVIDE          reduce using rule 28 (factor -> LEFT_PAREN expression RIGHT_PAREN .)
-    MODULE          reduce using rule 28 (factor -> LEFT_PAREN expression RIGHT_PAREN .)
-    POW             reduce using rule 28 (factor -> LEFT_PAREN expression RIGHT_PAREN .)
-    PLUS            reduce using rule 28 (factor -> LEFT_PAREN expression RIGHT_PAREN .)
-    MINUS           reduce using rule 28 (factor -> LEFT_PAREN expression RIGHT_PAREN .)
-    SEMICOLON       reduce using rule 28 (factor -> LEFT_PAREN expression RIGHT_PAREN .)
-    RIGHT_PAREN     reduce using rule 28 (factor -> LEFT_PAREN expression RIGHT_PAREN .)
-
-
-state 70
-
-    (19) expression -> term PLUS expression .
-
-    SEMICOLON       reduce using rule 19 (expression -> term PLUS expression .)
-    RIGHT_PAREN     reduce using rule 19 (expression -> term PLUS expression .)
-
-
-state 71
-
-    (20) expression -> term MINUS expression .
-
-    SEMICOLON       reduce using rule 20 (expression -> term MINUS expression .)
-    RIGHT_PAREN     reduce using rule 20 (expression -> term MINUS expression .)
-
-
-state 72
-
-    (22) term -> factor MULTIPLY term .
-
-    PLUS            reduce using rule 22 (term -> factor MULTIPLY term .)
-    MINUS           reduce using rule 22 (term -> factor MULTIPLY term .)
-    SEMICOLON       reduce using rule 22 (term -> factor MULTIPLY term .)
-    RIGHT_PAREN     reduce using rule 22 (term -> factor MULTIPLY term .)
-
-
-state 73
-
-    (23) term -> factor DIVIDE term .
-
-    PLUS            reduce using rule 23 (term -> factor DIVIDE term .)
-    MINUS           reduce using rule 23 (term -> factor DIVIDE term .)
-    SEMICOLON       reduce using rule 23 (term -> factor DIVIDE term .)
-    RIGHT_PAREN     reduce using rule 23 (term -> factor DIVIDE term .)
-
-
-state 74
-
-    (24) term -> factor MODULE term .
-
-    PLUS            reduce using rule 24 (term -> factor MODULE term .)
-    MINUS           reduce using rule 24 (term -> factor MODULE term .)
-    SEMICOLON       reduce using rule 24 (term -> factor MODULE term .)
-    RIGHT_PAREN     reduce using rule 24 (term -> factor MODULE term .)
-
-
-state 75
-
-    (25) term -> factor POW term .
-
-    PLUS            reduce using rule 25 (term -> factor POW term .)
-    MINUS           reduce using rule 25 (term -> factor POW term .)
-    SEMICOLON       reduce using rule 25 (term -> factor POW term .)
-    RIGHT_PAREN     reduce using rule 25 (term -> factor POW term .)
-
-
-state 76
-
-    (44) arrow_function -> FN LEFT_PAREN params . RIGHT_PAREN EQUALS GREATER_THAN codeblock
+    (29) factor -> LEFT_PAREN expression . RIGHT_PAREN
 
     RIGHT_PAREN     shift and go to state 81
 
 
+state 65
+
+    (27) factor -> INTEGER .
+
+    MULTIPLY        reduce using rule 27 (factor -> INTEGER .)
+    DIVIDE          reduce using rule 27 (factor -> INTEGER .)
+    MODULE          reduce using rule 27 (factor -> INTEGER .)
+    POW             reduce using rule 27 (factor -> INTEGER .)
+    PLUS            reduce using rule 27 (factor -> INTEGER .)
+    MINUS           reduce using rule 27 (factor -> INTEGER .)
+    RIGHT_PAREN     reduce using rule 27 (factor -> INTEGER .)
+    SEMICOLON       reduce using rule 27 (factor -> INTEGER .)
+
+
+state 66
+
+    (20) expression -> term PLUS . expression
+    (19) expression -> . term
+    (20) expression -> . term PLUS expression
+    (21) expression -> . term MINUS expression
+    (22) term -> . factor
+    (23) term -> . factor MULTIPLY term
+    (24) term -> . factor DIVIDE term
+    (25) term -> . factor MODULE term
+    (26) term -> . factor POW term
+    (27) factor -> . INTEGER
+    (28) factor -> . VARIABLE
+    (29) factor -> . LEFT_PAREN expression RIGHT_PAREN
+
+    INTEGER         shift and go to state 65
+    VARIABLE        shift and go to state 38
+    LEFT_PAREN      shift and go to state 45
+
+    term                           shift and go to state 46
+    expression                     shift and go to state 82
+    factor                         shift and go to state 49
+
+state 67
+
+    (21) expression -> term MINUS . expression
+    (19) expression -> . term
+    (20) expression -> . term PLUS expression
+    (21) expression -> . term MINUS expression
+    (22) term -> . factor
+    (23) term -> . factor MULTIPLY term
+    (24) term -> . factor DIVIDE term
+    (25) term -> . factor MODULE term
+    (26) term -> . factor POW term
+    (27) factor -> . INTEGER
+    (28) factor -> . VARIABLE
+    (29) factor -> . LEFT_PAREN expression RIGHT_PAREN
+
+    INTEGER         shift and go to state 65
+    VARIABLE        shift and go to state 38
+    LEFT_PAREN      shift and go to state 45
+
+    term                           shift and go to state 46
+    expression                     shift and go to state 83
+    factor                         shift and go to state 49
+
+state 68
+
+    (23) term -> factor MULTIPLY . term
+    (22) term -> . factor
+    (23) term -> . factor MULTIPLY term
+    (24) term -> . factor DIVIDE term
+    (25) term -> . factor MODULE term
+    (26) term -> . factor POW term
+    (27) factor -> . INTEGER
+    (28) factor -> . VARIABLE
+    (29) factor -> . LEFT_PAREN expression RIGHT_PAREN
+
+    INTEGER         shift and go to state 65
+    VARIABLE        shift and go to state 38
+    LEFT_PAREN      shift and go to state 45
+
+    factor                         shift and go to state 49
+    term                           shift and go to state 84
+
+state 69
+
+    (24) term -> factor DIVIDE . term
+    (22) term -> . factor
+    (23) term -> . factor MULTIPLY term
+    (24) term -> . factor DIVIDE term
+    (25) term -> . factor MODULE term
+    (26) term -> . factor POW term
+    (27) factor -> . INTEGER
+    (28) factor -> . VARIABLE
+    (29) factor -> . LEFT_PAREN expression RIGHT_PAREN
+
+    INTEGER         shift and go to state 65
+    VARIABLE        shift and go to state 38
+    LEFT_PAREN      shift and go to state 45
+
+    factor                         shift and go to state 49
+    term                           shift and go to state 85
+
+state 70
+
+    (25) term -> factor MODULE . term
+    (22) term -> . factor
+    (23) term -> . factor MULTIPLY term
+    (24) term -> . factor DIVIDE term
+    (25) term -> . factor MODULE term
+    (26) term -> . factor POW term
+    (27) factor -> . INTEGER
+    (28) factor -> . VARIABLE
+    (29) factor -> . LEFT_PAREN expression RIGHT_PAREN
+
+    INTEGER         shift and go to state 65
+    VARIABLE        shift and go to state 38
+    LEFT_PAREN      shift and go to state 45
+
+    factor                         shift and go to state 49
+    term                           shift and go to state 86
+
+state 71
+
+    (26) term -> factor POW . term
+    (22) term -> . factor
+    (23) term -> . factor MULTIPLY term
+    (24) term -> . factor DIVIDE term
+    (25) term -> . factor MODULE term
+    (26) term -> . factor POW term
+    (27) factor -> . INTEGER
+    (28) factor -> . VARIABLE
+    (29) factor -> . LEFT_PAREN expression RIGHT_PAREN
+
+    INTEGER         shift and go to state 65
+    VARIABLE        shift and go to state 38
+    LEFT_PAREN      shift and go to state 45
+
+    factor                         shift and go to state 49
+    term                           shift and go to state 87
+
+state 72
+
+    (50) arrow_function -> FN LEFT_PAREN . params RIGHT_PAREN EQUALS GREATER_THAN codeblock
+    (41) params -> . real_params
+    (42) params -> . empty
+    (43) real_params -> . VARIABLE
+    (44) real_params -> . real_params COMMA VARIABLE
+    (45) empty -> .
+
+    VARIABLE        shift and go to state 77
+    RIGHT_PAREN     reduce using rule 45 (empty -> .)
+
+    params                         shift and go to state 88
+    real_params                    shift and go to state 75
+    empty                          shift and go to state 76
+
+state 73
+
+    (51) anonymous_functions -> FUNCTION LEFT_PAREN . params RIGHT_PAREN codeblock
+    (41) params -> . real_params
+    (42) params -> . empty
+    (43) real_params -> . VARIABLE
+    (44) real_params -> . real_params COMMA VARIABLE
+    (45) empty -> .
+
+    VARIABLE        shift and go to state 77
+    RIGHT_PAREN     reduce using rule 45 (empty -> .)
+
+    params                         shift and go to state 89
+    real_params                    shift and go to state 75
+    empty                          shift and go to state 76
+
+state 74
+
+    (47) function_assignment -> FUNCTION IDENTIFIER LEFT_PAREN params . RIGHT_PAREN codeblock
+
+    RIGHT_PAREN     shift and go to state 90
+
+
+state 75
+
+    (41) params -> real_params .
+    (44) real_params -> real_params . COMMA VARIABLE
+
+    RIGHT_PAREN     reduce using rule 41 (params -> real_params .)
+    COMMA           shift and go to state 91
+
+
+state 76
+
+    (42) params -> empty .
+
+    RIGHT_PAREN     reduce using rule 42 (params -> empty .)
+
+
 state 77
 
-    (45) anonymous_functions -> FUNCTION LEFT_PAREN params . RIGHT_PAREN codeblock
+    (43) real_params -> VARIABLE .
 
-    RIGHT_PAREN     shift and go to state 82
+    COMMA           reduce using rule 43 (real_params -> VARIABLE .)
+    RIGHT_PAREN     reduce using rule 43 (real_params -> VARIABLE .)
 
 
 state 78
 
-    (41) function_assignment -> FUNCTION IDENTIFIER LEFT_PAREN params RIGHT_PAREN . codeblock
-    (46) codeblock -> . LEFT_BRACE RIGHT_BRACE
+    (38) const_syntax -> CONST IDENTIFIER EQUALS values . SEMICOLON
 
-    LEFT_BRACE      shift and go to state 84
+    SEMICOLON       shift and go to state 92
 
-    codeblock                      shift and go to state 83
 
 state 79
 
-    (38) real_params -> real_params COMMA . VARIABLE
+    (39) define_syntax -> DEFINE LEFT_PAREN STRING COMMA . values RIGHT_PAREN SEMICOLON
+    (13) values -> . INTEGER
+    (14) values -> . STRING
+    (15) values -> . FLOAT
+    (16) values -> . boolean
+    (17) boolean -> . TRUE
+    (18) boolean -> . FALSE
 
-    VARIABLE        shift and go to state 85
+    INTEGER         shift and go to state 22
+    STRING          shift and go to state 23
+    FLOAT           shift and go to state 24
+    TRUE            shift and go to state 26
+    FALSE           shift and go to state 27
 
+    values                         shift and go to state 93
+    boolean                        shift and go to state 25
 
 state 80
 
-    (34) function_invocation -> IDENTIFIER LEFT_PAREN params RIGHT_PAREN . SEMICOLON
+    (40) function_invocation -> IDENTIFIER LEFT_PAREN params . RIGHT_PAREN SEMICOLON
 
-    SEMICOLON       shift and go to state 86
+    RIGHT_PAREN     shift and go to state 94
 
 
 state 81
 
-    (44) arrow_function -> FN LEFT_PAREN params RIGHT_PAREN . EQUALS GREATER_THAN codeblock
+    (29) factor -> LEFT_PAREN expression RIGHT_PAREN .
 
-    EQUALS          shift and go to state 87
+    MULTIPLY        reduce using rule 29 (factor -> LEFT_PAREN expression RIGHT_PAREN .)
+    DIVIDE          reduce using rule 29 (factor -> LEFT_PAREN expression RIGHT_PAREN .)
+    MODULE          reduce using rule 29 (factor -> LEFT_PAREN expression RIGHT_PAREN .)
+    POW             reduce using rule 29 (factor -> LEFT_PAREN expression RIGHT_PAREN .)
+    PLUS            reduce using rule 29 (factor -> LEFT_PAREN expression RIGHT_PAREN .)
+    MINUS           reduce using rule 29 (factor -> LEFT_PAREN expression RIGHT_PAREN .)
+    SEMICOLON       reduce using rule 29 (factor -> LEFT_PAREN expression RIGHT_PAREN .)
+    RIGHT_PAREN     reduce using rule 29 (factor -> LEFT_PAREN expression RIGHT_PAREN .)
 
 
 state 82
 
-    (45) anonymous_functions -> FUNCTION LEFT_PAREN params RIGHT_PAREN . codeblock
-    (46) codeblock -> . LEFT_BRACE RIGHT_BRACE
+    (20) expression -> term PLUS expression .
 
-    LEFT_BRACE      shift and go to state 84
+    SEMICOLON       reduce using rule 20 (expression -> term PLUS expression .)
+    RIGHT_PAREN     reduce using rule 20 (expression -> term PLUS expression .)
 
-    codeblock                      shift and go to state 88
 
 state 83
 
-    (41) function_assignment -> FUNCTION IDENTIFIER LEFT_PAREN params RIGHT_PAREN codeblock .
+    (21) expression -> term MINUS expression .
 
-    ECHO            reduce using rule 41 (function_assignment -> FUNCTION IDENTIFIER LEFT_PAREN params RIGHT_PAREN codeblock .)
-    PRINT           reduce using rule 41 (function_assignment -> FUNCTION IDENTIFIER LEFT_PAREN params RIGHT_PAREN codeblock .)
-    VARIABLE        reduce using rule 41 (function_assignment -> FUNCTION IDENTIFIER LEFT_PAREN params RIGHT_PAREN codeblock .)
-    FUNCTION        reduce using rule 41 (function_assignment -> FUNCTION IDENTIFIER LEFT_PAREN params RIGHT_PAREN codeblock .)
-    $end            reduce using rule 41 (function_assignment -> FUNCTION IDENTIFIER LEFT_PAREN params RIGHT_PAREN codeblock .)
+    SEMICOLON       reduce using rule 21 (expression -> term MINUS expression .)
+    RIGHT_PAREN     reduce using rule 21 (expression -> term MINUS expression .)
 
 
 state 84
 
-    (46) codeblock -> LEFT_BRACE . RIGHT_BRACE
+    (23) term -> factor MULTIPLY term .
 
-    RIGHT_BRACE     shift and go to state 89
+    PLUS            reduce using rule 23 (term -> factor MULTIPLY term .)
+    MINUS           reduce using rule 23 (term -> factor MULTIPLY term .)
+    SEMICOLON       reduce using rule 23 (term -> factor MULTIPLY term .)
+    RIGHT_PAREN     reduce using rule 23 (term -> factor MULTIPLY term .)
 
 
 state 85
 
-    (38) real_params -> real_params COMMA VARIABLE .
+    (24) term -> factor DIVIDE term .
 
-    COMMA           reduce using rule 38 (real_params -> real_params COMMA VARIABLE .)
-    RIGHT_PAREN     reduce using rule 38 (real_params -> real_params COMMA VARIABLE .)
+    PLUS            reduce using rule 24 (term -> factor DIVIDE term .)
+    MINUS           reduce using rule 24 (term -> factor DIVIDE term .)
+    SEMICOLON       reduce using rule 24 (term -> factor DIVIDE term .)
+    RIGHT_PAREN     reduce using rule 24 (term -> factor DIVIDE term .)
 
 
 state 86
 
-    (34) function_invocation -> IDENTIFIER LEFT_PAREN params RIGHT_PAREN SEMICOLON .
+    (25) term -> factor MODULE term .
 
-    SEMICOLON       reduce using rule 34 (function_invocation -> IDENTIFIER LEFT_PAREN params RIGHT_PAREN SEMICOLON .)
+    PLUS            reduce using rule 25 (term -> factor MODULE term .)
+    MINUS           reduce using rule 25 (term -> factor MODULE term .)
+    SEMICOLON       reduce using rule 25 (term -> factor MODULE term .)
+    RIGHT_PAREN     reduce using rule 25 (term -> factor MODULE term .)
 
 
 state 87
 
-    (44) arrow_function -> FN LEFT_PAREN params RIGHT_PAREN EQUALS . GREATER_THAN codeblock
+    (26) term -> factor POW term .
 
-    GREATER_THAN    shift and go to state 90
+    PLUS            reduce using rule 26 (term -> factor POW term .)
+    MINUS           reduce using rule 26 (term -> factor POW term .)
+    SEMICOLON       reduce using rule 26 (term -> factor POW term .)
+    RIGHT_PAREN     reduce using rule 26 (term -> factor POW term .)
 
 
 state 88
 
-    (45) anonymous_functions -> FUNCTION LEFT_PAREN params RIGHT_PAREN codeblock .
+    (50) arrow_function -> FN LEFT_PAREN params . RIGHT_PAREN EQUALS GREATER_THAN codeblock
 
-    SEMICOLON       reduce using rule 45 (anonymous_functions -> FUNCTION LEFT_PAREN params RIGHT_PAREN codeblock .)
+    RIGHT_PAREN     shift and go to state 95
 
 
 state 89
 
-    (46) codeblock -> LEFT_BRACE RIGHT_BRACE .
+    (51) anonymous_functions -> FUNCTION LEFT_PAREN params . RIGHT_PAREN codeblock
 
-    ECHO            reduce using rule 46 (codeblock -> LEFT_BRACE RIGHT_BRACE .)
-    PRINT           reduce using rule 46 (codeblock -> LEFT_BRACE RIGHT_BRACE .)
-    VARIABLE        reduce using rule 46 (codeblock -> LEFT_BRACE RIGHT_BRACE .)
-    FUNCTION        reduce using rule 46 (codeblock -> LEFT_BRACE RIGHT_BRACE .)
-    $end            reduce using rule 46 (codeblock -> LEFT_BRACE RIGHT_BRACE .)
-    SEMICOLON       reduce using rule 46 (codeblock -> LEFT_BRACE RIGHT_BRACE .)
+    RIGHT_PAREN     shift and go to state 96
 
 
 state 90
 
-    (44) arrow_function -> FN LEFT_PAREN params RIGHT_PAREN EQUALS GREATER_THAN . codeblock
-    (46) codeblock -> . LEFT_BRACE RIGHT_BRACE
+    (47) function_assignment -> FUNCTION IDENTIFIER LEFT_PAREN params RIGHT_PAREN . codeblock
+    (52) codeblock -> . LEFT_BRACE RIGHT_BRACE
 
-    LEFT_BRACE      shift and go to state 84
+    LEFT_BRACE      shift and go to state 98
 
-    codeblock                      shift and go to state 91
+    codeblock                      shift and go to state 97
 
 state 91
 
-    (44) arrow_function -> FN LEFT_PAREN params RIGHT_PAREN EQUALS GREATER_THAN codeblock .
+    (44) real_params -> real_params COMMA . VARIABLE
 
-    SEMICOLON       reduce using rule 44 (arrow_function -> FN LEFT_PAREN params RIGHT_PAREN EQUALS GREATER_THAN codeblock .)
+    VARIABLE        shift and go to state 99
+
+
+state 92
+
+    (38) const_syntax -> CONST IDENTIFIER EQUALS values SEMICOLON .
+
+    ECHO            reduce using rule 38 (const_syntax -> CONST IDENTIFIER EQUALS values SEMICOLON .)
+    PRINT           reduce using rule 38 (const_syntax -> CONST IDENTIFIER EQUALS values SEMICOLON .)
+    VARIABLE        reduce using rule 38 (const_syntax -> CONST IDENTIFIER EQUALS values SEMICOLON .)
+    FUNCTION        reduce using rule 38 (const_syntax -> CONST IDENTIFIER EQUALS values SEMICOLON .)
+    CONST           reduce using rule 38 (const_syntax -> CONST IDENTIFIER EQUALS values SEMICOLON .)
+    DEFINE          reduce using rule 38 (const_syntax -> CONST IDENTIFIER EQUALS values SEMICOLON .)
+    $end            reduce using rule 38 (const_syntax -> CONST IDENTIFIER EQUALS values SEMICOLON .)
+
+
+state 93
+
+    (39) define_syntax -> DEFINE LEFT_PAREN STRING COMMA values . RIGHT_PAREN SEMICOLON
+
+    RIGHT_PAREN     shift and go to state 100
+
+
+state 94
+
+    (40) function_invocation -> IDENTIFIER LEFT_PAREN params RIGHT_PAREN . SEMICOLON
+
+    SEMICOLON       shift and go to state 101
+
+
+state 95
+
+    (50) arrow_function -> FN LEFT_PAREN params RIGHT_PAREN . EQUALS GREATER_THAN codeblock
+
+    EQUALS          shift and go to state 102
+
+
+state 96
+
+    (51) anonymous_functions -> FUNCTION LEFT_PAREN params RIGHT_PAREN . codeblock
+    (52) codeblock -> . LEFT_BRACE RIGHT_BRACE
+
+    LEFT_BRACE      shift and go to state 98
+
+    codeblock                      shift and go to state 103
+
+state 97
+
+    (47) function_assignment -> FUNCTION IDENTIFIER LEFT_PAREN params RIGHT_PAREN codeblock .
+
+    ECHO            reduce using rule 47 (function_assignment -> FUNCTION IDENTIFIER LEFT_PAREN params RIGHT_PAREN codeblock .)
+    PRINT           reduce using rule 47 (function_assignment -> FUNCTION IDENTIFIER LEFT_PAREN params RIGHT_PAREN codeblock .)
+    VARIABLE        reduce using rule 47 (function_assignment -> FUNCTION IDENTIFIER LEFT_PAREN params RIGHT_PAREN codeblock .)
+    FUNCTION        reduce using rule 47 (function_assignment -> FUNCTION IDENTIFIER LEFT_PAREN params RIGHT_PAREN codeblock .)
+    CONST           reduce using rule 47 (function_assignment -> FUNCTION IDENTIFIER LEFT_PAREN params RIGHT_PAREN codeblock .)
+    DEFINE          reduce using rule 47 (function_assignment -> FUNCTION IDENTIFIER LEFT_PAREN params RIGHT_PAREN codeblock .)
+    $end            reduce using rule 47 (function_assignment -> FUNCTION IDENTIFIER LEFT_PAREN params RIGHT_PAREN codeblock .)
+
+
+state 98
+
+    (52) codeblock -> LEFT_BRACE . RIGHT_BRACE
+
+    RIGHT_BRACE     shift and go to state 104
+
+
+state 99
+
+    (44) real_params -> real_params COMMA VARIABLE .
+
+    COMMA           reduce using rule 44 (real_params -> real_params COMMA VARIABLE .)
+    RIGHT_PAREN     reduce using rule 44 (real_params -> real_params COMMA VARIABLE .)
+
+
+state 100
+
+    (39) define_syntax -> DEFINE LEFT_PAREN STRING COMMA values RIGHT_PAREN . SEMICOLON
+
+    SEMICOLON       shift and go to state 105
+
+
+state 101
+
+    (40) function_invocation -> IDENTIFIER LEFT_PAREN params RIGHT_PAREN SEMICOLON .
+
+    SEMICOLON       reduce using rule 40 (function_invocation -> IDENTIFIER LEFT_PAREN params RIGHT_PAREN SEMICOLON .)
+
+
+state 102
+
+    (50) arrow_function -> FN LEFT_PAREN params RIGHT_PAREN EQUALS . GREATER_THAN codeblock
+
+    GREATER_THAN    shift and go to state 106
+
+
+state 103
+
+    (51) anonymous_functions -> FUNCTION LEFT_PAREN params RIGHT_PAREN codeblock .
+
+    SEMICOLON       reduce using rule 51 (anonymous_functions -> FUNCTION LEFT_PAREN params RIGHT_PAREN codeblock .)
+
+
+state 104
+
+    (52) codeblock -> LEFT_BRACE RIGHT_BRACE .
+
+    ECHO            reduce using rule 52 (codeblock -> LEFT_BRACE RIGHT_BRACE .)
+    PRINT           reduce using rule 52 (codeblock -> LEFT_BRACE RIGHT_BRACE .)
+    VARIABLE        reduce using rule 52 (codeblock -> LEFT_BRACE RIGHT_BRACE .)
+    FUNCTION        reduce using rule 52 (codeblock -> LEFT_BRACE RIGHT_BRACE .)
+    CONST           reduce using rule 52 (codeblock -> LEFT_BRACE RIGHT_BRACE .)
+    DEFINE          reduce using rule 52 (codeblock -> LEFT_BRACE RIGHT_BRACE .)
+    $end            reduce using rule 52 (codeblock -> LEFT_BRACE RIGHT_BRACE .)
+    SEMICOLON       reduce using rule 52 (codeblock -> LEFT_BRACE RIGHT_BRACE .)
+
+
+state 105
+
+    (39) define_syntax -> DEFINE LEFT_PAREN STRING COMMA values RIGHT_PAREN SEMICOLON .
+
+    ECHO            reduce using rule 39 (define_syntax -> DEFINE LEFT_PAREN STRING COMMA values RIGHT_PAREN SEMICOLON .)
+    PRINT           reduce using rule 39 (define_syntax -> DEFINE LEFT_PAREN STRING COMMA values RIGHT_PAREN SEMICOLON .)
+    VARIABLE        reduce using rule 39 (define_syntax -> DEFINE LEFT_PAREN STRING COMMA values RIGHT_PAREN SEMICOLON .)
+    FUNCTION        reduce using rule 39 (define_syntax -> DEFINE LEFT_PAREN STRING COMMA values RIGHT_PAREN SEMICOLON .)
+    CONST           reduce using rule 39 (define_syntax -> DEFINE LEFT_PAREN STRING COMMA values RIGHT_PAREN SEMICOLON .)
+    DEFINE          reduce using rule 39 (define_syntax -> DEFINE LEFT_PAREN STRING COMMA values RIGHT_PAREN SEMICOLON .)
+    $end            reduce using rule 39 (define_syntax -> DEFINE LEFT_PAREN STRING COMMA values RIGHT_PAREN SEMICOLON .)
+
+
+state 106
+
+    (50) arrow_function -> FN LEFT_PAREN params RIGHT_PAREN EQUALS GREATER_THAN . codeblock
+    (52) codeblock -> . LEFT_BRACE RIGHT_BRACE
+
+    LEFT_BRACE      shift and go to state 98
+
+    codeblock                      shift and go to state 107
+
+state 107
+
+    (50) arrow_function -> FN LEFT_PAREN params RIGHT_PAREN EQUALS GREATER_THAN codeblock .
+
+    SEMICOLON       reduce using rule 50 (arrow_function -> FN LEFT_PAREN params RIGHT_PAREN EQUALS GREATER_THAN codeblock .)
 
 WARNING: 
 WARNING: Conflicts:
 WARNING: 
-WARNING: reduce/reduce conflict in state 30 resolved using rule (values -> VARIABLE)
-WARNING: rejected rule (factor -> VARIABLE) in state 30
-WARNING: reduce/reduce conflict in state 35 resolved using rule (values -> INTEGER)
-WARNING: rejected rule (factor -> INTEGER) in state 35
+WARNING: reduce/reduce conflict in state 43 resolved using rule (values -> INTEGER)
+WARNING: rejected rule (factor -> INTEGER) in state 43

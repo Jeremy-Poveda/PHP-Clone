@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'ABSTRACT AND ARRAY AS BIT_AND BIT_NOT BIT_OR BIT_XOR BREAK CALLABLE CASE CATCH CLASS CLONE COLON COMMA COMMENT CONCATENATION CONST CONTINUE DECLARE DEFAULT DIE DIVIDE DO ECHO ELSE ELSEIF EMPTY ENDDECLARE ENDFOR ENDFOREACH ENDIF ENDSWITCH ENDWHILE EQUALS EQUALS_EQUALS ERROR_CONTROL EVAL EXIT EXTENDS FALSE FINAL FINALLY FLOAT FN FOR FOREACH FUNCTION GLOBAL GOTO GREATER_EQUALS_TO GREATER_THAN HALT_COMPILER IDENTICAL IDENTIFIER IF IMPLEMENTS INCLUDE INCLUDE_ONCE INPUT INSTANCEOF INSTEADOF INTEGER INTERFACE ISSET LEFT_BRACE LEFT_BRACKET LEFT_PAREN LIST LOGIC_AND LOGIC_NOT LOGIC_OR LOGIC_XOR MATCH MINUS MODULE MULTIPLY NAMESPACE NEW NOT_EQUALS NOT_IDENTICAL NULL_FUSION OR PLUS PLUS_EQUALS POST_DECREMENT POST_INCREASE POW PRE_DECREMENT PRE_INCREASE PRINT PRIVATE PROTECTED PUBLIC REQUIRE REQUIRE_ONCE RETURN RIGHT_BRACE RIGHT_BRACKET RIGHT_PAREN SEMICOLON SHIF_LEFT SHIF_RIGHT SMALL_EQUALS_TO SMALL_THAN SPACECRAFT STATIC STRING STRING_CONCATENATION SWITCH THROW TRAIT TRUE TRY UNSET USE VAR VARIABLE WHILE XOR YIELDprogram : sentence programprogram : sentence\n    sentence : print_statement SEMICOLON\n             | assignment\n    \n    print_statement : ECHO LEFT_PAREN printable_values RIGHT_PAREN\n                    | PRINT LEFT_PAREN printable_values RIGHT_PAREN\n                    | ECHO printable_values\n                    | PRINT printable_values\n    \n    printable_values : values\n                     | values COMMA printable_values\n    \n    values : INTEGER\n           | STRING\n           | FLOAT\n           | VARIABLE\n           | boolean\n    \n    boolean : TRUE\n            | FALSE\n    \n    expression : term\n               | term PLUS expression\n               | term MINUS expression\n    \n    term : factor\n         | factor MULTIPLY term\n         | factor DIVIDE term\n         | factor MODULE term\n         | factor POW term\n    \n    factor : INTEGER\n           | VARIABLE\n           | LEFT_PAREN expression RIGHT_PAREN\n    \n    assignment : variable_assignment\n               | function_assignment\n    \n    variable_assignment : VARIABLE EQUALS values SEMICOLON\n                        | VARIABLE EQUALS function_invocation SEMICOLON\n                        | VARIABLE EQUALS expression SEMICOLON\n    \n    function_invocation : IDENTIFIER LEFT_PAREN params RIGHT_PAREN SEMICOLON\n    \n    params : real_params\n           | empty\n    \n    real_params : VARIABLE\n                | real_params COMMA VARIABLE\n    \n    empty :\n    \n    function_assignment : VARIABLE EQUALS special_function SEMICOLON\n                        | FUNCTION IDENTIFIER LEFT_PAREN params RIGHT_PAREN codeblock\n    \n    special_function : arrow_function\n                     | anonymous_functions\n    \n    arrow_function : FN LEFT_PAREN params RIGHT_PAREN EQUALS GREATER_THAN codeblock\n    \n    anonymous_functions : FUNCTION LEFT_PAREN params RIGHT_PAREN codeblock\n    \n    codeblock : LEFT_BRACE RIGHT_BRACE\n    '
+_lr_signature = 'ABSTRACT AND ARRAY AS BIT_AND BIT_NOT BIT_OR BIT_XOR BREAK CALLABLE CASE CATCH CLASS CLONE COLON COMMA COMMENT CONCATENATION CONST CONTINUE DECLARE DEFAULT DEFINE DIE DIVIDE DO ECHO ELSE ELSEIF EMPTY ENDDECLARE ENDFOR ENDFOREACH ENDIF ENDSWITCH ENDWHILE EQUALS EQUALS_EQUALS ERROR_CONTROL EVAL EXIT EXTENDS FALSE FINAL FINALLY FLOAT FN FOR FOREACH FUNCTION GLOBAL GOTO GREATER_EQUALS_TO GREATER_THAN HALT_COMPILER IDENTICAL IDENTIFIER IF IMPLEMENTS INCLUDE INCLUDE_ONCE INPUT INSTANCEOF INSTEADOF INTEGER INTERFACE ISSET LEFT_BRACE LEFT_BRACKET LEFT_PAREN LIST LOGIC_AND LOGIC_NOT LOGIC_OR LOGIC_XOR MATCH MINUS MODULE MULTIPLY NAMESPACE NEW NOT_EQUALS NOT_IDENTICAL NULL_FUSION OR PLUS PLUS_EQUALS POST_DECREMENT POST_INCREASE POW PRE_DECREMENT PRE_INCREASE PRINT PRIVATE PROTECTED PUBLIC REQUIRE REQUIRE_ONCE RETURN RIGHT_BRACE RIGHT_BRACKET RIGHT_PAREN SEMICOLON SHIF_LEFT SHIF_RIGHT SMALL_EQUALS_TO SMALL_THAN SPACECRAFT STATIC STRING STRING_CONCATENATION SWITCH THROW TRAIT TRUE TRY UNSET USE VAR VARIABLE WHILE XOR YIELDprogram : sentence programprogram : sentence\n    sentence : print_statement SEMICOLON\n             | assignment\n    \n    print_statement : ECHO LEFT_PAREN printable_values RIGHT_PAREN\n                    | PRINT LEFT_PAREN printable_values RIGHT_PAREN\n                    | ECHO printable_values\n                    | PRINT printable_values\n    \n    printable_values : values\n                     | values COMMA printable_values\n                     | VARIABLE\n                     | VARIABLE COMMA printable_values\n    \n    values : INTEGER\n           | STRING\n           | FLOAT\n           | boolean\n    \n    boolean : TRUE\n            | FALSE\n    \n    expression : term\n               | term PLUS expression\n               | term MINUS expression\n    \n    term : factor\n         | factor MULTIPLY term\n         | factor DIVIDE term\n         | factor MODULE term\n         | factor POW term\n    \n    factor : INTEGER\n           | VARIABLE\n           | LEFT_PAREN expression RIGHT_PAREN\n    \n    assignment : variable_assignment\n               | function_assignment\n               | constant_assignment\n    \n    variable_assignment : VARIABLE EQUALS values SEMICOLON\n                        | VARIABLE EQUALS function_invocation SEMICOLON\n                        | VARIABLE EQUALS expression SEMICOLON\n    \n    constant_assignment : const_syntax\n                        | define_syntax\n    \n     const_syntax : CONST IDENTIFIER EQUALS values SEMICOLON\n    \n        define_syntax : DEFINE LEFT_PAREN STRING COMMA values RIGHT_PAREN SEMICOLON\n    \n    function_invocation : IDENTIFIER LEFT_PAREN params RIGHT_PAREN SEMICOLON\n    \n    params : real_params\n           | empty\n    \n    real_params : VARIABLE\n                | real_params COMMA VARIABLE\n    \n    empty :\n    \n    function_assignment : VARIABLE EQUALS special_function SEMICOLON\n                        | FUNCTION IDENTIFIER LEFT_PAREN params RIGHT_PAREN codeblock\n    \n    special_function : arrow_function\n                     | anonymous_functions\n    \n    arrow_function : FN LEFT_PAREN params RIGHT_PAREN EQUALS GREATER_THAN codeblock\n    \n    anonymous_functions : FUNCTION LEFT_PAREN params RIGHT_PAREN codeblock\n    \n    codeblock : LEFT_BRACE RIGHT_BRACE\n    '
     
-_lr_action_items = {'ECHO':([0,2,4,7,8,12,48,49,50,51,83,89,],[5,5,-4,-29,-30,-3,-31,-32,-33,-40,-41,-46,]),'PRINT':([0,2,4,7,8,12,48,49,50,51,83,89,],[6,6,-4,-29,-30,-3,-31,-32,-33,-40,-41,-46,]),'VARIABLE':([0,2,4,5,6,7,8,12,13,23,25,28,37,44,48,49,50,51,52,56,57,58,59,60,61,62,63,79,83,89,],[9,9,-4,19,19,-29,-30,-3,19,19,30,19,55,67,-31,-32,-33,-40,67,55,55,55,55,55,55,67,67,85,-41,-46,]),'FUNCTION':([0,2,4,7,8,12,25,48,49,50,51,83,89,],[10,10,-4,-29,-30,-3,43,-31,-32,-33,-40,-41,-46,]),'$end':([1,2,4,7,8,11,12,48,49,50,51,83,89,],[0,-2,-4,-29,-30,-1,-3,-31,-32,-33,-40,-41,-46,]),'SEMICOLON':([3,14,15,16,17,18,19,20,21,22,24,30,31,32,33,34,35,38,39,40,41,45,46,47,54,55,69,70,71,72,73,74,75,80,86,88,89,91,],[12,-7,-9,-11,-12,-13,-14,-15,-16,-17,-8,-14,48,49,50,51,-11,-18,-42,-43,-21,-5,-10,-6,-26,-27,-28,-19,-20,-22,-23,-24,-25,86,-34,-45,-46,-44,]),'LEFT_PAREN':([5,6,25,26,36,37,42,43,56,57,58,59,60,61,],[13,23,37,44,52,37,62,63,37,37,37,37,37,37,]),'INTEGER':([5,6,13,23,25,28,37,56,57,58,59,60,61,],[16,16,16,16,35,16,54,54,54,54,54,54,54,]),'STRING':([5,6,13,23,25,28,],[17,17,17,17,17,17,]),'FLOAT':([5,6,13,23,25,28,],[18,18,18,18,18,18,]),'TRUE':([5,6,13,23,25,28,],[21,21,21,21,21,21,]),'FALSE':([5,6,13,23,25,28,],[22,22,22,22,22,22,]),'EQUALS':([9,81,],[25,87,]),'IDENTIFIER':([10,25,],[26,36,]),'RIGHT_PAREN':([15,16,17,18,19,20,21,22,27,29,38,41,44,46,52,53,54,55,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,85,],[-9,-11,-12,-13,-14,-15,-16,-17,45,47,-18,-21,-39,-10,-39,69,-26,-27,-39,-39,78,-35,-36,-37,80,-28,-19,-20,-22,-23,-24,-25,81,82,-38,]),'COMMA':([15,16,17,18,19,20,21,22,65,67,85,],[28,-11,-12,-13,-14,-15,-16,-17,79,-37,-38,]),'FN':([25,],[42,]),'MULTIPLY':([30,35,41,54,55,69,],[-27,-26,58,-26,-27,-28,]),'DIVIDE':([30,35,41,54,55,69,],[-27,-26,59,-26,-27,-28,]),'MODULE':([30,35,41,54,55,69,],[-27,-26,60,-26,-27,-28,]),'POW':([30,35,41,54,55,69,],[-27,-26,61,-26,-27,-28,]),'PLUS':([30,35,38,41,54,55,69,72,73,74,75,],[-27,-26,56,-21,-26,-27,-28,-22,-23,-24,-25,]),'MINUS':([30,35,38,41,54,55,69,72,73,74,75,],[-27,-26,57,-21,-26,-27,-28,-22,-23,-24,-25,]),'LEFT_BRACE':([78,82,90,],[84,84,84,]),'RIGHT_BRACE':([84,],[89,]),'GREATER_THAN':([87,],[90,]),}
+_lr_action_items = {'ECHO':([0,2,4,7,8,9,12,13,17,59,60,61,62,92,97,104,105,],[5,5,-4,-30,-31,-32,-36,-37,-3,-33,-34,-35,-46,-38,-47,-52,-39,]),'PRINT':([0,2,4,7,8,9,12,13,17,59,60,61,62,92,97,104,105,],[6,6,-4,-30,-31,-32,-36,-37,-3,-33,-34,-35,-46,-38,-47,-52,-39,]),'VARIABLE':([0,2,4,5,6,7,8,9,12,13,17,18,28,30,35,36,45,52,59,60,61,62,63,66,67,68,69,70,71,72,73,91,92,97,104,105,],[10,10,-4,21,21,-30,-31,-32,-36,-37,-3,21,21,38,21,21,38,77,-33,-34,-35,-46,77,38,38,38,38,38,38,77,77,99,-38,-47,-52,-39,]),'FUNCTION':([0,2,4,7,8,9,12,13,17,30,59,60,61,62,92,97,104,105,],[11,11,-4,-30,-31,-32,-36,-37,-3,51,-33,-34,-35,-46,-38,-47,-52,-39,]),'CONST':([0,2,4,7,8,9,12,13,17,59,60,61,62,92,97,104,105,],[14,14,-4,-30,-31,-32,-36,-37,-3,-33,-34,-35,-46,-38,-47,-52,-39,]),'DEFINE':([0,2,4,7,8,9,12,13,17,59,60,61,62,92,97,104,105,],[15,15,-4,-30,-31,-32,-36,-37,-3,-33,-34,-35,-46,-38,-47,-52,-39,]),'$end':([1,2,4,7,8,9,12,13,16,17,59,60,61,62,92,97,104,105,],[0,-2,-4,-30,-31,-32,-36,-37,-1,-3,-33,-34,-35,-46,-38,-47,-52,-39,]),'SEMICOLON':([3,19,20,21,22,23,24,25,26,27,29,38,39,40,41,42,43,46,47,48,49,55,56,57,58,65,78,81,82,83,84,85,86,87,94,100,101,103,104,107,],[17,-7,-9,-11,-13,-14,-15,-16,-17,-18,-8,-28,59,60,61,62,-13,-19,-48,-49,-22,-5,-10,-12,-6,-27,92,-29,-20,-21,-23,-24,-25,-26,101,105,-40,-51,-52,-50,]),'LEFT_PAREN':([5,6,15,30,31,44,45,50,51,66,67,68,69,70,71,],[18,28,33,45,52,63,45,72,73,45,45,45,45,45,45,]),'INTEGER':([5,6,18,28,30,35,36,45,53,66,67,68,69,70,71,79,],[22,22,22,22,43,22,22,65,22,65,65,65,65,65,65,22,]),'STRING':([5,6,18,28,30,33,35,36,53,79,],[23,23,23,23,23,54,23,23,23,23,]),'FLOAT':([5,6,18,28,30,35,36,53,79,],[24,24,24,24,24,24,24,24,24,]),'TRUE':([5,6,18,28,30,35,36,53,79,],[26,26,26,26,26,26,26,26,26,]),'FALSE':([5,6,18,28,30,35,36,53,79,],[27,27,27,27,27,27,27,27,27,]),'EQUALS':([10,32,95,],[30,53,102,]),'IDENTIFIER':([11,14,30,],[31,32,44,]),'RIGHT_PAREN':([20,21,22,23,24,25,26,27,34,37,38,46,49,52,56,57,63,64,65,72,73,74,75,76,77,80,81,82,83,84,85,86,87,88,89,93,99,],[-9,-11,-13,-14,-15,-16,-17,-18,55,58,-28,-19,-22,-45,-10,-12,-45,81,-27,-45,-45,90,-41,-42,-43,94,-29,-20,-21,-23,-24,-25,-26,95,96,100,-44,]),'COMMA':([20,21,22,23,24,25,26,27,54,75,77,99,],[35,36,-13,-14,-15,-16,-17,-18,79,91,-43,-44,]),'FN':([30,],[50,]),'MULTIPLY':([38,43,49,65,81,],[-28,-27,68,-27,-29,]),'DIVIDE':([38,43,49,65,81,],[-28,-27,69,-27,-29,]),'MODULE':([38,43,49,65,81,],[-28,-27,70,-27,-29,]),'POW':([38,43,49,65,81,],[-28,-27,71,-27,-29,]),'PLUS':([38,43,46,49,65,81,84,85,86,87,],[-28,-27,66,-22,-27,-29,-23,-24,-25,-26,]),'MINUS':([38,43,46,49,65,81,84,85,86,87,],[-28,-27,67,-22,-27,-29,-23,-24,-25,-26,]),'LEFT_BRACE':([90,96,106,],[98,98,98,]),'RIGHT_BRACE':([98,],[104,]),'GREATER_THAN':([102,],[106,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'program':([0,2,],[1,11,]),'sentence':([0,2,],[2,2,]),'print_statement':([0,2,],[3,3,]),'assignment':([0,2,],[4,4,]),'variable_assignment':([0,2,],[7,7,]),'function_assignment':([0,2,],[8,8,]),'printable_values':([5,6,13,23,28,],[14,24,27,29,46,]),'values':([5,6,13,23,25,28,],[15,15,15,15,31,15,]),'boolean':([5,6,13,23,25,28,],[20,20,20,20,20,20,]),'function_invocation':([25,],[32,]),'expression':([25,37,56,57,],[33,53,70,71,]),'special_function':([25,],[34,]),'term':([25,37,56,57,58,59,60,61,],[38,38,38,38,72,73,74,75,]),'arrow_function':([25,],[39,]),'anonymous_functions':([25,],[40,]),'factor':([25,37,56,57,58,59,60,61,],[41,41,41,41,41,41,41,41,]),'params':([44,52,62,63,],[64,68,76,77,]),'real_params':([44,52,62,63,],[65,65,65,65,]),'empty':([44,52,62,63,],[66,66,66,66,]),'codeblock':([78,82,90,],[83,88,91,]),}
+_lr_goto_items = {'program':([0,2,],[1,16,]),'sentence':([0,2,],[2,2,]),'print_statement':([0,2,],[3,3,]),'assignment':([0,2,],[4,4,]),'variable_assignment':([0,2,],[7,7,]),'function_assignment':([0,2,],[8,8,]),'constant_assignment':([0,2,],[9,9,]),'const_syntax':([0,2,],[12,12,]),'define_syntax':([0,2,],[13,13,]),'printable_values':([5,6,18,28,35,36,],[19,29,34,37,56,57,]),'values':([5,6,18,28,30,35,36,53,79,],[20,20,20,20,39,20,20,78,93,]),'boolean':([5,6,18,28,30,35,36,53,79,],[25,25,25,25,25,25,25,25,25,]),'function_invocation':([30,],[40,]),'expression':([30,45,66,67,],[41,64,82,83,]),'special_function':([30,],[42,]),'term':([30,45,66,67,68,69,70,71,],[46,46,46,46,84,85,86,87,]),'arrow_function':([30,],[47,]),'anonymous_functions':([30,],[48,]),'factor':([30,45,66,67,68,69,70,71,],[49,49,49,49,49,49,49,49,]),'params':([52,63,72,73,],[74,80,88,89,]),'real_params':([52,63,72,73,],[75,75,75,75,]),'empty':([52,63,72,73,],[76,76,76,76,]),'codeblock':([90,96,106,],[97,103,107,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -27,50 +27,56 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> program","S'",1,None,None,None),
-  ('program -> sentence program','program',2,'p_program_sentence_program','syntaxAnalysis.py',9),
-  ('program -> sentence','program',1,'p_program_sentence','syntaxAnalysis.py',13),
-  ('sentence -> print_statement SEMICOLON','sentence',2,'p_sentence_print_statement','syntaxAnalysis.py',18),
-  ('sentence -> assignment','sentence',1,'p_sentence_print_statement','syntaxAnalysis.py',19),
-  ('print_statement -> ECHO LEFT_PAREN printable_values RIGHT_PAREN','print_statement',4,'p_print_statement','syntaxAnalysis.py',24),
-  ('print_statement -> PRINT LEFT_PAREN printable_values RIGHT_PAREN','print_statement',4,'p_print_statement','syntaxAnalysis.py',25),
-  ('print_statement -> ECHO printable_values','print_statement',2,'p_print_statement','syntaxAnalysis.py',26),
-  ('print_statement -> PRINT printable_values','print_statement',2,'p_print_statement','syntaxAnalysis.py',27),
-  ('printable_values -> values','printable_values',1,'p_printable_values','syntaxAnalysis.py',32),
-  ('printable_values -> values COMMA printable_values','printable_values',3,'p_printable_values','syntaxAnalysis.py',33),
-  ('values -> INTEGER','values',1,'p__values','syntaxAnalysis.py',39),
-  ('values -> STRING','values',1,'p__values','syntaxAnalysis.py',40),
-  ('values -> FLOAT','values',1,'p__values','syntaxAnalysis.py',41),
-  ('values -> VARIABLE','values',1,'p__values','syntaxAnalysis.py',42),
-  ('values -> boolean','values',1,'p__values','syntaxAnalysis.py',43),
-  ('boolean -> TRUE','boolean',1,'p_boolean','syntaxAnalysis.py',48),
-  ('boolean -> FALSE','boolean',1,'p_boolean','syntaxAnalysis.py',49),
-  ('expression -> term','expression',1,'p_expression','syntaxAnalysis.py',59),
-  ('expression -> term PLUS expression','expression',3,'p_expression','syntaxAnalysis.py',60),
-  ('expression -> term MINUS expression','expression',3,'p_expression','syntaxAnalysis.py',61),
-  ('term -> factor','term',1,'p_term','syntaxAnalysis.py',66),
-  ('term -> factor MULTIPLY term','term',3,'p_term','syntaxAnalysis.py',67),
-  ('term -> factor DIVIDE term','term',3,'p_term','syntaxAnalysis.py',68),
-  ('term -> factor MODULE term','term',3,'p_term','syntaxAnalysis.py',69),
-  ('term -> factor POW term','term',3,'p_term','syntaxAnalysis.py',70),
-  ('factor -> INTEGER','factor',1,'p_factor','syntaxAnalysis.py',75),
-  ('factor -> VARIABLE','factor',1,'p_factor','syntaxAnalysis.py',76),
-  ('factor -> LEFT_PAREN expression RIGHT_PAREN','factor',3,'p_factor','syntaxAnalysis.py',77),
-  ('assignment -> variable_assignment','assignment',1,'p_assignment','syntaxAnalysis.py',86),
-  ('assignment -> function_assignment','assignment',1,'p_assignment','syntaxAnalysis.py',87),
-  ('variable_assignment -> VARIABLE EQUALS values SEMICOLON','variable_assignment',4,'p_variable_assignment','syntaxAnalysis.py',93),
-  ('variable_assignment -> VARIABLE EQUALS function_invocation SEMICOLON','variable_assignment',4,'p_variable_assignment','syntaxAnalysis.py',94),
-  ('variable_assignment -> VARIABLE EQUALS expression SEMICOLON','variable_assignment',4,'p_variable_assignment','syntaxAnalysis.py',95),
-  ('function_invocation -> IDENTIFIER LEFT_PAREN params RIGHT_PAREN SEMICOLON','function_invocation',5,'p_function_invocation','syntaxAnalysis.py',101),
-  ('params -> real_params','params',1,'p_params','syntaxAnalysis.py',107),
-  ('params -> empty','params',1,'p_params','syntaxAnalysis.py',108),
-  ('real_params -> VARIABLE','real_params',1,'p_real_params','syntaxAnalysis.py',114),
-  ('real_params -> real_params COMMA VARIABLE','real_params',3,'p_real_params','syntaxAnalysis.py',115),
-  ('empty -> <empty>','empty',0,'p_empty','syntaxAnalysis.py',125),
-  ('function_assignment -> VARIABLE EQUALS special_function SEMICOLON','function_assignment',4,'p_function_assignment','syntaxAnalysis.py',132),
-  ('function_assignment -> FUNCTION IDENTIFIER LEFT_PAREN params RIGHT_PAREN codeblock','function_assignment',6,'p_function_assignment','syntaxAnalysis.py',133),
-  ('special_function -> arrow_function','special_function',1,'p_special_function','syntaxAnalysis.py',139),
-  ('special_function -> anonymous_functions','special_function',1,'p_special_function','syntaxAnalysis.py',140),
-  ('arrow_function -> FN LEFT_PAREN params RIGHT_PAREN EQUALS GREATER_THAN codeblock','arrow_function',7,'p_arrow_function','syntaxAnalysis.py',146),
-  ('anonymous_functions -> FUNCTION LEFT_PAREN params RIGHT_PAREN codeblock','anonymous_functions',5,'p_anonymous_functions','syntaxAnalysis.py',152),
-  ('codeblock -> LEFT_BRACE RIGHT_BRACE','codeblock',2,'p_codeblock','syntaxAnalysis.py',158),
+  ('program -> sentence program','program',2,'p_program_sentence_program','syntaxAnalysis.py',11),
+  ('program -> sentence','program',1,'p_program_sentence','syntaxAnalysis.py',15),
+  ('sentence -> print_statement SEMICOLON','sentence',2,'p_sentence_print_statement','syntaxAnalysis.py',20),
+  ('sentence -> assignment','sentence',1,'p_sentence_print_statement','syntaxAnalysis.py',21),
+  ('print_statement -> ECHO LEFT_PAREN printable_values RIGHT_PAREN','print_statement',4,'p_print_statement','syntaxAnalysis.py',27),
+  ('print_statement -> PRINT LEFT_PAREN printable_values RIGHT_PAREN','print_statement',4,'p_print_statement','syntaxAnalysis.py',28),
+  ('print_statement -> ECHO printable_values','print_statement',2,'p_print_statement','syntaxAnalysis.py',29),
+  ('print_statement -> PRINT printable_values','print_statement',2,'p_print_statement','syntaxAnalysis.py',30),
+  ('printable_values -> values','printable_values',1,'p_printable_values','syntaxAnalysis.py',36),
+  ('printable_values -> values COMMA printable_values','printable_values',3,'p_printable_values','syntaxAnalysis.py',37),
+  ('printable_values -> VARIABLE','printable_values',1,'p_printable_values','syntaxAnalysis.py',38),
+  ('printable_values -> VARIABLE COMMA printable_values','printable_values',3,'p_printable_values','syntaxAnalysis.py',39),
+  ('values -> INTEGER','values',1,'p_values','syntaxAnalysis.py',46),
+  ('values -> STRING','values',1,'p_values','syntaxAnalysis.py',47),
+  ('values -> FLOAT','values',1,'p_values','syntaxAnalysis.py',48),
+  ('values -> boolean','values',1,'p_values','syntaxAnalysis.py',49),
+  ('boolean -> TRUE','boolean',1,'p_boolean','syntaxAnalysis.py',55),
+  ('boolean -> FALSE','boolean',1,'p_boolean','syntaxAnalysis.py',56),
+  ('expression -> term','expression',1,'p_expression','syntaxAnalysis.py',62),
+  ('expression -> term PLUS expression','expression',3,'p_expression','syntaxAnalysis.py',63),
+  ('expression -> term MINUS expression','expression',3,'p_expression','syntaxAnalysis.py',64),
+  ('term -> factor','term',1,'p_term','syntaxAnalysis.py',70),
+  ('term -> factor MULTIPLY term','term',3,'p_term','syntaxAnalysis.py',71),
+  ('term -> factor DIVIDE term','term',3,'p_term','syntaxAnalysis.py',72),
+  ('term -> factor MODULE term','term',3,'p_term','syntaxAnalysis.py',73),
+  ('term -> factor POW term','term',3,'p_term','syntaxAnalysis.py',74),
+  ('factor -> INTEGER','factor',1,'p_factor','syntaxAnalysis.py',80),
+  ('factor -> VARIABLE','factor',1,'p_factor','syntaxAnalysis.py',81),
+  ('factor -> LEFT_PAREN expression RIGHT_PAREN','factor',3,'p_factor','syntaxAnalysis.py',82),
+  ('assignment -> variable_assignment','assignment',1,'p_assignment','syntaxAnalysis.py',92),
+  ('assignment -> function_assignment','assignment',1,'p_assignment','syntaxAnalysis.py',93),
+  ('assignment -> constant_assignment','assignment',1,'p_assignment','syntaxAnalysis.py',94),
+  ('variable_assignment -> VARIABLE EQUALS values SEMICOLON','variable_assignment',4,'p_variable_assignment','syntaxAnalysis.py',100),
+  ('variable_assignment -> VARIABLE EQUALS function_invocation SEMICOLON','variable_assignment',4,'p_variable_assignment','syntaxAnalysis.py',101),
+  ('variable_assignment -> VARIABLE EQUALS expression SEMICOLON','variable_assignment',4,'p_variable_assignment','syntaxAnalysis.py',102),
+  ('constant_assignment -> const_syntax','constant_assignment',1,'p_constant_assignment','syntaxAnalysis.py',108),
+  ('constant_assignment -> define_syntax','constant_assignment',1,'p_constant_assignment','syntaxAnalysis.py',109),
+  ('const_syntax -> CONST IDENTIFIER EQUALS values SEMICOLON','const_syntax',5,'p_const_syntax','syntaxAnalysis.py',115),
+  ('define_syntax -> DEFINE LEFT_PAREN STRING COMMA values RIGHT_PAREN SEMICOLON','define_syntax',7,'p_define_syntax','syntaxAnalysis.py',121),
+  ('function_invocation -> IDENTIFIER LEFT_PAREN params RIGHT_PAREN SEMICOLON','function_invocation',5,'p_function_invocation','syntaxAnalysis.py',133),
+  ('params -> real_params','params',1,'p_params','syntaxAnalysis.py',139),
+  ('params -> empty','params',1,'p_params','syntaxAnalysis.py',140),
+  ('real_params -> VARIABLE','real_params',1,'p_real_params','syntaxAnalysis.py',146),
+  ('real_params -> real_params COMMA VARIABLE','real_params',3,'p_real_params','syntaxAnalysis.py',147),
+  ('empty -> <empty>','empty',0,'p_empty','syntaxAnalysis.py',157),
+  ('function_assignment -> VARIABLE EQUALS special_function SEMICOLON','function_assignment',4,'p_function_assignment','syntaxAnalysis.py',164),
+  ('function_assignment -> FUNCTION IDENTIFIER LEFT_PAREN params RIGHT_PAREN codeblock','function_assignment',6,'p_function_assignment','syntaxAnalysis.py',165),
+  ('special_function -> arrow_function','special_function',1,'p_special_function','syntaxAnalysis.py',171),
+  ('special_function -> anonymous_functions','special_function',1,'p_special_function','syntaxAnalysis.py',172),
+  ('arrow_function -> FN LEFT_PAREN params RIGHT_PAREN EQUALS GREATER_THAN codeblock','arrow_function',7,'p_arrow_function','syntaxAnalysis.py',178),
+  ('anonymous_functions -> FUNCTION LEFT_PAREN params RIGHT_PAREN codeblock','anonymous_functions',5,'p_anonymous_functions','syntaxAnalysis.py',184),
+  ('codeblock -> LEFT_BRACE RIGHT_BRACE','codeblock',2,'p_codeblock','syntaxAnalysis.py',190),
 ]

@@ -1,3 +1,5 @@
+import re
+
 import ply.yacc as yacc
 
 from lexicalAnalysis import tokens
@@ -33,16 +35,17 @@ def p_printable_values(p):
     """
     printable_values : values
                      | values COMMA printable_values
+                     | VARIABLE
+                     | VARIABLE COMMA printable_values
     """
 
 
 # Tipos de dato
-def p__values(p):
+def p_values(p):
     """
     values : INTEGER
            | STRING
            | FLOAT
-           | VARIABLE
            | boolean
     """
 
@@ -88,6 +91,7 @@ def p_assignment(p):
     """
     assignment : variable_assignment
                | function_assignment
+               | constant_assignment
     """
 
 
@@ -97,6 +101,30 @@ def p_variable_assignment(p):
                         | VARIABLE EQUALS function_invocation SEMICOLON
                         | VARIABLE EQUALS expression SEMICOLON
     """
+
+
+def p_constant_assignment(p):
+    """
+    constant_assignment : const_syntax
+                        | define_syntax
+    """
+
+
+def p_const_syntax(p):
+    """
+     const_syntax : CONST IDENTIFIER EQUALS values SEMICOLON
+    """
+
+
+def p_define_syntax(p):
+    """
+        define_syntax : DEFINE LEFT_PAREN STRING COMMA values RIGHT_PAREN SEMICOLON
+    """
+    constant_name = p[3][1:-1]
+
+    if re.match(r'[a-zA-Z_\x80-\xff][a-zA-Z0-9_\x80-\xff]*', constant_name) is None:
+        print(f"Error de sintaxis: nombre de constante '{constant_name}' no permitido")
+        raise SyntaxError(f"Error de sintaxis: nombre de constante '{constant_name}' no permitido")
 
 
 def p_function_invocation(p):
@@ -167,16 +195,18 @@ def p_codeblock(p):
 # Regla para los errores de sintáxis
 def p_error(p):
     if p:
-        print(f"Error semántico en línea {p.lineno}, posición {p.lexpos}: Token inesperado '{p.value}' \n'{p}'")
+        print(f"Error de sintaxis en línea {p.lineno}, posición {p.lexpos}: Token inesperado '{p.value}' \n'{p}'")
     else:
-        print("Error semántico: Fin de archivo inesperado")
+        print("Error de sintaxis: Fin de archivo inesperado")
 
 
 
 # Creamos el parser
 parser = yacc.yacc()
 
+
 parser.error = 0
+
 code = '''
 print 56;
 $clave = 34;
@@ -186,7 +216,10 @@ function validarContrasena($contrasena) {}
 $clave = "ClaveSegura123!";
 $_cla = fn($a) => {};
 $op = function($nombre) {};
-$ko = 23+5;
+$ko = 23;
+define("5hola",29);
+const 5HOLA = "xd";
+
 '''
 parser.parse(code)
 
