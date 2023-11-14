@@ -2,7 +2,7 @@
 # Componentes lexicos con libreria ply lex
 import ply.lex as lex
 
-    # INICIO CONTRIBUCION KEVIN ROLDAN
+# INICIO CONTRIBUCION KEVIN ROLDAN
 
 reserved = {
     '__halt_compiler': 'HALT_COMPILER',
@@ -77,18 +77,21 @@ reserved = {
     'define': 'DEFINE'
 }
 
-    # FIN DE CONTRIBUCION KEVIN ROLDAN
+# FIN DE CONTRIBUCION KEVIN ROLDAN
 
-
+essential_functions = {
+    'fgets': 'FEGTS',
+    'readline': 'READLINE',
+    'STDIN': 'STDIN'
+}
 # Tokens
 tokens = (
-    #CONTRIBUCION JEREMY POVEDA
+             # CONTRIBUCION JEREMY POVEDA
              'STRING',
              'FLOAT',
              'COMMENT',
-             'INPUT',
-    #FIN DE LA CONTRIBUCION JEREMY POVEDA 
-    #CONTRIBUCION JORGE MAWYIN
+             # FIN DE LA CONTRIBUCION JEREMY POVEDA
+             # CONTRIBUCION JORGE MAWYIN
              'INTEGER',
              # OPERADORES ARITMÉTICOS
              'PLUS',
@@ -135,9 +138,9 @@ tokens = (
              # OPERADOR PARA STRING
              'STRING_CONCATENATION',
 
-    # FIN DE CONTRIBUCION JORGE MAWYIN
+             # FIN DE CONTRIBUCION JORGE MAWYIN
 
-    # INICIO CONTRIBUCION KEVIN ROLDAN
+             # INICIO CONTRIBUCION KEVIN ROLDAN
              'IDENTIFIER',
              'VARIABLE',
              'TRUE',
@@ -152,10 +155,10 @@ tokens = (
              'SEMICOLON',
              'COLON',
 
-    # FIN DE CONTRIBUCION KEVIN ROLDAN
-         ) + tuple(reserved.values())
+             # FIN DE CONTRIBUCION KEVIN ROLDAN
+         ) + tuple(reserved.values()) + tuple(essential_functions.values())
 
-    # INICIO CONTRIBUCION JORGE MAWYIN
+# INICIO CONTRIBUCION JORGE MAWYIN
 
 # Expresiones Regulares simples para símbolos
 # OPERADORES ARITMÉTICOS
@@ -205,37 +208,40 @@ t_LOGIC_NOT = r'!'
 # OPERADOR PARA STRING
 t_STRING_CONCATENATION = r'\.'
 
-
 t_STRING = r'\'[^\']*\'|"[^"]*"'
 
-f_INPUT = r'fgets(STDIN)'
+
 
 def t_FLOAT(t):
     r'([0-9]+\.[0-9])([eE][+-]?[0-9]+)?'
     t.value = float(t.value)
     return t
 
+
 def t_COMMENT(t):
     r'(\#.*|\/\/.*|/\*(.|\n)*?\*/)'
     pass
+
 
 # Expresión regular para números enteros, con casting para las 4 bases
 def t_INTEGER(t):
     r'[+-]?([1-9][0-9]*|0[xX][0-9a-fA-F]+|0[0-7]+|0b[01]+)'
     base = 10
     if t.value.startswith("0x") or t.value.startswith("0X"):
-        base = 16 # Hexadecimal
+        base = 16  # Hexadecimal
     elif t.value.startswith("0"):
-        base = 8 # Octal
+        base = 8  # Octal
     if t.value.startswith("0b") or t.value.startswith("0B"):
-        base = 2 # BInaria
+        base = 2  # BInaria
     t.value = int(t.value, base)
     return t
-# FIN DE LA CONTRIBUCION JEREMY POVEDA
-  
 
-    # INICIO CONTRIBUCION KEVIN ROLDAN
-t_VARIABLE= r'\$[a-zA-Z_\x80-\xff][a-zA-Z0-9_\x80-\xff]*'
+
+# FIN DE LA CONTRIBUCION JEREMY POVEDA
+
+
+# INICIO CONTRIBUCION KEVIN ROLDAN
+t_VARIABLE = r'\$[a-zA-Z_\x80-\xff][a-zA-Z0-9_\x80-\xff]*'
 t_LEFT_PAREN = r'\('
 t_RIGHT_PAREN = r'\)'
 t_LEFT_BRACE = r'\{'
@@ -245,29 +251,39 @@ t_RIGHT_BRACKET = r'\]'
 t_COMMA = r','
 t_SEMICOLON = r';'
 t_COLON = r':'
+
+
 def t_TRUE(t):
     r'[Tt][Rr][Uu][Ee]'
     return t
+
 
 def t_FALSE(t):
     r'[Ff][Aa][Ll][Ss][Ee]'
     return t
 
+
 def t_IDENTIFIER(t):
     r'[a-zA-Z_\x80-\xff][a-zA-Z0-9_\x80-\xff]*'
-    t.type = reserved.get(t.value, 'IDENTIFIER')
+    t.type = essential_functions.get(t.value, 'IDENTIFIER')
+    if t.type == 'IDENTIFIER':
+        t.type = reserved.get(t.value, 'IDENTIFIER')
     return t
     # FIN DE CONTRIBUCION KEVIN ROLDAN
+
 
 def t_newline(t):
     r'\n+'
     t.lexer.lineno += len(t.value)
 
+
 t_ignore = ' \t'
+
 
 def t_error(t):
     print(f"{t.type.upper()}: No se reconoce el caracter {t.value[0]} en la línea {t.lineno}")
     t.lexer.skip(1)
+
 
 # Construccion de los lexers
 lexer = lex.lex()

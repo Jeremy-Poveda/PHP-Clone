@@ -101,6 +101,8 @@ def p_variable_assignment(p):
     variable_assignment : VARIABLE EQUALS values SEMICOLON
                         | VARIABLE EQUALS function_invocation SEMICOLON
                         | VARIABLE EQUALS expression SEMICOLON
+                        | VARIABLE EQUALS types_structure
+                        | VARIABLE EQUALS input SEMICOLON
     """
 
 
@@ -144,7 +146,9 @@ def p_params(p):
 def p_real_params(p):
     """
     real_params : VARIABLE
+                | values
                 | real_params COMMA VARIABLE
+                | real_params COMMA values
     """
     if len(p) == 2:
         p[0] = [p[1]]
@@ -190,102 +194,131 @@ def p_codeblock(p):
     codeblock : LEFT_BRACE RIGHT_BRACE
     """
 
+
+def p_input(p):
+    """
+    input : FEGTS LEFT_PAREN STDIN RIGHT_PAREN
+          | READLINE LEFT_PAREN STRING RIGHT_PAREN
+    """
+
+
 #FIN DE APORTACIÓN KEVIN ROLDAN
-
 #INICIO DE APORTACIÓN JORGE MAWYIN
-
 #ESTRUCTURAS DE DATOS
 
+
 def p_types_structure(p):
-    '''
+    """
     types_structure : structure_array_principal
                     | structure_matrix_principal
                     | structure_object_principal
-    '''
+    """
+
+
 #ARRAY
 def p_structure_array_principal(p):
-    '''
+    """
     structure_array_principal : indexed_array
                               | associative_array
-    '''
+    """
+
 
 def p_indexed_array(p):
-    'indexed_array : ARRAY LEFT_PAREN values_array_indexed RIGHT_PAREN SEMICOLON'
+    """indexed_array : ARRAY LEFT_PAREN values_array_indexed RIGHT_PAREN SEMICOLON"""
+
 
 def p_associative_array(p):
-    '''associative_array : ARRAY LEFT_PAREN structure_array RIGHT_PAREN SEMICOLON
+    """associative_array : ARRAY LEFT_PAREN structure_array RIGHT_PAREN SEMICOLON
                          | ARRAY LEFT_BRACKET structure_array RIGHT_BRACKET SEMICOLON
-    '''
+    """
+
 
 def p_structure_array(p):
-    '''
+    """
     structure_array : key EQUALS GREATER_THAN values
                     | key EQUALS GREATER_THAN values COMMA structure_array
-    '''
+    """
+
 
 def p_key(p):
-    '''
-    key : INTEGER 
+    """
+    key : INTEGER
         | STRING
-    '''
+    """
+
 
 def p_values_array_indexed(p):
-    '''values_array_indexed : values
+    """values_array_indexed : values
                             | values COMMA values_array_indexed
-    '''
+    """
+
 
 #MATRIX
 def p_structure_matrix_principal(p):
-    '''
+    """
     structure_matrix_principal : matrix_firstform
                                | matrix_secondform
                                | access_element_matrix
                                | modify_element_matrix
                                | add_element_matrix
-    '''
+    """
+
 
 def p_matrix_firstform(p):
-    'matrix_firstform : ARRAY LEFT_PAREN structure_matrix_first RIGHT_PAREN SEMICOLON'
+    """matrix_firstform : ARRAY LEFT_PAREN structure_matrix_first RIGHT_PAREN SEMICOLON"""
+
 
 def p_matrix_secondform(p):
-    'matrix_secondform : LEFT_BRACKET structure_matrix_second RIGHT_BRACKET SEMICOLON'
+    """matrix_secondform : LEFT_BRACKET structure_matrix_second RIGHT_BRACKET SEMICOLON"""
+
 
 def p_structure_matrix_second(p):
-    '''
+    """
     structure_matrix_second : LEFT_BRACKET values RIGHT_BRACKET
                             | LEFT_BRACKET values RIGHT_BRACKET COMMA structure_matrix_second
-    '''
+    """
+
+
 def p_structure_matrix_first(p):
-    '''
+    """
     structure_matrix_first : ARRAY LEFT_PAREN values RIGHT_PAREN
                            | ARRAY LEFT_PAREN values RIGHT_PAREN COMMA structure_matrix_first
-    '''
+    """
+
+
 def p_access_element_matrix(p):
-    'access_element_matrix : VARIABLE LEFT_BRACKET INTEGER RIGHT_BRACKET LEFT_BRACKET INTEGER RIGHT_BRACKET SEMICOLON'
+    """access_element_matrix : VARIABLE LEFT_BRACKET INTEGER RIGHT_BRACKET LEFT_BRACKET INTEGER RIGHT_BRACKET SEMICOLON"""
+
 
 def p_modify_element_matrix(p):
     'modify_element_matrix : VARIABLE LEFT_BRACKET INTEGER RIGHT_BRACKET LEFT_BRACKET INTEGER RIGHT_BRACKET EQUALS values SEMICOLON'
 
+
 def p_add_element_matrix(p):
-    'add_element_matrix : VARIABLE LEFT_BRACKET RIGHT_BRACKET EQUALS indexed_array'
+    """add_element_matrix : VARIABLE LEFT_BRACKET RIGHT_BRACKET EQUALS indexed_array"""
+
 
 #OBJECT
 def p_structure_object_principal(p):
-    '''
+    """
     structure_object_principal : object_creation
                                | access_method_object
-    '''
+    """
+
 
 def p_object_creation(p):
-    'object_creation : NEW class_name SEMICOLON'
+    """object_creation : NEW class_name SEMICOLON"""
+
 
 def p_class_name(p):
-    'class_name : IDENTIFIER'
+    """class_name : IDENTIFIER"""
+
 
 def p_access_method_object(p):
-    'access_method_object : VARIABLE MINUS GREATER_THAN IDENTIFIER LEFT_PAREN RIGHT_PAREN SEMICOLON'
+    """access_method_object : VARIABLE MINUS GREATER_THAN IDENTIFIER LEFT_PAREN RIGHT_PAREN SEMICOLON"""
 
 #FIN DE APORTACIÓN JORGE MAWYIN
+
 
 # Regla para los errores de sintáxis
 def p_error(p):
@@ -310,11 +343,13 @@ echo "asjos", 34, "2";
 function validarContrasena($contrasena) {}
 $clave = "ClaveSegura123!";
 $_cla = fn($a) => {};
-$op = function($nombre) {};
+$op = function($nombre,$rrr, 2, true, "hola") {};
 $ko = 23;
-define("5hola",29);
-const 5HOLA = "xd";
-
+define("hola",29);
+const HOLA = "xd";
+$hola = array(4,5);
+$input = fgets(STDIN);
+$input2 = readline("escriba una linea");
 '''
 parser.parse(code)
 
