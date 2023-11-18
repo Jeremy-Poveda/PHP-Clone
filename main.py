@@ -158,11 +158,13 @@ def play_button_clicked():
 root = tk.Tk()
 root.title("PHP Clone - GRUPO 4")
 
-input_text = tk.Text(root, height=10, width=50)
+input_text = tk.Text(root, height=30, width=100)
 input_text.pack(pady=10)
 
+
+
 # widget de texto para la consola
-output_text = scrolledtext.ScrolledText(root, height=15, width=50, wrap=tk.WORD)
+output_text = scrolledtext.ScrolledText(root, height=10, width=100, wrap=tk.WORD)
 output_text.pack()
 
 # botón para ejecutar el análisis lexico y semantico

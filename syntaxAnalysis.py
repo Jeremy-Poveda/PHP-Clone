@@ -15,13 +15,97 @@ def p_program_sentence(p):
     """program : sentence"""
  
 
+# Sentencias para impresión de valores, asignaciones, estructuras de datos, declaración de funciones y estructuras de control.
 def p_sentence_print_statement(p):
     """
     sentence : print_statement SEMICOLON
-             | assignment
+             | assignment SEMICOLON
              | types_structure
+             | control_structures
+             | function_declaration
     """
 
+# Estructuras de control
+def p_control_structures(p):
+    """
+    control_structures : if_statement
+                       | while_statement
+    """
+def p_while_statement(p):
+    """
+    while_statement : WHILE LEFT_PAREN conditional RIGHT_PAREN LEFT_BRACE body_statement RIGHT_BRACE
+    """
+
+def p_if_statement(p):
+    """
+    if_statement : IF LEFT_PAREN conditional RIGHT_PAREN LEFT_BRACE body_statement RIGHT_BRACE
+                 | IF LEFT_PAREN conditional RIGHT_PAREN LEFT_BRACE body_statement RIGHT_BRACE elseif_statement
+                 | IF LEFT_PAREN conditional RIGHT_PAREN LEFT_BRACE body_statement RIGHT_BRACE else_statement
+    """
+
+def p_elseif_statement(p):
+    """
+    elseif_statement : ELSEIF LEFT_PAREN conditional RIGHT_PAREN LEFT_BRACE body_statement RIGHT_BRACE
+                 | ELSEIF LEFT_PAREN conditional RIGHT_PAREN LEFT_BRACE body_statement RIGHT_BRACE elseif_statement
+                 | ELSEIF LEFT_PAREN conditional RIGHT_PAREN LEFT_BRACE body_statement RIGHT_BRACE else_statement
+    """
+
+def p_else_statement(p):
+    """
+    else_statement : ELSE LEFT_BRACE body_statement RIGHT_BRACE
+    """
+
+def p_body_statement(p):
+    """
+    body_statement : sentence
+            | sentence RETURN values SEMICOLON
+            | sentence RETURN SEMICOLON
+            | sentence BREAK SEMICOLON
+            | sentence body_statement
+    """
+
+# Sentencias que pueden ser condicionales, preprosiciones lógicas y combinaciones de estas comparaciones
+
+def p_conditional(p):
+    """
+    conditional  : boolean_expression
+                 | boolean_expression logic_operator boolean_expression
+    """
+
+def p_logic_operator(p):
+    """
+    logic_operator  : LOGIC_AND
+                    | LOGIC_OR
+                    | LOGIC_XOR 
+    """
+
+def p_boolean_expression(p):
+    """
+    boolean_expression  : comparation
+                        | LEFT_PAREN conditional RIGHT_PAREN
+                        | LOGIC_NOT conditional
+    """
+
+def p_comparation(p):
+    """
+    comparation : values comparator_operator values
+                | values comparator_operator expression
+                | expression comparator_operator expression
+    """
+
+def p_comparator_operator(p):
+    """
+    comparator_operator : EQUALS_EQUALS
+                         | IDENTICAL
+                         | NOT_EQUALS
+                         | NOT_IDENTICAL
+                         | SMALL_THAN
+                         | GREATER_THAN
+                         | SMALL_EQUALS_TO
+                         | GREATER_EQUALS_TO
+                         | SPACECRAFT
+                         | NULL_FUSION
+    """
 
 def p_print_statement(p):
     """
@@ -38,6 +122,8 @@ def p_printable_values(p):
                      | values COMMA printable_values
                      | VARIABLE
                      | VARIABLE COMMA printable_values
+                     | conditional
+                     | conditional COMMA printable_values
     """
 
 
@@ -91,20 +177,31 @@ def p_factor(p):
 def p_assignment(p):
     """
     assignment : variable_assignment
-               | function_assignment
                | constant_assignment
     """
 
 
 def p_variable_assignment(p):
     """
-    variable_assignment : VARIABLE EQUALS values SEMICOLON
-                        | VARIABLE EQUALS function_invocation SEMICOLON
-                        | VARIABLE EQUALS expression SEMICOLON
-                        | VARIABLE EQUALS types_structure
-                        | VARIABLE EQUALS input SEMICOLON
+    variable_assignment : VARIABLE assignment_operator values
+                        | VARIABLE assignment_operator expression 
+                        | VARIABLE assignment_operator function_invocation
+                        | VARIABLE assignment_operator types_structure 
+                        | VARIABLE assignment_operator input 
+                        | VARIABLE assignment_operator special_function
+                        | VARIABLE INCREASE 
+                        | VARIABLE DECREMENT 
+                        | INCREASE VARIABLE 
+                        | DECREMENT VARIABLE 
     """
 
+# Aportación Jeremy Poveda, Para que se apliquen más operadores de asignación
+def p_assignment_operator(p):
+    """
+    assignment_operator : EQUALS
+                        | PLUS_EQUALS
+    """
+#Nota para el resto, hay que hacer en el semantico la diferenciacion entre asignacion de strings para poder usar la operacion de .=
 
 def p_constant_assignment(p):
     """
@@ -115,13 +212,13 @@ def p_constant_assignment(p):
 
 def p_const_syntax(p):
     """
-     const_syntax : CONST IDENTIFIER EQUALS values SEMICOLON
+     const_syntax : CONST IDENTIFIER EQUALS values 
     """
 
 
 def p_define_syntax(p):
     """
-        define_syntax : DEFINE LEFT_PAREN STRING COMMA values RIGHT_PAREN SEMICOLON
+        define_syntax : DEFINE LEFT_PAREN STRING COMMA values RIGHT_PAREN 
     """
     constant_name = p[3][1:-1]
 
@@ -162,11 +259,10 @@ def p_empty(p):
     """
     pass
 
-
-def p_function_assignment(p):
+# Creado por Jeremy Poveda, separando la declaración de la función con su asignación a una variable
+def p_function_declaration(p):
     """
-    function_assignment : VARIABLE EQUALS special_function SEMICOLON
-                        | FUNCTION IDENTIFIER LEFT_PAREN params RIGHT_PAREN codeblock
+    function_declaration : FUNCTION IDENTIFIER LEFT_PAREN params RIGHT_PAREN codeblock
     """
 
 
@@ -224,12 +320,12 @@ def p_structure_array_principal(p):
 
 
 def p_indexed_array(p):
-    """indexed_array : ARRAY LEFT_PAREN values_array_indexed RIGHT_PAREN SEMICOLON"""
+    """indexed_array : ARRAY LEFT_PAREN values_array_indexed RIGHT_PAREN"""
 
 
 def p_associative_array(p):
-    """associative_array : ARRAY LEFT_PAREN structure_array RIGHT_PAREN SEMICOLON
-                         | ARRAY LEFT_BRACKET structure_array RIGHT_BRACKET SEMICOLON
+    """associative_array : ARRAY LEFT_PAREN structure_array RIGHT_PAREN 
+                         | ARRAY LEFT_BRACKET structure_array RIGHT_BRACKET
     """
 
 
@@ -350,7 +446,35 @@ const HOLA = "xd";
 $hola = array(4,5);
 $input = fgets(STDIN);
 $input2 = readline("escriba una linea");
+$a--;
+--$a;
+'''
+
+algorith_Poveda = '''
+$numero = 7;
+
+// Bucle while y estructura if anidada
+while (!($numero == 0) and $numero > 1) { // Ejemplo de negacion
+    echo "El número actual es: $numero ";
+
+    if ($numero % 2 == 0) {
+        echo "(par)\n";
+    } else {
+        echo "(impar)\n";
+        return "Hola mundo";
+    }
+
+    $numero--;
+
+    if ($numero == 4) {
+        echo "¡El número llegó a 4! Terminando el bucle.\n";
+        break;
+    }
+}
+
+echo "Fin del programa.";
 '''
 parser.parse(code)
+parser.parse(algorith_Poveda)
 
 

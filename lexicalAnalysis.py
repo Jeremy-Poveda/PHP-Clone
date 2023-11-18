@@ -7,9 +7,9 @@ import ply.lex as lex
 reserved = {
     '__halt_compiler': 'HALT_COMPILER',
     'abstract': 'ABSTRACT',
-    'and': 'AND',
     'array': 'ARRAY',
     'as': 'AS',
+    'and': 'LOGIC_AND',
     'break': 'BREAK',
     'callable': 'CALLABLE',
     'case': 'CASE',
@@ -55,7 +55,6 @@ reserved = {
     'match': 'MATCH',
     'namespace': 'NAMESPACE',
     'new': 'NEW',
-    'or': 'OR',
     'print': 'PRINT',
     'private': 'PRIVATE',
     'protected': 'PROTECTED',
@@ -72,7 +71,6 @@ reserved = {
     'use': 'USE',
     'var': 'VAR',
     'while': 'WHILE',
-    'xor': 'XOR',
     'yield': 'YIELD',
     'define': 'DEFINE'
 }
@@ -126,10 +124,8 @@ tokens = (
              'ERROR_CONTROL',
 
              # OPERADORES DE INCREMENTO/DECREMENTO
-             'PRE_INCREASE',
-             'POST_INCREASE',
-             'PRE_DECREMENT',
-             'POST_DECREMENT',
+             'INCREASE',
+             'DECREMENT',
              # OPERADORES LOGICOS
              'LOGIC_AND',
              'LOGIC_OR',
@@ -193,12 +189,10 @@ t_NULL_FUSION = r'\?\?'
 # OPERADOR DE CONTROL DE ERRORES
 t_ERROR_CONTROL = r'@'
 # OPERADORES DE INCREMENTO/DECREMENTO
-t_PRE_INCREASE = r'\+\+'
-t_POST_INCREASE = r'\+\+'
-t_PRE_DECREMENT = r'--'
-t_POST_DECREMENT = r'--'
+t_INCREASE = r'\+\+'
+t_DECREMENT = r'--'
 # OPERADORES LOGICOS
-t_LOGIC_AND = r'and|&&$'
+t_LOGIC_AND = r'and|&&'
 t_LOGIC_OR = r'or|\|\|'
 t_LOGIC_XOR = r'xor'
 t_LOGIC_NOT = r'!'
@@ -225,7 +219,7 @@ def t_COMMENT(t):
 
 # Expresión regular para números enteros, con casting para las 4 bases
 def t_INTEGER(t):
-    r'[+-]?([1-9][0-9]*|0[xX][0-9a-fA-F]+|0[0-7]+|0b[01]+)'
+    r'[+-]?([1-9][0-9]*|0|0[xX][0-9a-fA-F]+|0[0-7]+|0b[01]+)'
     base = 10
     if t.value.startswith("0x") or t.value.startswith("0X"):
         base = 16  # Hexadecimal
