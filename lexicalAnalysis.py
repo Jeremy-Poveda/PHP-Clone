@@ -10,6 +10,8 @@ reserved = {
     'array': 'ARRAY',
     'as': 'AS',
     'and': 'LOGIC_AND',
+    'or': 'LOGIC_OR',
+    'xor': 'LOGIC_XOR',
     'break': 'BREAK',
     'callable': 'CALLABLE',
     'case': 'CASE',

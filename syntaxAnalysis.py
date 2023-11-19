@@ -30,6 +30,7 @@ def p_control_structures(p):
     """
     control_structures : if_statement
                        | while_statement
+                       | for_statement
     """
 def p_while_statement(p):
     """
@@ -64,6 +65,37 @@ def p_body_statement(p):
             | sentence body_statement
     """
 
+#Aportacion Jorge Mawyin
+def p_for_statement(p):
+    """
+    for_statement : FOR LEFT_PAREN VARIABLE EQUALS number_values SEMICOLON VARIABLE comparator_operator number_values SEMICOLON increment_statement RIGHT_PAREN LEFT_BRACE body_statement RIGHT_BRACE
+    """
+
+def p_increment_statement(p):
+    """
+    increment_statement : VARIABLE INCREASE
+                        | VARIABLE DECREMENT
+                        | INCREASE VARIABLE
+                        | DECREMENT VARIABLE
+                        | VARIABLE PLUS_EQUALS INTEGER
+                        | VARIABLE EQUALS VARIABLE operator_aritmetic number_values
+    """
+
+def p_number_values(p):
+    """
+    number_values : INTEGER
+                  | FLOAT
+    """
+
+def p_operator_aritmetic(p):
+    """
+    operator_aritmetic : PLUS
+                       | MINUS
+                       | MULTIPLY
+                       | DIVIDE
+                       | MODULE
+                       | POW
+    """
 # Sentencias que pueden ser condicionales, preprosiciones lógicas y combinaciones de estas comparaciones
 
 def p_conditional(p):
@@ -83,14 +115,23 @@ def p_boolean_expression(p):
     """
     boolean_expression  : comparation
                         | LEFT_PAREN conditional RIGHT_PAREN
-                        | LOGIC_NOT conditional
+                        | logic_not_sentence
     """
+
+#Aportacion Jorge Mawyin
+def p_logic_not_sentence (p):
+    """
+    logic_not_sentence : LOGIC_NOT conditional
+             | LOGIC_NOT VARIABLE
+    """
+#fin aportacion
 
 def p_comparation(p):
     """
     comparation : values comparator_operator values
                 | values comparator_operator expression
                 | expression comparator_operator expression
+                | VARIABLE EQUALS_EQUALS values
     """
 
 def p_comparator_operator(p):
