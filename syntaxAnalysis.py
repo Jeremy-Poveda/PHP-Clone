@@ -71,13 +71,17 @@ def p_body_statement(p):
             | sentence RETURN SEMICOLON
             | sentence BREAK SEMICOLON
             | sentence body_statement
+            | RETURN values SEMICOLON
+            | BREAK SEMICOLON
     """
 
 
 #Aportacion Jorge Mawyin
 def p_for_statement(p):
     """
-    for_statement : FOR LEFT_PAREN VARIABLE EQUALS number_values SEMICOLON VARIABLE comparator_operator number_values SEMICOLON increment_statement RIGHT_PAREN LEFT_BRACE body_statement RIGHT_BRACE
+    for_statement : FOR LEFT_PAREN VARIABLE EQUALS expression_for SEMICOLON condition_for SEMICOLON increment_statement RIGHT_PAREN LEFT_BRACE body_statement RIGHT_BRACE
+                  | FOR LEFT_PAREN VARIABLE EQUALS expression_for SEMICOLON SEMICOLON increment_statement RIGHT_PAREN LEFT_BRACE body_statement RIGHT_BRACE
+                  | FOR LEFT_PAREN  SEMICOLON SEMICOLON RIGHT_PAREN LEFT_BRACE body_statement RIGHT_BRACE
     """
 
 def p_increment_statement(p):
@@ -88,6 +92,21 @@ def p_increment_statement(p):
                         | DECREMENT VARIABLE
                         | VARIABLE PLUS_EQUALS INTEGER
                         | VARIABLE EQUALS VARIABLE operator_aritmetic number_values
+    """
+
+def p_condition_for(p):
+    """
+    condition_for : VARIABLE comparator_operator expression_for
+    """
+
+def p_expression_for(p):
+    """
+    expression_for : VARIABLE
+                   | number_values
+                   | expression_for operator_aritmetic expression_for
+                   | LEFT_PAREN expression_for RIGHT_PAREN
+                   | IDENTIFIER LEFT_PAREN VARIABLE RIGHT_PAREN
+                   | IDENTIFIER LEFT_PAREN access_array_element RIGHT_PAREN
     """
 
 def p_number_values(p):
@@ -145,6 +164,13 @@ def p_comparation(p):
                 | values comparator_operator expression
                 | expression comparator_operator expression
                 | VARIABLE EQUALS_EQUALS values
+                | access_array_element EQUALS_EQUALS values
+                | access_array_element EQUALS_EQUALS VARIABLE
+                | VARIABLE EQUALS_EQUALS access_array_element
+                | VARIABLE EQUALS_EQUALS VARIABLE
+                | access_array_element EQUALS_EQUALS access_array_element
+                | access_element_matrix EQUALS_EQUALS VARIABLE
+                | VARIABLE EQUALS_EQUALS access_element_matrix
     """
 
 
@@ -378,6 +404,8 @@ def p_structure_array_principal(p):
     """
     structure_array_principal : indexed_array
                               | associative_array
+                              | access_array_stucture
+                              | access_array_element
     """
 
 
@@ -408,16 +436,30 @@ def p_key(p):
 def p_values_array_indexed(p):
     """values_array_indexed : values
                             | values COMMA values_array_indexed
+                            | object_creation
+                            | object_creation COMMA values_array_indexed
+                            | indexed_array
+                            | indexed_array COMMA values_array_indexed
     """
 
+def p_access_array_stucture(p):
+    """
+    access_array_stucture : access_array_element SEMICOLON
+    """
+
+def p_access_array_element(p):
+    """
+    access_array_element : VARIABLE LEFT_BRACKET INTEGER RIGHT_BRACKET
+                         | VARIABLE LEFT_BRACKET VARIABLE RIGHT_BRACKET
+    """
 
 # MATRIX
 def p_structure_matrix_principal(p):
     """
     structure_matrix_principal : matrix_firstform
                                | matrix_secondform
-                               | access_element_matrix
-                               | modify_element_matrix
+                               | access_element_matrix SEMICOLON
+                               | modify_element_matrix SEMICOLON
                                | add_element_matrix
     """
 
@@ -445,11 +487,16 @@ def p_structure_matrix_first(p):
 
 
 def p_access_element_matrix(p):
-    """access_element_matrix : VARIABLE LEFT_BRACKET INTEGER RIGHT_BRACKET LEFT_BRACKET INTEGER RIGHT_BRACKET SEMICOLON"""
+    """
+    access_element_matrix : VARIABLE LEFT_BRACKET INTEGER RIGHT_BRACKET LEFT_BRACKET INTEGER RIGHT_BRACKET
+                          | VARIABLE LEFT_BRACKET VARIABLE RIGHT_BRACKET LEFT_BRACKET VARIABLE RIGHT_BRACKET
+                          | VARIABLE LEFT_BRACKET VARIABLE RIGHT_BRACKET LEFT_BRACKET INTEGER RIGHT_BRACKET
+                          | VARIABLE LEFT_BRACKET INTEGER RIGHT_BRACKET LEFT_BRACKET VARIABLE RIGHT_BRACKET
+    """
 
 
 def p_modify_element_matrix(p):
-    'modify_element_matrix : VARIABLE LEFT_BRACKET INTEGER RIGHT_BRACKET LEFT_BRACKET INTEGER RIGHT_BRACKET EQUALS values SEMICOLON'
+    'modify_element_matrix : VARIABLE LEFT_BRACKET INTEGER RIGHT_BRACKET LEFT_BRACKET INTEGER RIGHT_BRACKET EQUALS values'
 
 
 def p_add_element_matrix(p):
@@ -609,6 +656,31 @@ while (!($numero == 0) and $numero > 1) { // Ejemplo de negacion
 }
 
 echo "Fin del programa.";
+'''
+
+algorith_Mawyin = '''
+// Declaración e inicialización de un array bidimensional
+$matriz = array(
+    array(1, 2, 3),
+    array(4, 5, 6),
+    array(7, 8, 9)
+);
+
+// Función que usa estructura for
+function buscarValor($valor, $matriz) {
+    for ($i = 0; $i < count($matriz); $i++) {
+        for ($j = 0; $j < count($matriz[$i]); $j++) {
+            if ($matriz[$i][$j] == $valor) {
+                return "El valor $valor se encuentra en la posición [$i][$j] de la matriz.";
+            }
+        }
+    }
+    return "El valor $valor no se encuentra en la matriz.";
+}
+
+// Llamada a la función
+$busqueda = buscarValor(5, $matriz);
+echo "$busqueda \n";
 '''
 parser.parse(code)
 # parser.parse(algorith_Poveda)
