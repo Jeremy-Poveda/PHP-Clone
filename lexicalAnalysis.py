@@ -47,7 +47,6 @@ reserved = {
     'implements': 'IMPLEMENTS',
     'include': 'INCLUDE',
     'include_once': 'INCLUDE_ONCE',
-    'instanceof': 'INSTANCEOF',
     'insteadof': 'INSTEADOF',
     'interface': 'INTERFACE',
     'isset': 'ISSET',

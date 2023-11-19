@@ -13,7 +13,7 @@ def p_program_sentence_program(p):
 
 def p_program_sentence(p):
     """program : sentence"""
- 
+
 
 # Sentencias para impresión de valores, asignaciones, estructuras de datos, declaración de funciones y estructuras de control.
 def p_sentence_print_statement(p):
@@ -21,9 +21,11 @@ def p_sentence_print_statement(p):
     sentence : print_statement SEMICOLON
              | assignment SEMICOLON
              | types_structure
+             | class_declaration
              | control_structures
              | function_declaration
     """
+
 
 # Estructuras de control
 def p_control_structures(p):
@@ -31,10 +33,13 @@ def p_control_structures(p):
     control_structures : if_statement
                        | while_statement
     """
+
+
 def p_while_statement(p):
     """
     while_statement : WHILE LEFT_PAREN conditional RIGHT_PAREN LEFT_BRACE body_statement RIGHT_BRACE
     """
+
 
 def p_if_statement(p):
     """
@@ -43,6 +48,7 @@ def p_if_statement(p):
                  | IF LEFT_PAREN conditional RIGHT_PAREN LEFT_BRACE body_statement RIGHT_BRACE else_statement
     """
 
+
 def p_elseif_statement(p):
     """
     elseif_statement : ELSEIF LEFT_PAREN conditional RIGHT_PAREN LEFT_BRACE body_statement RIGHT_BRACE
@@ -50,10 +56,12 @@ def p_elseif_statement(p):
                  | ELSEIF LEFT_PAREN conditional RIGHT_PAREN LEFT_BRACE body_statement RIGHT_BRACE else_statement
     """
 
+
 def p_else_statement(p):
     """
     else_statement : ELSE LEFT_BRACE body_statement RIGHT_BRACE
     """
+
 
 def p_body_statement(p):
     """
@@ -64,6 +72,7 @@ def p_body_statement(p):
             | sentence body_statement
     """
 
+
 # Sentencias que pueden ser condicionales, preprosiciones lógicas y combinaciones de estas comparaciones
 
 def p_conditional(p):
@@ -72,12 +81,14 @@ def p_conditional(p):
                  | boolean_expression logic_operator boolean_expression
     """
 
+
 def p_logic_operator(p):
     """
     logic_operator  : LOGIC_AND
                     | LOGIC_OR
                     | LOGIC_XOR 
     """
+
 
 def p_boolean_expression(p):
     """
@@ -86,12 +97,14 @@ def p_boolean_expression(p):
                         | LOGIC_NOT conditional
     """
 
+
 def p_comparation(p):
     """
     comparation : values comparator_operator values
                 | values comparator_operator expression
                 | expression comparator_operator expression
     """
+
 
 def p_comparator_operator(p):
     """
@@ -106,6 +119,7 @@ def p_comparator_operator(p):
                          | SPACECRAFT
                          | NULL_FUSION
     """
+
 
 def p_print_statement(p):
     """
@@ -124,6 +138,8 @@ def p_printable_values(p):
                      | VARIABLE COMMA printable_values
                      | conditional
                      | conditional COMMA printable_values
+                     | access_method_object
+
     """
 
 
@@ -169,9 +185,10 @@ def p_factor(p):
            | LEFT_PAREN expression RIGHT_PAREN
     """
 
-#FIN DE APORTACIÓN JEREMY POVEDA
 
-#APORTACIÓN KEVIN ROLDAN
+# FIN DE APORTACIÓN JEREMY POVEDA
+
+# APORTACIÓN KEVIN ROLDAN
 
 
 def p_assignment(p):
@@ -195,13 +212,14 @@ def p_variable_assignment(p):
                         | DECREMENT VARIABLE 
     """
 
+
 # Aportación Jeremy Poveda, Para que se apliquen más operadores de asignación
 def p_assignment_operator(p):
     """
     assignment_operator : EQUALS
                         | PLUS_EQUALS
     """
-#Nota para el resto, hay que hacer en el semantico la diferenciacion entre asignacion de strings para poder usar la operacion de .=
+
 
 def p_constant_assignment(p):
     """
@@ -259,6 +277,7 @@ def p_empty(p):
     """
     pass
 
+
 # Creado por Jeremy Poveda, separando la declaración de la función con su asignación a una variable
 def p_function_declaration(p):
     """
@@ -287,7 +306,7 @@ def p_anonymous_functions(p):
 
 def p_codeblock(p):
     """
-    codeblock : LEFT_BRACE RIGHT_BRACE
+    codeblock : LEFT_BRACE body_statement RIGHT_BRACE
     """
 
 
@@ -298,9 +317,9 @@ def p_input(p):
     """
 
 
-#FIN DE APORTACIÓN KEVIN ROLDAN
-#INICIO DE APORTACIÓN JORGE MAWYIN
-#ESTRUCTURAS DE DATOS
+# FIN DE APORTACIÓN KEVIN ROLDAN
+# INICIO DE APORTACIÓN JORGE MAWYIN
+# ESTRUCTURAS DE DATOS
 
 
 def p_types_structure(p):
@@ -311,7 +330,7 @@ def p_types_structure(p):
     """
 
 
-#ARRAY
+# ARRAY
 def p_structure_array_principal(p):
     """
     structure_array_principal : indexed_array
@@ -349,7 +368,7 @@ def p_values_array_indexed(p):
     """
 
 
-#MATRIX
+# MATRIX
 def p_structure_matrix_principal(p):
     """
     structure_matrix_principal : matrix_firstform
@@ -394,7 +413,7 @@ def p_add_element_matrix(p):
     """add_element_matrix : VARIABLE LEFT_BRACKET RIGHT_BRACKET EQUALS indexed_array"""
 
 
-#OBJECT
+# OBJECT
 def p_structure_object_principal(p):
     """
     structure_object_principal : object_creation
@@ -403,17 +422,75 @@ def p_structure_object_principal(p):
 
 
 def p_object_creation(p):
-    """object_creation : NEW class_name SEMICOLON"""
-
-
-def p_class_name(p):
-    """class_name : IDENTIFIER"""
+    """object_creation : NEW IDENTIFIER
+                       | NEW IDENTIFIER LEFT_PAREN params RIGHT_PAREN """
 
 
 def p_access_method_object(p):
-    """access_method_object : VARIABLE MINUS GREATER_THAN IDENTIFIER LEFT_PAREN RIGHT_PAREN SEMICOLON"""
+    """access_method_object : VARIABLE MINUS GREATER_THAN function_invocation
+                            | VARIABLE MINUS GREATER_THAN IDENTIFIER SEMICOLON
+                            | VARIABLE MINUS GREATER_THAN IDENTIFIER EQUALS values SEMICOLON
+                            | VARIABLE MINUS GREATER_THAN IDENTIFIER EQUALS VARIABLE SEMICOLON
+                            """
 
-#FIN DE APORTACIÓN JORGE MAWYIN
+
+def p_class_declaration(p):
+    """class_declaration : CLASS IDENTIFIER class_extends_opt LEFT_BRACE class_body RIGHT_BRACE"""
+
+
+def p_class_extends_opt(p):
+    """class_extends_opt : EXTENDS IDENTIFIER
+                        | """
+
+
+def p_class_body(p):
+    """class_body : class_body class_member
+                  |"""
+
+
+def p_class_member(p):
+    """class_member : visibility_opt STATIC FUNCTION IDENTIFIER LEFT_PAREN params RIGHT_PAREN LEFT_BRACE method_body RIGHT_BRACE
+                    | visibility_opt FUNCTION IDENTIFIER LEFT_PAREN params RIGHT_PAREN LEFT_BRACE method_body RIGHT_BRACE
+                    | class_attribute """
+
+
+def p_class_attribute(p):
+    """
+    class_attribute : visibility_opt VARIABLE  EQUALS values SEMICOLON
+                    | visibility_opt VARIABLE SEMICOLON
+    """
+
+
+def p_visibility_opt(p):
+    """visibility_opt : PUBLIC
+                     | PRIVATE
+                     | PROTECTED
+                     |"""
+
+
+def p_method_body(p):
+    """method_body : classStatement
+                   | classStatement return_form
+                   | return_form
+                   | classStatement BREAK SEMICOLON
+                   | classStatement method_body
+    """
+
+
+def p_return_form(p):
+    """
+    return_form : RETURN values SEMICOLON
+                | RETURN  access_method_object
+                | RETURN SEMICOLON
+    """
+
+
+def p_classStatement(p):
+    """classStatement : sentence
+                      | access_method_object"""
+
+
+# FIN DE APORTACIÓN JORGE MAWYIN
 
 
 # Regla para los errores de sintáxis
@@ -424,30 +501,49 @@ def p_error(p):
         print("Error de sintaxis: Fin de archivo inesperado")
 
 
-
 # Creamos el parser
 parser = yacc.yacc()
-
 
 parser.error = 0
 
 code = '''
-print 56;
-$clave = 34;
-$rtr = $ft;
-echo "asjos", 34, "2";
-function validarContrasena($contrasena) {}
-$clave = "ClaveSegura123!";
-$_cla = fn($a) => {};
-$op = function($nombre,$rrr, 2, true, "hola") {};
-$ko = 23;
-define("hola",29);
-const HOLA = "xd";
-$hola = array(4,5);
-$input = fgets(STDIN);
-$input2 = readline("escriba una linea");
-$a--;
---$a;
+
+class MiClase {
+    // Propiedades (variables de la clase)
+    public $propiedad1;
+    private $propiedad2;
+    protected $propiedad3;
+
+    // Constructor (método llamado al instanciar la clase)
+    public function __construct($valor1, $valor2) {
+        $this->propiedad1 = $valor1;
+        $this->propiedad2 = $valor2;
+        $hola = 2;
+    }
+
+    // Métodos (funciones de la clase)
+    public function obtenerPropiedad1() {
+        return $this->propiedad1;
+    }
+
+    private function metodoPrivado() {
+        // Código del método privado
+        $aaaa = 23;
+    }
+
+    protected function metodoProtegido() {
+        // Código del método protegido
+        $hola = "juan";
+    }
+}
+
+// Instanciar la clase
+$instancia = new MiClase;
+$instancia = new MiClase('Valor1', 'Valor2');
+
+// Acceder a propiedades y métodos
+echo $instancia->obtenerPropiedad1();
+
 '''
 
 algorith_Poveda = '''
@@ -459,11 +555,15 @@ while (!($numero == 0) and $numero > 1) { // Ejemplo de negacion
 
     if ($numero % 2 == 0) {
         echo "(par)\n";
+        
     } else {
         echo "(impar)\n";
         return "Hola mundo";
     }
-
+    if (!!$numero == 0) {
+        echo "(par)\n";
+        
+    }
     $numero--;
 
     if ($numero == 4) {
@@ -475,6 +575,4 @@ while (!($numero == 0) and $numero > 1) { // Ejemplo de negacion
 echo "Fin del programa.";
 '''
 parser.parse(code)
-parser.parse(algorith_Poveda)
-
-
+#parser.parse(algorith_Poveda)
