@@ -138,7 +138,8 @@ def p_printable_values(p):
                      | VARIABLE COMMA printable_values
                      | conditional
                      | conditional COMMA printable_values
-                     | access_method_object
+                     | structure_object_principal
+                     | structure_object_principal COMMA printable_values
 
     """
 
@@ -202,7 +203,7 @@ def p_variable_assignment(p):
     """
     variable_assignment : VARIABLE assignment_operator values
                         | VARIABLE assignment_operator expression 
-                        | VARIABLE assignment_operator function_invocation
+                        | VARIABLE assignment_operator function_invocation SEMICOLON
                         | VARIABLE assignment_operator types_structure 
                         | VARIABLE assignment_operator input 
                         | VARIABLE assignment_operator special_function
@@ -247,7 +248,7 @@ def p_define_syntax(p):
 
 def p_function_invocation(p):
     """
-    function_invocation : IDENTIFIER LEFT_PAREN params RIGHT_PAREN SEMICOLON
+    function_invocation : IDENTIFIER LEFT_PAREN params RIGHT_PAREN
     """
 
 
@@ -428,9 +429,9 @@ def p_object_creation(p):
 
 def p_access_method_object(p):
     """access_method_object : VARIABLE MINUS GREATER_THAN function_invocation
-                            | VARIABLE MINUS GREATER_THAN IDENTIFIER SEMICOLON
-                            | VARIABLE MINUS GREATER_THAN IDENTIFIER EQUALS values SEMICOLON
-                            | VARIABLE MINUS GREATER_THAN IDENTIFIER EQUALS VARIABLE SEMICOLON
+                            | VARIABLE MINUS GREATER_THAN IDENTIFIER
+                            | VARIABLE MINUS GREATER_THAN IDENTIFIER EQUALS values
+                            | VARIABLE MINUS GREATER_THAN IDENTIFIER EQUALS VARIABLE
                             """
 
 
@@ -480,14 +481,14 @@ def p_method_body(p):
 def p_return_form(p):
     """
     return_form : RETURN values SEMICOLON
-                | RETURN  access_method_object
+                | RETURN  access_method_object SEMICOLON
                 | RETURN SEMICOLON
     """
 
 
 def p_classStatement(p):
     """classStatement : sentence
-                      | access_method_object"""
+                      | access_method_object SEMICOLON"""
 
 
 # FIN DE APORTACIÓN JORGE MAWYIN
@@ -507,42 +508,35 @@ parser = yacc.yacc()
 parser.error = 0
 
 code = '''
+class EjemploClase {
+    public $atributo1;
+    private $atributo2;
 
-class MiClase {
-    // Propiedades (variables de la clase)
-    public $propiedad1;
-    private $propiedad2;
-    protected $propiedad3;
-
-    // Constructor (método llamado al instanciar la clase)
     public function __construct($valor1, $valor2) {
-        $this->propiedad1 = $valor1;
-        $this->propiedad2 = $valor2;
-        $hola = 2;
+        $this->atributo1 = $valor1;
+        $this->atributo2 = $valor2;
     }
 
-    // Métodos (funciones de la clase)
-    public function obtenerPropiedad1() {
-        return $this->propiedad1;
-    }
-
-    private function metodoPrivado() {
-        // Código del método privado
-        $aaaa = 23;
-    }
-
-    protected function metodoProtegido() {
-        // Código del método protegido
-        $hola = "juan";
+    public function obtenerAtributo2() {
+        return $this->atributo2;
     }
 }
 
-// Instanciar la clase
-$instancia = new MiClase;
-$instancia = new MiClase('Valor1', 'Valor2');
+// Crear una instancia de la clase
+$instancia = new EjemploClase('Hola', 'Mundo');
 
-// Acceder a propiedades y métodos
-echo $instancia->obtenerPropiedad1();
+// Imprimir un valor de la instancia
+echo $instancia->atributo1;
+
+// Crear un arreglo con instancias de la clase
+$arregloDeInstancias = array(
+    new EjemploClase('Uno', 'Dos'),
+    new EjemploClase('Tres', 'Cuatro'),
+    new EjemploClase('Cinco', 'Seis')
+);
+
+// Imprimir un valor de una instancia en el arreglo
+echo $arregloDeInstancias[1]->obtenerAtributo2();
 
 '''
 
@@ -575,4 +569,4 @@ while (!($numero == 0) and $numero > 1) { // Ejemplo de negacion
 echo "Fin del programa.";
 '''
 parser.parse(code)
-#parser.parse(algorith_Poveda)
+# parser.parse(algorith_Poveda)
