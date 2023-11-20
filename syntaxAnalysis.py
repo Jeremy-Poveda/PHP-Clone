@@ -22,6 +22,7 @@ def p_sentence_print_statement(p):
              | assignment SEMICOLON
              | types_structure
              | class_declaration
+             | interface_declaration
              | control_structures
              | function_declaration
     """
@@ -158,6 +159,7 @@ def p_logic_not_sentence (p):
     """
 #fin aportacion
 
+
 def p_comparation(p):
     """
     comparation : values comparator_operator values
@@ -201,14 +203,21 @@ def p_print_statement(p):
 def p_printable_values(p):
     """
     printable_values : values
-                     | values COMMA printable_values
+                     | values printable_dividers printable_values
                      | VARIABLE
-                     | VARIABLE COMMA printable_values
+                     | VARIABLE printable_dividers printable_values
                      | conditional
-                     | conditional COMMA printable_values
+                     | conditional printable_dividers printable_values
                      | structure_object_principal
-                     | structure_object_principal COMMA printable_values
+                     | structure_object_principal printable_dividers printable_values
 
+    """
+
+
+def p_printable_dividers(p):
+    """
+    printable_dividers : COMMA
+                       | STRING_CONCATENATION
     """
 
 
@@ -271,7 +280,7 @@ def p_variable_assignment(p):
     """
     variable_assignment : VARIABLE assignment_operator values
                         | VARIABLE assignment_operator expression 
-                        | VARIABLE assignment_operator function_invocation SEMICOLON
+                        | VARIABLE assignment_operator function_invocation
                         | VARIABLE assignment_operator types_structure 
                         | VARIABLE assignment_operator input 
                         | VARIABLE assignment_operator special_function
@@ -503,6 +512,9 @@ def p_add_element_matrix(p):
     """add_element_matrix : VARIABLE LEFT_BRACKET RIGHT_BRACKET EQUALS indexed_array"""
 
 
+# FIN DE APORTACIÓN JORGE MAWYIN
+
+# INICIO DE APORTACIÓN KEVIN ROLDAN
 # OBJECT
 def p_structure_object_principal(p):
     """
@@ -518,19 +530,55 @@ def p_object_creation(p):
 
 def p_access_method_object(p):
     """access_method_object : VARIABLE MINUS GREATER_THAN function_invocation
-                            | VARIABLE MINUS GREATER_THAN IDENTIFIER
-                            | VARIABLE MINUS GREATER_THAN IDENTIFIER EQUALS values
-                            | VARIABLE MINUS GREATER_THAN IDENTIFIER EQUALS VARIABLE
+                            | VARIABLE MINUS GREATER_THAN accessType
+                            | VARIABLE MINUS GREATER_THAN accessType EQUALS values
+                            | VARIABLE MINUS GREATER_THAN accessType EQUALS VARIABLE
+                            | VARIABLE MINUS GREATER_THAN accessType EQUALS access_array_element
+                            | access_array_element MINUS GREATER_THAN function_invocation
+                            | access_array_element MINUS GREATER_THAN accessType
+                            | access_array_element MINUS GREATER_THAN accessType EQUALS values
+                            | access_array_element MINUS GREATER_THAN accessType EQUALS VARIABLE
+                            | access_array_element MINUS GREATER_THAN accessType EQUALS access_array_element
                             """
 
 
+def p_accessType(p):
+    """
+    accessType : IDENTIFIER LEFT_BRACKET INTEGER RIGHT_BRACKET
+               | IDENTIFIER
+    """
+
+
 def p_class_declaration(p):
-    """class_declaration : CLASS IDENTIFIER class_extends_opt LEFT_BRACE class_body RIGHT_BRACE"""
+    """class_declaration : CLASS IDENTIFIER class_extends_opt class_implements_opt LEFT_BRACE class_body RIGHT_BRACE"""
+
+
+def p_interface_declaration(p):
+    """interface_declaration : INTERFACE IDENTIFIER class_extends_opt LEFT_BRACE interface_body RIGHT_BRACE"""
+
+
+def p_interface_body(p):
+    """interface_body : interface_body interface_method
+                     |"""
+
+
+def p_interface_method(p):
+    """interface_method : visibility_opt FUNCTION IDENTIFIER LEFT_PAREN params RIGHT_PAREN SEMICOLON"""
 
 
 def p_class_extends_opt(p):
     """class_extends_opt : EXTENDS IDENTIFIER
                         | """
+
+
+def p_class_implements_opt(p):
+    """class_implements_opt : IMPLEMENTS interface_list
+                           |"""
+
+
+def p_interface_list(p):
+    """interface_list : IDENTIFIER
+                     | interface_list COMMA IDENTIFIER"""
 
 
 def p_class_body(p):
@@ -548,6 +596,7 @@ def p_class_attribute(p):
     """
     class_attribute : visibility_opt VARIABLE  EQUALS values SEMICOLON
                     | visibility_opt VARIABLE SEMICOLON
+                    | visibility_opt constant_assignment SEMICOLON
     """
 
 
@@ -580,7 +629,7 @@ def p_classStatement(p):
                       | access_method_object SEMICOLON"""
 
 
-# FIN DE APORTACIÓN JORGE MAWYIN
+
 
 
 # Regla para los errores de sintáxis
@@ -590,43 +639,54 @@ def p_error(p):
     else:
         print("Error de sintaxis: Fin de archivo inesperado")
 
+# FIN DE APORTACIÓN KEVIN ROLDAN
 
 # Creamos el parser
 parser = yacc.yacc()
 
 parser.error = 0
 
-code = '''
-class EjemploClase {
+algorith_Roldan = '''
+// Definición de la interfaz
+interface MiInterfaz {
+    public function miMetodo();
+}
+
+// Definición de la clase que extiende e implementa la interfaz
+class MiClase implements MiInterfaz {
+    const MI_CONSTANTE = "Hola, soy una constante";
+
     public $atributo1;
-    private $atributo2;
+    public $atributo2;
 
     public function __construct($valor1, $valor2) {
         $this->atributo1 = $valor1;
         $this->atributo2 = $valor2;
     }
 
-    public function obtenerAtributo2() {
-        return $this->atributo2;
+    public function miMetodo() {
+        return "¡Hola desde mi método!";
     }
 }
 
-// Crear una instancia de la clase
-$instancia = new EjemploClase('Hola', 'Mundo');
+// Creación de una instancia de la clase fuera de la clase
+$instancia1 = new MiClase("Valor1", "Valor2");
 
-// Imprimir un valor de la instancia
-echo $instancia->atributo1;
-
-// Crear un arreglo con instancias de la clase
-$arregloDeInstancias = array(
-    new EjemploClase('Uno', 'Dos'),
-    new EjemploClase('Tres', 'Cuatro'),
-    new EjemploClase('Cinco', 'Seis')
+// Creación de un arreglo con nuevas instancias de la clase
+$arregloInstancias = array(
+    new MiClase("Atributo1", "Atributo2"),
+    new MiClase("OtroValor1", "OtroValor2"),
+    new MiClase("NuevoValor1", "NuevoValor2")
 );
 
-// Imprimir un valor de una instancia en el arreglo
-echo $arregloDeInstancias[1]->obtenerAtributo2();
+// Ejemplo de uso
+echo $instancia1->miMetodo() . "\n";
+echo "Constante: "  . "\n";
 
+// Imprimir valores del arreglo de instancias
+for ($i = 0; $i < count($arregloInstancias); $i++) {
+    echo $arregloInstancias[$i]->atributo1 . ", " . $arregloInstancias[$i]->atributo2 . "\n";
+}
 '''
 
 algorith_Poveda = '''
@@ -682,5 +742,6 @@ function buscarValor($valor, $matriz) {
 $busqueda = buscarValor(5, $matriz);
 echo "$busqueda \n";
 '''
-parser.parse(code)
-# parser.parse(algorith_Poveda)
+#parser.parse(algorith_Roldan)
+#parser.parse(algorith_Poveda)
+parser.parse(algorith_Mawyin)

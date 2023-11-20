@@ -5,74 +5,31 @@ import ply.lex as lex
 # INICIO CONTRIBUCION KEVIN ROLDAN
 
 reserved = {
-    '__halt_compiler': 'HALT_COMPILER',
-    'abstract': 'ABSTRACT',
     'array': 'ARRAY',
-    'as': 'AS',
     'and': 'LOGIC_AND',
     'or': 'LOGIC_OR',
     'xor': 'LOGIC_XOR',
     'break': 'BREAK',
-    'callable': 'CALLABLE',
-    'case': 'CASE',
-    'catch': 'CATCH',
     'class': 'CLASS',
-    'clone': 'CLONE',
     'const': 'CONST',
-    'continue': 'CONTINUE',
-    'declare': 'DECLARE',
-    'default': 'DEFAULT',
-    'die': 'DIE',
-    'do': 'DO',
     'echo': 'ECHO',
     'else': 'ELSE',
     'elseif': 'ELSEIF',
-    'empty': 'EMPTY',
-    'enddeclare': 'ENDDECLARE',
-    'endfor': 'ENDFOR',
-    'endforeach': 'ENDFOREACH',
-    'endif': 'ENDIF',
-    'endswitch': 'ENDSWITCH',
-    'endwhile': 'ENDWHILE',
-    'eval': 'EVAL',
-    'exit': 'EXIT',
     'extends': 'EXTENDS',
-    'final': 'FINAL',
-    'finally': 'FINALLY',
     'fn': 'FN',
     'for': 'FOR',
-    'foreach': 'FOREACH',
     'function': 'FUNCTION',
-    'global': 'GLOBAL',
-    'goto': 'GOTO',
     'if': 'IF',
     'implements': 'IMPLEMENTS',
-    'include': 'INCLUDE',
-    'include_once': 'INCLUDE_ONCE',
-    'insteadof': 'INSTEADOF',
     'interface': 'INTERFACE',
-    'isset': 'ISSET',
-    'list': 'LIST',
-    'match': 'MATCH',
-    'namespace': 'NAMESPACE',
     'new': 'NEW',
     'print': 'PRINT',
     'private': 'PRIVATE',
     'protected': 'PROTECTED',
     'public': 'PUBLIC',
-    'require': 'REQUIRE',
-    'require_once': 'REQUIRE_ONCE',
     'return': 'RETURN',
     'static': 'STATIC',
-    'switch': 'SWITCH',
-    'throw': 'THROW',
-    'trait': 'TRAIT',
-    'try': 'TRY',
-    'unset': 'UNSET',
-    'use': 'USE',
-    'var': 'VAR',
     'while': 'WHILE',
-    'yield': 'YIELD',
     'define': 'DEFINE'
 }
 
@@ -102,14 +59,6 @@ tokens = (
              # OPERADORES DE ASIGNACION
              'EQUALS',
              'PLUS_EQUALS',
-             'CONCATENATION',
-             # OPERADORES BIT A BIT
-             'BIT_AND',
-             'BIT_OR',
-             'BIT_XOR',
-             'BIT_NOT',
-             'SHIF_LEFT',
-             'SHIF_RIGHT',
              # OPERADORES DE COMPARACION
              'EQUALS_EQUALS',
              'IDENTICAL',
@@ -121,8 +70,7 @@ tokens = (
              'GREATER_EQUALS_TO',
              'SPACECRAFT',
              'NULL_FUSION',
-             # OPERADOR DE CONTROL DE ERRORES
-             'ERROR_CONTROL',
+
 
              # OPERADORES DE INCREMENTO/DECREMENTO
              'INCREASE',
@@ -168,14 +116,7 @@ t_POW = r'\*\*'
 # OPERADORES DE ASIGNACION
 t_EQUALS = r'='
 t_PLUS_EQUALS = r'\+='
-t_CONCATENATION = r'\.='
-# OPERADORES BIT A BIT
-t_BIT_AND = r'&'
-t_BIT_OR = r'\|'
-t_BIT_XOR = r'\^'
-t_BIT_NOT = r'~'
-t_SHIF_LEFT = r'<<'
-t_SHIF_RIGHT = r'>>'
+
 # OPERADORES DE COMPARACION
 t_EQUALS_EQUALS = r'=='
 t_IDENTICAL = r'==='
@@ -187,8 +128,7 @@ t_SMALL_EQUALS_TO = r'<='
 t_GREATER_EQUALS_TO = r'>='
 t_SPACECRAFT = r'<=>'
 t_NULL_FUSION = r'\?\?'
-# OPERADOR DE CONTROL DE ERRORES
-t_ERROR_CONTROL = r'@'
+
 # OPERADORES DE INCREMENTO/DECREMENTO
 t_INCREASE = r'\+\+'
 t_DECREMENT = r'--'
