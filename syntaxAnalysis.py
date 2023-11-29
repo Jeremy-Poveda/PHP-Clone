@@ -201,23 +201,17 @@ def p_print_statement(p):
 def p_printable_values(p):
     """
     printable_values : values
-                     | values printable_dividers printable_values
+                     | values COMMA printable_values
                      | VARIABLE
-                     | VARIABLE printable_dividers printable_values
+                     | VARIABLE COMMA printable_values
+                     | STRING STRING_CONCATENATION STRING
+                     | VARIABLE STRING_CONCATENATION STRING
                      | conditional
-                     | conditional printable_dividers printable_values
+                     | conditional COMMA printable_values
                      | structure_object_principal
-                     | structure_object_principal printable_dividers printable_values
+                     | structure_object_principal COMMA printable_values
 
     """
-
-
-def p_printable_dividers(p):
-    """
-    printable_dividers : COMMA
-                       | STRING_CONCATENATION
-    """
-
 
 # Tipos de dato
 def p_values(p):
@@ -503,14 +497,9 @@ def p_access_element_matrix(p):
 
 
 def p_modify_element_matrix(p):
-    """modify_element_matrix : VARIABLE LEFT_BRACKET INTEGER RIGHT_BRACKET LEFT_BRACKET INTEGER RIGHT_BRACKET EQUALS values
-                             | VARIABLE LEFT_BRACKET VARIABLE RIGHT_BRACKET LEFT_BRACKET VARIABLE RIGHT_BRACKET EQUALS values
-                             | VARIABLE LEFT_BRACKET INTEGER RIGHT_BRACKET LEFT_BRACKET VARIABLE RIGHT_BRACKET EQUALS values
-                             | VARIABLE LEFT_BRACKET VARIABLE RIGHT_BRACKET LEFT_BRACKET INTEGER RIGHT_BRACKET EQUALS values
-                             | VARIABLE LEFT_BRACKET INTEGER RIGHT_BRACKET LEFT_BRACKET INTEGER RIGHT_BRACKET EQUALS VARIABLE
-                             | VARIABLE LEFT_BRACKET VARIABLE RIGHT_BRACKET LEFT_BRACKET VARIABLE RIGHT_BRACKET EQUALS VARIABLE
-                             | VARIABLE LEFT_BRACKET INTEGER RIGHT_BRACKET LEFT_BRACKET VARIABLE RIGHT_BRACKET EQUALS VARIABLE
-                             | VARIABLE LEFT_BRACKET VARIABLE RIGHT_BRACKET LEFT_BRACKET INTEGER RIGHT_BRACKET EQUALS VARIABLE
+    """modify_element_matrix : access_element_matrix EQUALS values
+                             | access_element_matrix EQUALS VARIABLE
+                             
     """
 
 
