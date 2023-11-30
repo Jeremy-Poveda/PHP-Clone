@@ -29,8 +29,7 @@ reserved = {
     'public': 'PUBLIC',
     'return': 'RETURN',
     'static': 'STATIC',
-    'while': 'WHILE',
-    'define': 'DEFINE'
+    'while': 'WHILE'
 }
 
 # FIN DE CONTRIBUCION KEVIN ROLDAN
@@ -38,7 +37,8 @@ reserved = {
 essential_functions = {
     'fgets': 'FEGTS',
     'readline': 'READLINE',
-    'STDIN': 'STDIN'
+    'STDIN': 'STDIN',
+    'define': 'DEFINE'
 }
 # Tokens
 tokens = (
@@ -47,8 +47,11 @@ tokens = (
              'FLOAT',
              'COMMENT',
              # FIN DE LA CONTRIBUCION JEREMY POVEDA
+
+
              # CONTRIBUCION JORGE MAWYIN
              'INTEGER',
+             'NULL',
              # OPERADORES ARITMÉTICOS
              'PLUS',
              'MINUS',
@@ -78,7 +81,8 @@ tokens = (
              # OPERADORES LOGICOS
              'LOGIC_AND',
              'LOGIC_OR',
-             'LOGIC_XOR',
+
+
              'LOGIC_NOT',
              # OPERADOR PARA STRING
              'STRING_CONCATENATION',
@@ -104,6 +108,10 @@ tokens = (
          ) + tuple(reserved.values()) + tuple(essential_functions.values())
 
 # INICIO CONTRIBUCION JORGE MAWYIN
+
+def t_NULL(t):
+    r'[Nn][Uu][Ll][Ll]'
+    return t
 
 # Expresiones Regulares simples para símbolos
 # OPERADORES ARITMÉTICOS
@@ -135,7 +143,7 @@ t_DECREMENT = r'--'
 # OPERADORES LOGICOS
 t_LOGIC_AND = r'and|&&'
 t_LOGIC_OR = r'or|\|\|'
-t_LOGIC_XOR = r'xor'
+
 t_LOGIC_NOT = r'!'
 
 # FIN DE CONTRIBUCION JORGE MAWYIN

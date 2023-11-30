@@ -146,7 +146,35 @@ def p_boolean_expression(p):
     boolean_expression  : comparation
                         | LEFT_PAREN conditional RIGHT_PAREN
                         | logic_not_sentence
+                        | logic_expression
     """
+
+#Regla Semantica Kevin Roldan (Regla 2 de los booleanos en el informe del proyecto)
+def p_logic_expression(p):
+    """
+    logic_expression : true_boolean_types logic_operator false_boolean_types
+                     | false_boolean_types logic_operator true_boolean_types
+    """
+
+def p_true_boolean_types(p):
+    """
+    true_boolean_types : TRUE
+                       | STRING
+                       | INTEGER
+                       | FLOAT
+                       | ARRAY LEFT_PAREN values RIGHT_PAREN
+    """
+
+def p_false_boolean_types(p):
+    """
+    false_boolean_types : FALSE
+                        | STRING
+                        | INTEGER
+                        | FLOAT
+                        | ARRAY LEFT_PAREN RIGHT_PAREN
+                        | NULL
+    """
+#Fin de Regla Semantica Kevin Roldan
 
 
 #Aportacion Jorge Mawyin

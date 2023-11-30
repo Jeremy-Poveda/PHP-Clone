@@ -42,7 +42,7 @@ def play_button_clicked():
 root = tk.Tk()
 root.title("PHP Clone - GRUPO 4")
 
-input_text = tk.Text(root, height=30, width=100)
+input_text = tk.Text(root, height=20, width=100)
 input_text.pack(pady=10)
 
 
