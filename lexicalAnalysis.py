@@ -38,7 +38,9 @@ essential_functions = {
     'fgets': 'FEGTS',
     'readline': 'READLINE',
     'STDIN': 'STDIN',
-    'define': 'DEFINE'
+    'define': 'DEFINE',
+    'strlen' : 'STRLEN',
+    'substr' : 'SUBSTR'
 }
 # Tokens
 tokens = (

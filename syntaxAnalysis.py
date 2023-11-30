@@ -238,6 +238,10 @@ def p_printable_values(p):
                      | conditional COMMA printable_values
                      | structure_object_principal
                      | structure_object_principal COMMA printable_values
+                     | function_invocation
+                     | function_invocation COMMA printable_values
+                     | string_special_function
+                     | string_special_function COMMA printable_values
 
     """
 
@@ -301,6 +305,7 @@ def p_variable_assignment(p):
     variable_assignment : VARIABLE assignment_operator values
                         | VARIABLE assignment_operator expression 
                         | VARIABLE assignment_operator function_invocation
+                        | VARIABLE assignment_operator string_special_function
                         | VARIABLE assignment_operator types_structure 
                         | VARIABLE assignment_operator input 
                         | VARIABLE assignment_operator special_function
@@ -317,7 +322,7 @@ def p_assignment_operator(p):
     assignment_operator : EQUALS
                         | PLUS_EQUALS
     """
-
+##
 
 def p_constant_assignment(p):
     """
@@ -381,7 +386,7 @@ def p_function_declaration(p):
     """
     function_declaration : FUNCTION IDENTIFIER LEFT_PAREN params RIGHT_PAREN codeblock
     """
-
+##
 
 def p_special_function(p):
     """
@@ -414,8 +419,30 @@ def p_input(p):
           | READLINE LEFT_PAREN STRING RIGHT_PAREN
     """
 
+#Regla Semantica Kevin Roldan (Regla 1 de los Operaciones de Longitud en el informe del proyecto)
+
+
+def p_string_special_function(p):
+    """
+    string_special_function : STRLEN LEFT_PAREN string_param RIGHT_PAREN
+                            | SUBSTR LEFT_PAREN string_param COMMA int_param RIGHT_PAREN
+                            | SUBSTR LEFT_PAREN string_param COMMA int_param COMMA int_param RIGHT_PAREN
+    """
+
+def p_string_param(p):
+    """
+    string_param : STRING
+                 | VARIABLE
+    """
+def p_int_param(p):
+    """
+    int_param : INTEGER
+              | VARIABLE
+    """
+#Fin de la Regla Semantica Kevin Roldan
 
 # FIN DE APORTACIÓN KEVIN ROLDAN
+
 # INICIO DE APORTACIÓN JORGE MAWYIN
 # ESTRUCTURAS DE DATOS
 
