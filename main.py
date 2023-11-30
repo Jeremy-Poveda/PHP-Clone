@@ -13,7 +13,6 @@ from tkinter import ttk
 from io import StringIO
 import sys
 import ply.yacc as yacc
-
 class RedirectText:
     def __init__(self, text_widget):
         self.text_widget = text_widget

@@ -131,6 +131,7 @@ def p_conditional(p):
     """
     conditional  : boolean_expression
                  | boolean_expression logic_operator boolean_expression
+
     """
 
 
@@ -145,6 +146,8 @@ def p_logic_operator(p):
 def p_boolean_expression(p):
     """
     boolean_expression  : comparation
+                        | VARIABLE
+                        | IDENTIFIER
                         | LEFT_PAREN conditional RIGHT_PAREN
                         | logic_not_sentence
                         | logic_expression
@@ -164,6 +167,7 @@ def p_true_boolean_types(p):
                        | INTEGER
                        | FLOAT
                        | VARIABLE
+                       | IDENTIFIER
                        | ARRAY LEFT_PAREN values RIGHT_PAREN
     """
 
@@ -173,6 +177,7 @@ def p_false_boolean_types(p):
                         | STRING
                         | INTEGER
                         | VARIABLE
+                        | IDENTIFIER
                         | FLOAT
                         | ARRAY LEFT_PAREN RIGHT_PAREN
                         | NULL
@@ -326,6 +331,7 @@ def p_assignment(p):
 def p_variable_assignment(p):
     """
     variable_assignment : VARIABLE assignment_operator values
+                        | VARIABLE assignment_operator IDENTIFIER
                         | VARIABLE assignment_operator expression 
                         | VARIABLE assignment_operator function_invocation
                         | VARIABLE assignment_operator string_special_function
@@ -425,6 +431,7 @@ def p_arrow_function(p):
     """
     arrow_function : FN LEFT_PAREN params RIGHT_PAREN EQUALS GREATER_THAN codeblock
                    | FN LEFT_PAREN params RIGHT_PAREN EQUALS GREATER_THAN print_statement
+                   | FN LEFT_PAREN params RIGHT_PAREN EQUALS GREATER_THAN expression
     """
 
 
@@ -723,8 +730,11 @@ def p_method_body(p):
 def p_return_form(p):
     """
     return_form : RETURN values SEMICOLON
-                | RETURN  access_method_object SEMICOLON
+                | RETURN access_method_object SEMICOLON
                 | RETURN SEMICOLON
+                | RETURN expression SEMICOLON
+                | RETURN string_special_function SEMICOLON
+                | RETURN array_special_function SEMICOLON
     """
 
 
@@ -750,65 +760,68 @@ parser = yacc.yacc()
 
 parser.error = 0
 
-algorith_Roldan = '''// Entrada de texto
-$entradaUsuario = readline("Ingrese un texto: ");
-// Operaciones con cadena
-$longitudTexto = strlen($entradaUsuario);
-$subcadena = substr($entradaUsuario, 0, 5);
-
-// Operaciones booleanas
-$resultadoBooleano = true;
-$resultadoExpresionBooleana = $resultadoBooleano &&  $subcadena;
-
-// Definición de la interfaz
-interface MiInterfaz {
-    public function miMetodo();
+algorith_Roldan = '''interface StringOperationsInterface {
+    public function concatenateStrings($str1, $str2);
+    public function getSubstring($str, $start, $length);
 }
 
-// Definición de la clase que extiende e implementa la interfaz
-class MiClase implements MiInterfaz {
-    const MI_CONSTANTE = "Hola, soy una constante";
-
-    public $atributo1;
-    public $atributo2;
-
-    public function __construct($valor1, $valor2) {
-        $this->atributo1 = $valor1;
-        $this->atributo2 = $valor2;
+// Clase StringManipulator que implementa la interfaz
+class StringManipulator implements StringOperationsInterface {
+    // Función para concatenar dos cadenas
+    public function concatenateStrings($str1, $str2) {
+        return $str1 + $str2;
     }
 
-    public function miMetodo() {
-        return "¡Hola desde mi método!";
+    // Función para obtener una subcadena de una cadena
+    public function getSubstring($str, $start, $length) {
+        return substr($str, $start, $length);
     }
 }
 
-// Creación de una instancia de la clase fuera de la clase
-$instancia1 = new MiClase("Valor1", "Valor2");
+// Función flecha fuera de la clase para calcular el cuadrado de un número
+$square = fn($number) => $number * $number;
 
-// Creación de un arreglo con nuevas instancias de la clase
-$arregloInstancias = array(
-    new MiClase("Atributo1", "Atributo2"),
-    new MiClase("OtroValor1", "OtroValor2"),
-    new MiClase("NuevoValor1", "NuevoValor2")
-);
+echo "¡Bienvenido al programa!\n";
 
-// Función de flecha fuera de la clase
-$funcionFlecha = fn($parametro) => echo "Resultado de la función flecha: $parametro";
+// Crear una instancia de la clase StringManipulator
+$stringManipulator = new StringManipulator();
 
-// Ejemplo de uso
-echo $instancia1->miMetodo() , "\n";
-echo "Longitud del texto: $longitudTexto\n";
-echo "Subcadena: $subcadena\n";
-echo "Resultado booleano: $resultadoBooleano\n";
-echo "Resultado de la concatenación: $resultadoConcatenacion\n";
+// // Entrada de texto usando readline y Operaciones de cadena
+$string1 = readline("Ingresa la primera cadena: ");
+$string2 = readline("Ingresa la segunda cadena: ");
+$resultConcatenation = $stringManipulator->concatenateStrings($string1, $string2);
+echo "Concatenación de cadenas: $resultConcatenation\n";
 
-// Imprimir valores del arreglo de instancias
-for ($i = 0; $i < count($arregloInstancias); $i++) {
-    echo $arregloInstancias[$i]->atributo1 , ", " , $arregloInstancias[$i]->atributo2 , "\n";
+$subString = readline("Ingresa una cadena para obtener una subcadena: ");
+$start = readline("Ingresa la posición de inicio: ");
+$length = readline("Ingresa la longitud de la subcadena: ");
+$resultSubstring = $stringManipulator->getSubstring($subString, $start, $length);
+echo "Subcadena: $resultSubstring\n";
+
+// Uso de la función flecha
+$numToSquare = readline("Ingresa un número para calcular su cuadrado: ");
+$userNum = readline("Ingresa un número que usted cree q es el cuadrado del anterior: ");
+if ($userNum == $resultSquare) {
+    echo "¡Correcto! Has acertado. ¡Bien hecho!\n";
+} else {
+   $resultSquare = $square($numToSquare);
+    echo "Lo siento, la estimación es incorrecta. El cuadrado es: $resultSquare\n";
 }
 
-// Llamada a la función de flecha
-echo $funcionFlecha("Parámetro de prueba") , "\n";
+print "Ahora validaremos una expresion booleana con coerción de tipos ";
+// Definir una constante booleana
+define("MI_CONSTANTE_BOOL", true);
+
+// Expresión booleana con una cadena
+$cadena =  readline("Ingrese la cadena a validar con True");
+$resultado = $cadena && MI_CONSTANTE_BOOL;
+
+// Verificar el resultado
+if ($resultado) {
+    echo "La expresión es verdadera.\n";
+} else {
+    echo "La expresión es falsa.\n";
+}
 
 '''
 
