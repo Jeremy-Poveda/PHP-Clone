@@ -106,6 +106,7 @@ def p_expression_for(p):
                    | LEFT_PAREN expression_for RIGHT_PAREN
                    | IDENTIFIER LEFT_PAREN VARIABLE RIGHT_PAREN
                    | IDENTIFIER LEFT_PAREN access_array_element RIGHT_PAREN
+                   | length_operations
     """
 
 def p_number_values(p):
@@ -242,7 +243,8 @@ def p_printable_values(p):
                      | function_invocation COMMA printable_values
                      | string_special_function
                      | string_special_function COMMA printable_values
-
+                     | array_special_function
+                     | array_special_function COMMA printable_values
     """
 
 # Tipos de dato
@@ -279,13 +281,32 @@ def p_term(p):
          | factor POW term
     """
 
+#Regla Semantica Jorge Mawyin (Regla 1 de los Enteros en el informe del proyecto)
 
 def p_factor(p):
     """
     factor : INTEGER
+           | FLOAT
            | VARIABLE
            | LEFT_PAREN expression RIGHT_PAREN
+           | STRING
     """
+    if len(p) == 2:
+        p[0] = p[1]
+        if p.slice[1].type == 'STRING':
+            try:
+               p[0] = int(p[1][1:-1])  
+            except ValueError:
+                try:
+                    p[0] = float(p[1][1:-1])  
+                except ValueError:
+                    print(f'Error de sintaxis en {p[1]} , valor no permitido para expresiones aritmeticas')
+                    raise SyntaxError(f'Error de sintaxis en {p[1]} , valor no permitido para expresiones aritmeticas')
+        
+    elif p[1] == '(':
+        p[0] = p[2]
+
+#Fin de la Regla Semantica Jorge Mawyin
 
 
 # FIN DE APORTACIÓN JEREMY POVEDA
@@ -306,6 +327,7 @@ def p_variable_assignment(p):
                         | VARIABLE assignment_operator expression 
                         | VARIABLE assignment_operator function_invocation
                         | VARIABLE assignment_operator string_special_function
+                        | VARIABLE assignment_operator array_special_function
                         | VARIABLE assignment_operator types_structure 
                         | VARIABLE assignment_operator input 
                         | VARIABLE assignment_operator special_function
@@ -440,6 +462,33 @@ def p_int_param(p):
               | VARIABLE
     """
 #Fin de la Regla Semantica Kevin Roldan
+
+#Regla Semantica Jorge Mawyin (Regla 2 de los Operaciones de Longitud en el informe del proyecto)
+
+
+def p_array_special_function(p):
+    """
+    array_special_function : COUNT LEFT_PAREN structure_array_principal count_param RIGHT_PAREN
+                           | COUNT LEFT_PAREN structure_matrix_principal count_param RIGHT_PAREN
+                           | COUNT LEFT_PAREN VARIABLE count_param RIGHT_PAREN
+                           | ARRAY_POP LEFT_PAREN VARIABLE RIGHT_PAREN
+    """
+
+
+def p_count_param(p):
+    """
+    count_param : COMMA COUNT_NORMAL
+                | COMMA COUNT_RECURSIVE
+                |
+    """
+def p_length_operations(p):
+    """
+    length_operations : COUNT LEFT_PAREN structure_array_principal count_param RIGHT_PAREN
+                      | COUNT LEFT_PAREN structure_matrix_principal count_param RIGHT_PAREN
+                      | COUNT LEFT_PAREN VARIABLE count_param RIGHT_PAREN
+                      | STRLEN LEFT_PAREN string_param RIGHT_PAREN
+    """
+#Fin de la Regla Semantica Jorge Mawyin
 
 # FIN DE APORTACIÓN KEVIN ROLDAN
 

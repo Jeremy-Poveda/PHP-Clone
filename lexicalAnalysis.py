@@ -40,7 +40,12 @@ essential_functions = {
     'STDIN': 'STDIN',
     'define': 'DEFINE',
     'strlen' : 'STRLEN',
-    'substr' : 'SUBSTR'
+    'substr' : 'SUBSTR',
+    'count' : 'COUNT',
+    'array_push' : 'ARRAY_PUSH',
+    'array_pop' : 'ARRAY_POP',
+    'COUNT_NORMAL' : 'COUNT_NORMAL',
+    'COUNT_RECURSIVE' : 'COUNT_RECURSIVE'
 }
 # Tokens
 tokens = (
@@ -158,7 +163,7 @@ t_STRING = r'\'[^\']*\'|"[^"]*"'
 
 
 def t_FLOAT(t):
-    r'([0-9]+\.[0-9])([eE][+-]?[0-9]+)?'
+    r'([0-9]+\.[0-9]+)([eE][+-]?[0-9]+)?'
     t.value = float(t.value)
     return t
 
@@ -170,15 +175,7 @@ def t_COMMENT(t):
 
 # Expresión regular para números enteros, con casting para las 4 bases
 def t_INTEGER(t):
-    r'[+-]?([1-9][0-9]*|0|0[xX][0-9a-fA-F]+|0[0-7]+|0b[01]+)'
-    base = 10
-    if t.value.startswith("0x") or t.value.startswith("0X"):
-        base = 16  # Hexadecimal
-    elif t.value.startswith("0"):
-        base = 8  # Octal
-    if t.value.startswith("0b") or t.value.startswith("0B"):
-        base = 2  # BInaria
-    t.value = int(t.value, base)
+    r'\d+'
     return t
 
 
