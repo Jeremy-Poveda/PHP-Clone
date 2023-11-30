@@ -163,6 +163,7 @@ def p_true_boolean_types(p):
                        | STRING
                        | INTEGER
                        | FLOAT
+                       | VARIABLE
                        | ARRAY LEFT_PAREN values RIGHT_PAREN
     """
 
@@ -171,6 +172,7 @@ def p_false_boolean_types(p):
     false_boolean_types : FALSE
                         | STRING
                         | INTEGER
+                        | VARIABLE
                         | FLOAT
                         | ARRAY LEFT_PAREN RIGHT_PAREN
                         | NULL
@@ -331,6 +333,7 @@ def p_variable_assignment(p):
                         | VARIABLE assignment_operator types_structure 
                         | VARIABLE assignment_operator input 
                         | VARIABLE assignment_operator special_function
+                        | VARIABLE assignment_operator conditional
                         | VARIABLE INCREASE 
                         | VARIABLE DECREMENT 
                         | INCREASE VARIABLE 
@@ -373,6 +376,7 @@ def p_define_syntax(p):
 def p_function_invocation(p):
     """
     function_invocation : IDENTIFIER LEFT_PAREN params RIGHT_PAREN
+                        | VARIABLE LEFT_PAREN params RIGHT_PAREN
     """
 
 
@@ -420,6 +424,7 @@ def p_special_function(p):
 def p_arrow_function(p):
     """
     arrow_function : FN LEFT_PAREN params RIGHT_PAREN EQUALS GREATER_THAN codeblock
+                   | FN LEFT_PAREN params RIGHT_PAREN EQUALS GREATER_THAN print_statement
     """
 
 
@@ -745,7 +750,16 @@ parser = yacc.yacc()
 
 parser.error = 0
 
-algorith_Roldan = '''
+algorith_Roldan = '''// Entrada de texto
+$entradaUsuario = readline("Ingrese un texto: ");
+// Operaciones con cadena
+$longitudTexto = strlen($entradaUsuario);
+$subcadena = substr($entradaUsuario, 0, 5);
+
+// Operaciones booleanas
+$resultadoBooleano = true;
+$resultadoExpresionBooleana = $resultadoBooleano &&  $subcadena;
+
 // Definición de la interfaz
 interface MiInterfaz {
     public function miMetodo();
@@ -778,14 +792,24 @@ $arregloInstancias = array(
     new MiClase("NuevoValor1", "NuevoValor2")
 );
 
+// Función de flecha fuera de la clase
+$funcionFlecha = fn($parametro) => echo "Resultado de la función flecha: $parametro";
+
 // Ejemplo de uso
-echo $instancia1->miMetodo() . "\n";
-echo "Constante: "  . "\n";
+echo $instancia1->miMetodo() , "\n";
+echo "Longitud del texto: $longitudTexto\n";
+echo "Subcadena: $subcadena\n";
+echo "Resultado booleano: $resultadoBooleano\n";
+echo "Resultado de la concatenación: $resultadoConcatenacion\n";
 
 // Imprimir valores del arreglo de instancias
 for ($i = 0; $i < count($arregloInstancias); $i++) {
-    echo $arregloInstancias[$i]->atributo1 . ", " . $arregloInstancias[$i]->atributo2 . "\n";
+    echo $arregloInstancias[$i]->atributo1 , ", " , $arregloInstancias[$i]->atributo2 , "\n";
 }
+
+// Llamada a la función de flecha
+echo $funcionFlecha("Parámetro de prueba") , "\n";
+
 '''
 
 algorith_Poveda = '''
@@ -841,6 +865,6 @@ function buscarValor($valor, $matriz) {
 $busqueda = buscarValor(5, $matriz);
 echo "$busqueda \n";
 '''
-#parser.parse(algorith_Roldan)
+parser.parse(algorith_Roldan)
 #parser.parse(algorith_Poveda)
-parser.parse(algorith_Mawyin)
+#parser.parse(algorith_Mawyin)
