@@ -175,7 +175,15 @@ def t_COMMENT(t):
 
 # Expresión regular para números enteros, con casting para las 4 bases
 def t_INTEGER(t):
-    r'\d+'
+    r'[+-]?([1-9][0-9]*|0[xX][0-9a-fA-F]+|0[0-7]+|0b[01]+|0)'
+    base = 10
+    if t.value.startswith("0x") or t.value.startswith("0X"):
+        base = 16  # Hexadecimal
+    elif t.value.startswith("0"):
+        base = 8  # Octal
+    if t.value.startswith("0b") or t.value.startswith("0B"):
+        base = 2  # BInaria
+    t.value = int(t.value, base)
     return t
 
 

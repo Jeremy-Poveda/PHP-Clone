@@ -74,8 +74,10 @@ def p_body_statement(p):
             | sentence body_statement
             | RETURN values SEMICOLON
             | BREAK SEMICOLON
+            | RETURN printable_values SEMICOLON
+            | sentence RETURN printable_values SEMICOLON
     """
-
+# Fin de aportacion Jeremy Poveda
 
 #Aportacion Jorge Mawyin
 def p_for_statement(p):
@@ -125,8 +127,8 @@ def p_operator_aritmetic(p):
                        | POW
     """
 
-# Sentencias que pueden ser condicionales, preprosiciones lógicas y combinaciones de estas comparaciones
-
+# Sentencias que pueden ser condicionales, preprosiciones lógicas y combinaciones de estas comparaciones y que estas solo se puedan operar logicamente
+# Regla Semantica Jeremy Poveda (Regla 1 de los booleanos en el informe del proyecto)
 def p_conditional(p):
     """
     conditional  : boolean_expression
@@ -219,6 +221,9 @@ def p_comparator_operator(p):
                          | NULL_FUSION
     """
 
+#Regla Semantica Jeremy Poveda (Regla 1 de las cadenas en el informe del proyecto)
+# Se permiten concatenaciones entre strings y otros valores.
+
 
 def p_print_statement(p):
     """
@@ -228,25 +233,27 @@ def p_print_statement(p):
                     | PRINT printable_values
     """
 
-
 def p_printable_values(p):
     """
     printable_values : values
+                     | values printable_dividers printable_values
                      | values COMMA printable_values
                      | VARIABLE
+                     | VARIABLE printable_dividers printable_values
                      | VARIABLE COMMA printable_values
-                     | STRING STRING_CONCATENATION STRING
                      | VARIABLE STRING_CONCATENATION STRING
                      | conditional
+                     | conditional printable_dividers printable_values
                      | conditional COMMA printable_values
                      | structure_object_principal
+                     | structure_object_principal printable_dividers printable_values
                      | structure_object_principal COMMA printable_values
-                     | function_invocation
-                     | function_invocation COMMA printable_values
-                     | string_special_function
-                     | string_special_function COMMA printable_values
-                     | array_special_function
-                     | array_special_function COMMA printable_values
+    """
+
+def p_printable_dividers(p):
+    """
+    printable_dividers : COMMA
+                       | STRING_CONCATENATION
     """
 
 # Tipos de dato
