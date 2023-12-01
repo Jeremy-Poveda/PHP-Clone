@@ -42,7 +42,7 @@ essential_functions = {
     'strlen' : 'STRLEN',
     'substr' : 'SUBSTR',
     'count' : 'COUNT',
-    'array_push' : 'ARRAY_PUSH',
+    'array_sum' : 'ARRAY_SUM',
     'array_pop' : 'ARRAY_POP',
     'COUNT_NORMAL' : 'COUNT_NORMAL',
     'COUNT_RECURSIVE' : 'COUNT_RECURSIVE'
@@ -59,6 +59,8 @@ tokens = (
              # CONTRIBUCION JORGE MAWYIN
              'INTEGER',
              'NULL',
+             'PHP_IDENTIFIER',
+             'PHP_END_IDENTIFIER',
              # OPERADORES ARITMÉTICOS
              'PLUS',
              'MINUS',
@@ -121,6 +123,10 @@ def t_NULL(t):
     return t
 
 # Expresiones Regulares simples para símbolos
+
+#IDENTIFICADORES PHP
+t_PHP_IDENTIFIER = r'<\?php'
+t_PHP_END_IDENTIFIER = r'\?>'
 # OPERADORES ARITMÉTICOS
 t_PLUS = r'\+'
 t_MINUS = r'-'

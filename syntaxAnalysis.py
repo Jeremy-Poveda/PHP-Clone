@@ -7,8 +7,11 @@ from lexicalAnalysis import tokens
 
 ## APORTACIÓN JEREMY POVEDA
 # Regla para permitir más de una instrucción
+def p_inicial_program(p):
+    """inicial_program : PHP_IDENTIFIER program PHP_END_IDENTIFIER"""
+
 def p_program_sentence_program(p):
-    """program : sentence program"""
+    """program : sentence program """
 
 
 def p_program_sentence(p):
@@ -342,7 +345,7 @@ def p_variable_assignment(p):
                         | VARIABLE assignment_operator expression 
                         | VARIABLE assignment_operator function_invocation
                         | VARIABLE assignment_operator string_special_function
-                        | VARIABLE assignment_operator array_special_function
+                        | VARIABLE assignment_operator array_special_function_structure
                         | VARIABLE assignment_operator types_structure 
                         | VARIABLE assignment_operator input 
                         | VARIABLE assignment_operator special_function
@@ -474,16 +477,36 @@ def p_string_param(p):
     """
     string_param : STRING
                  | VARIABLE
+                 | INTEGER
     """
+    if len(p) == 2:
+        p[0] = p[1]
+        if p.slice[1].type == 'INTEGER':
+
+            print(f'Error de sintaxis en {p[1]} , El parámetro de cadena de la funcion no puede ser un entero')
+            raise SyntaxError(f'Error de sintaxis en {p[1]} , El parámetro de cadena de la funcion no puede ser un entero')
+        
 def p_int_param(p):
     """
     int_param : INTEGER
               | VARIABLE
+              | STRING
     """
+    if len(p) == 2:
+        p[0] = p[1]
+        if p.slice[1].type == 'STRING':
+
+            print(f'Error de sintaxis en {p[1]} , El parámetro de entero de la funcion no puede ser un string')
+            raise SyntaxError(f'Error de sintaxis en {p[1]} , El parámetro de entero de la funcion no puede ser un string')
+        
 #Fin de la Regla Semantica Kevin Roldan
 
 #Regla Semantica Jorge Mawyin (Regla 2 de los Operaciones de Longitud en el informe del proyecto)
-
+def p_array_special_function_structure(p):
+    """
+    array_special_function_structure : array_special_function
+                                     | statement_array_special_function_error
+    """
 
 def p_array_special_function(p):
     """
@@ -491,8 +514,25 @@ def p_array_special_function(p):
                            | COUNT LEFT_PAREN structure_matrix_principal count_param RIGHT_PAREN
                            | COUNT LEFT_PAREN VARIABLE count_param RIGHT_PAREN
                            | ARRAY_POP LEFT_PAREN VARIABLE RIGHT_PAREN
+                           | ARRAY_SUM LEFT_PAREN VARIABLE RIGHT_PAREN
     """
 
+def p_statement_array_special_function_error(p):
+    """
+    statement_array_special_function_error : COUNT LEFT_PAREN error count_param RIGHT_PAREN
+                                           | ARRAY_POP LEFT_PAREN error RIGHT_PAREN
+                                           | ARRAY_SUM LEFT_PAREN error RIGHT_PAREN
+    """
+    print ("Error semántico, parámetro incorrecto para las funciones de arreglos")
+
+def p_values_array_special(p):
+    """
+    values_array_special : values
+                         | values COMMA values_array_special
+                         | object_creation
+                         | object_creation COMMA values_array_special
+
+    """
 
 def p_count_param(p):
     """
@@ -529,7 +569,7 @@ def p_structure_array_principal(p):
     structure_array_principal : indexed_array
                               | associative_array
                               | access_array_stucture
-                              | access_array_element
+                              | access_array_element         
     """
 
 
@@ -568,7 +608,8 @@ def p_values_array_indexed(p):
 
 def p_access_array_stucture(p):
     """
-    access_array_stucture : access_array_element SEMICOLON
+    access_array_stucture : access_array_element
+                          | statement_access_array_element_error
     """
 
 def p_access_array_element(p):
@@ -576,6 +617,12 @@ def p_access_array_element(p):
     access_array_element : VARIABLE LEFT_BRACKET INTEGER RIGHT_BRACKET
                          | VARIABLE LEFT_BRACKET VARIABLE RIGHT_BRACKET
     """
+
+def p_statement_access_array_element_error(p):
+    """
+    statement_access_array_element_error : VARIABLE LEFT_BRACKET error RIGHT_BRACKET
+    """   
+    print("Error semántico, parámetro incorrecto para indexar un arreglo")
 
 # MATRIX
 def p_structure_matrix_principal(p):
@@ -741,7 +788,7 @@ def p_return_form(p):
                 | RETURN SEMICOLON
                 | RETURN expression SEMICOLON
                 | RETURN string_special_function SEMICOLON
-                | RETURN array_special_function SEMICOLON
+                | RETURN array_special_function_structure SEMICOLON
     """
 
 
@@ -767,7 +814,8 @@ parser = yacc.yacc()
 
 parser.error = 0
 
-algorith_Roldan = '''interface StringOperationsInterface {
+algorith_Roldan = '''<?php
+interface StringOperationsInterface {
     public function concatenateStrings($str1, $str2);
     public function getSubstring($str, $start, $length);
 }
@@ -829,7 +877,7 @@ if ($resultado) {
 } else {
     echo "La expresión es falsa.\n";
 }
-
+?>
 '''
 
 algorith_Poveda = '''
@@ -862,29 +910,73 @@ echo "Fin del programa.";
 '''
 
 algorith_Mawyin = '''
-// Declaración e inicialización de un array bidimensional
-$matriz = array(
-    array(1, 2, 3),
-    array(4, 5, 6),
-    array(7, 8, 9)
-);
-
-// Función que usa estructura for
-function buscarValor($valor, $matriz) {
-    for ($i = 0; $i < count($matriz); $i++) {
-        for ($j = 0; $j < count($matriz[$i]); $j++) {
-            if ($matriz[$i][$j] == $valor) {
-                return "El valor $valor se encuentra en la posición [$i][$j] de la matriz.";
-            }
-        }
+<?php
+class Estudiante {
+    public $nombre;
+    public $edad;
+    public $notas;
+    public function construct($nombre, $edad, $notas) {
+        $nombre = $nombre;
+        $edad = $edad;
+        $notas = $notas;
     }
-    return "El valor $valor no se encuentra en la matriz.";
+    public function obtenerPromedio() {
+        $suma = array_sum($notas);
+        $cantidad = count($notas);
+        return $suma / $cantidad;
+    }  
 }
-
-// Llamada a la función
-$busqueda = buscarValor(5, $matriz);
-echo "$busqueda \n";
+//Creacion de arrays simples de notas
+$arregloNotas1 = array(85, 90, 78);
+$arregloNotas2 = array(90, 92, 88);
+$arregloNotas3 = array(82, 88, 90);
+//Creacion de arrays simples de objetos tipo estudiante
+$estudiantes = array(
+    new Estudiante("Juan", 20, $arregloNotas1),
+    new Estudiante("Maria", 22, $arregloNotas2),
+    new Estudiante("Pedro", 21, $arregloNotas3)
+);
+// Imprimir la información de cada estudiante y su promedio de notas usando la estructura for
+for ($i = 0; $i < count($estudiantes); $i++) {
+    echo "Nombre: " . $estudiantes[$i]->nombre . "<br>";
+    echo "Edad: " . $estudiantes[$i]->edad . "<br>";
+    echo "Promedio de notas: " . $estudiantes[$i]->obtenerPromedio() . "<br>";
+    echo "<br>";
+}
+// Encontrar el estudiante con el promedio de notas más alto indexando el arreglo estudiantes
+$mejorEstudiante = $estudiantes[0];
+for ($i = 1; $i < count($estudiantes); $i++) {
+    $promedioActual = $estudiantes[$i]->obtenerPromedio();
+    $mejorPromedio = $mejorEstudiante->obtenerPromedio();
+    if ( $promedioActual > $mejorPromedio ) {
+        $mejorEstudiante = $estudiantes[$i];
+    }
+}
+echo "El último estudiante eliminado del array es: " .  $mejorEstudiante->nombre . "<br>";
+// Encontrar el estudiante con la edad más alta
+$estudianteMayor = $estudiantes[0];
+for ($i = 1; $i < count($estudiantes); $i++) {
+    $estudianteActual = $estudiantes[$i]->edad;
+    $edadEstudianteMayor = $estudianteMayor->edad;
+    if ($estudianteActual > $edadEstudianteMayor) {
+        $estudianteMayor = $estudiantes[$i];
+    }
+}
+echo "El último estudiante eliminado del array es: " .  $estudianteMayor->nombre . "<br>";
+// Encontrar el estudiante con la edad más baja
+$estudianteMenor = $estudiantes[0];
+for ($i = 1; $i < count($estudiantes); $i++) {
+    $estudianteActual = $estudiantes[$i]->edad;
+    $edadEstudianteMenor = $estudianteMenor->edad;
+    if ($estudianteActual > $edadEstudianteMenor) {
+        $estudianteActual = $estudiantes[$i];
+    }
+}
+echo "El último estudiante eliminado del array es: " .  $estudianteMenor->nombre . "<br>";
+$ultimoEstudiante = array_pop($estudiantes);
+echo "El último estudiante eliminado del array es: " . $ultimoEstudiante->nombre . "<br>";
+?>
 '''
-parser.parse(algorith_Roldan)
+#parser.parse(algorith_Roldan)
 #parser.parse(algorith_Poveda)
 #parser.parse(algorith_Mawyin)
