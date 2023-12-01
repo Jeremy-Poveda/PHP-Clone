@@ -139,6 +139,14 @@ def p_conditional(p):
 
     """
 
+def p_conditional_error(p):
+    """
+    conditional  :  boolean_expression logic_operator error
+                 |  error logic_operator boolean_expression
+
+    """
+    print("Error semántico: las expresiones booleanas solo pueden ser operadas por otras expresiones booleanas")
+
 
 def p_logic_operator(p):
     """
@@ -242,21 +250,25 @@ def p_print_statement(p):
     """
 
 def p_printable_values(p):
-    """
+   """
     printable_values : values
                      | values printable_dividers printable_values
-                     | values COMMA printable_values
                      | VARIABLE
                      | VARIABLE printable_dividers printable_values
-                     | VARIABLE COMMA printable_values
                      | VARIABLE STRING_CONCATENATION STRING
                      | conditional
                      | conditional printable_dividers printable_values
-                     | conditional COMMA printable_values
                      | structure_object_principal
                      | structure_object_principal printable_dividers printable_values
-                     | structure_object_principal COMMA printable_values
     """
+def p_printable_values_error(p):
+    """
+    printable_values : values printable_dividers error
+                     | VARIABLE printable_dividers error
+                     | conditional printable_dividers error
+                     | structure_object_principal printable_dividers error
+    """
+    print("Error semántico: La concatenación no es válida para ese valor")
 
 def p_printable_dividers(p):
     """
@@ -881,32 +893,52 @@ if ($resultado) {
 '''
 
 algorith_Poveda = '''
-$numero = 7;
+<?php
+// Declaración de variables en diferentes representaciones
+$decimalNumber = 15; // Representación decimal
+$hexNumber = 0x1F; // Representación hexadecimal
+$octalNumber = 037; // Representación octal
 
-// Bucle while y estructura if anidada
-while (!($numero == 0) and $numero > 1) { // Ejemplo de negacion
-    echo "El número actual es: $numero ";
+/*
+Comentario multilinea:
+Este programa utiliza estructuras de control anidadas
+con while y condiciones que involucran AND, OR y XOR.
+*/
 
-    if ($numero % 2 == 0) {
-        echo "(par)\n";
-        
+// Estructura de control: while anidada
+while ($decimalNumber <= 20) {
+    echo "Número decimal: $decimalNumber";
+
+    // Estructura de control: if anidada con AND y OR
+    if (($decimalNumber % 2 == 0) and ($decimalNumber > 10)) {
+        echo "El número es par y mayor que 10.";
+    } elseif (($decimalNumber % 3 == 0) or ($decimalNumber < 5)) {
+        echo "El número es divisible por 3 o menor que 5.";
     } else {
-        echo "(impar)\n";
-        return "Hola mundo";
+        echo "El número no cumple ninguna de las condiciones especificadas.";
     }
-    if (!!$numero == 0) {
-        echo "(par)\n";
-        
-    }
-    $numero--;
 
-    if ($numero == 4) {
-        echo "¡El número llegó a 4! Terminando el bucle.\n";
-        break;
+    // Incrementar el número decimal
+    $decimalNumber++;
+
+    // Estructura de control: while anidada
+    while ($hexNumber > 0) {
+        echo "Número hexadecimal: $hexNumber";
+
+        // Estructura de control: if dentro del while anidado con XOR
+        if (($octalNumber % 4 == 0) xor ($octalNumber < 10)) {
+            echo "El número octal $octalNumber cumple con una de las condiciones.";
+        } else {
+            echo "El número octal $octalNumber no".4."cumple ninguna o cumple ambas condiciones.";
+        }
+
+        // Decrementar el número hexadecimal
+        $hexNumber--;
+        // Incrementar el número octal
+        $octalNumber++;
     }
 }
-
-echo "Fin del programa.";
+?>
 '''
 
 algorith_Mawyin = '''
@@ -978,5 +1010,5 @@ echo "El último estudiante eliminado del array es: " . $ultimoEstudiante->nombr
 ?>
 '''
 #parser.parse(algorith_Roldan)
-#parser.parse(algorith_Poveda)
+parser.parse(algorith_Poveda)
 #parser.parse(algorith_Mawyin)
