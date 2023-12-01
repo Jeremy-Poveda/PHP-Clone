@@ -525,15 +525,6 @@ def p_statement_array_special_function_error(p):
     """
     print ("Error semántico, parámetro incorrecto para las funciones de arreglos")
 
-def p_values_array_special(p):
-    """
-    values_array_special : values
-                         | values COMMA values_array_special
-                         | object_creation
-                         | object_creation COMMA values_array_special
-
-    """
-
 def p_count_param(p):
     """
     count_param : COMMA COUNT_NORMAL
@@ -952,7 +943,7 @@ for ($i = 1; $i < count($estudiantes); $i++) {
         $mejorEstudiante = $estudiantes[$i];
     }
 }
-echo "El último estudiante eliminado del array es: " .  $mejorEstudiante->nombre . "<br>";
+echo "El mejor estudiante del array es: " .  $mejorEstudiante->nombre . "<br>";
 // Encontrar el estudiante con la edad más alta
 $estudianteMayor = $estudiantes[0];
 for ($i = 1; $i < count($estudiantes); $i++) {
@@ -962,17 +953,19 @@ for ($i = 1; $i < count($estudiantes); $i++) {
         $estudianteMayor = $estudiantes[$i];
     }
 }
-echo "El último estudiante eliminado del array es: " .  $estudianteMayor->nombre . "<br>";
-// Encontrar el estudiante con la edad más baja
-$estudianteMenor = $estudiantes[0];
+echo "El  estudiante con mayor edad del array es: " .  $estudianteMayor->nombre . "<br>";
+// Encontrar el estudiante con edad igual o superior a una edad establecida
+$edadEstablecida = 14 + "12";
+$estudianteEdadIgual = $estudiantes[0];
 for ($i = 1; $i < count($estudiantes); $i++) {
     $estudianteActual = $estudiantes[$i]->edad;
-    $edadEstudianteMenor = $estudianteMenor->edad;
-    if ($estudianteActual > $edadEstudianteMenor) {
-        $estudianteActual = $estudiantes[$i];
+    $EdadestudianteIgual = $estudianteEdadIgual->edad;
+    if ($estudianteActual > $EdadestudianteIgual) {
+        $EdadestudianteIgual = $estudiantes[$i];
     }
 }
-echo "El último estudiante eliminado del array es: " .  $estudianteMenor->nombre . "<br>";
+echo "El estudiante con la edad igual a $edadEstablecida es: " .  $EdadestudianteIgual->nombre . "<br>";
+//Usando la funcion pop para los arreglos
 $ultimoEstudiante = array_pop($estudiantes);
 echo "El último estudiante eliminado del array es: " . $ultimoEstudiante->nombre . "<br>";
 ?>
