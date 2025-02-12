@@ -1,5 +1,1 @@
-# Proyecto de Lenguajes de programación, Paralelo #1
-## Integrantes:
-- Jeremy Poveda
-- Kevin Roldán
-- Jorge Mawyin
+Creation of a lexical, syntactic and semantic analyzer that simulates the PHP programming language using Python libraries.
